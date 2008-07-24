@@ -9,7 +9,7 @@ all: libjfetion.so
 libjfetion.so: FetionImpl.o
 	$(LD) -o libjfetion.so FetionImpl.o $(LDFLAGS)
 
-FetionImpl.o:
+FetionImpl.o: FetionImpl.c FetionImpl.h FetionHelper.h
 	$(CC) $(CFLAGS) -c -o FetionImpl.o FetionImpl.c
 
 clean:

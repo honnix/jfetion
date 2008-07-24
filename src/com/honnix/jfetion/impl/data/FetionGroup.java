@@ -1,5 +1,5 @@
 /**
- * Fetion.java
+ * FetionImpl.java
  * 
  * Copyright : (C) 2008 by Honnix
  * Email     : hxliang1982@gmail.com
@@ -18,22 +18,55 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package com.honnix.jfetion;
+package com.honnix.jfetion.impl.data;
 
 /**
  * 
  */
-public interface Fetion
+public class FetionGroup
 {
 
-    boolean intit();
+    private long id;
 
-    boolean login(String uid, String password);
+    private String name;
 
-    void logout();
+    public FetionGroup()
+    {
+        super();
+    }
 
-    boolean sendSmsToSelf(String message);
+    /**
+     * @return the id
+     */
+    public long getId()
+    {
+        return id;
+    }
 
-    void terminate();
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
 }
