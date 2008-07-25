@@ -25,6 +25,7 @@
 #include "FetionHelper.h"
 
 #define OBJECT_CLASS "java/lang/Object"
+#define ARRAY_LIST_CLASS "java/util/ArrayList"
 #define CLASS_NOT_FOUND_EXCEPTION_CLASS "java/lang/ClassNotFoundException"
 
 #define FETION_MESSAGE_CLASS "com/honnix/jfetion/impl/data/FetionMessage"
@@ -35,7 +36,34 @@
 #define FETION_PERSONAL_INFO_CLASS_NOT_FOUND \
     "Class com/honnix/jfetion/impl/data/FetionPersonalInfo not found."
 
+#define FETION_GROUP_CLASS "com/honnix/jfetion/impl/data/FetionGroup"
+#define FETION_GROUP_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionGroup not found."
+
+#define FETION_ACCOUNT_CLASS "com/honnix/jfetion/impl/data/FetionAccount"
+#define FETION_ACCOUNT_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionAccount not found."
+
+#define FETION_BLACKLIST_ITEM_CLASS "com/honnix/jfetion/impl/data/FetionBlacklistItem"
+#define FETION_BLACKLIST_ITEM_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionBlacklistItem not found."
+
+#define FETION_GANG_CLASS "com/honnix/jfetion/impl/data/FetionGang"
+#define FETION_GANG_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionGang not found."
+
+#define FETION_GANG_INFO_CLASS "com/honnix/jfetion/impl/data/FetionGangInfo"
+#define FETION_GANG_INFO_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionGangInfo not found."
+
+#define FETION_GANG_MEMBER_CLASS "com/honnix/jfetion/impl/data/FetionGangMember"
+#define FETION_GANG_MEMBER_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionGangMember not found."
+
 #define STRING_CLASS_SIG "Ljava/lang/String;"
+#define ARRAY_LIST_CLASS_SIG "Ljava/util/ArrayList;"
+#define FETION_PERSONAL_INFO_CLASS_SIG "Lcom/honnix/jfetion/impl/data/FetionPersonalInfo;"
+#define FETION_GANG_INFO_CLASS_SIG "Lcom/honnix/jfetion/impl/data/FetionGangInfo;"
 
 JavaVM* theVM = NULL;
 
@@ -98,20 +126,30 @@ void callback(int message, unsigned int wparam, unsigned long lparam,
     (*env)->DeleteGlobalRef(env, jargs);
 }
 
-jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
+jobject buildObject(JNIEnv* env, jclass* objectClass, const char* objectClassPath, 
+                    const char* classNotFoundMessage)
 {
-    jclass messageClass = (*env)->FindClass(env, FETION_MESSAGE_CLASS);
+    (*objectClass)  = (*env)->FindClass(env, objectClassPath);
 
-    if (messageClass == NULL)
+    if ((*objectClass) == NULL)
     {
         jclass exceptionClass = (*env)->FindClass(env, CLASS_NOT_FOUND_EXCEPTION_CLASS);
 
-        (*env)->ThrowNew(env, exceptionClass, FETION_MESSAGE_CLASS_NOT_FOUND);
+        (*env)->ThrowNew(env, exceptionClass, classNotFoundMessage);
     }
 
-    jmethodID constructor = (*env)->GetMethodID(env, messageClass,
+    jmethodID constructor = (*env)->GetMethodID(env, (*objectClass),
                                                    "<init>", "()V");
-    jobject jmessage = (*env)->NewObject(env, messageClass, constructor);
+    jobject jobj = (*env)->NewObject(env, (*objectClass), constructor);
+
+    return jobj;
+}
+
+jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
+{
+    jclass messageClass = NULL;
+    jobject jmessage = buildObject(env, &messageClass, FETION_MESSAGE_CLASS,
+                                   FETION_MESSAGE_CLASS_NOT_FOUND);
 
     jfieldID jidField = (*env)->GetFieldID(env, messageClass, "id", "J");
     (*env)->SetLongField(env, jmessage, jidField, message->uid);
@@ -119,7 +157,8 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
     if (message->message != NULL)
     {
         jstring jrealMessage = (*env)->NewStringUTF(env, message->message);
-        jfieldID jrealMessageField = (*env)->GetFieldID(env, messageClass, "message", STRING_CLASS_SIG);
+        jfieldID jrealMessageField = (*env)->GetFieldID(env, messageClass, "message", 
+                                                        STRING_CLASS_SIG);
 
         (*env)->SetObjectField(env, jmessage, jrealMessageField, jrealMessage);
     }
@@ -127,7 +166,8 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
     if (message->msgformat != NULL)
     {
         jstring jmessageFormat = (*env)->NewStringUTF(env, message->msgformat);
-        jfieldID jmessageFormatField = (*env)->GetFieldID(env, messageClass, "messageFormat", STRING_CLASS_SIG);
+        jfieldID jmessageFormatField = (*env)->GetFieldID(env, messageClass, "messageFormat", 
+                                                          STRING_CLASS_SIG);
 
         (*env)->SetObjectField(env, jmessage, jmessageFormatField, jmessageFormat);
     }
@@ -137,18 +177,9 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
 
 jobject buildFetionPersonalInfo(JNIEnv* env, Fetion_Personal* personalInfo)
 {
-    jclass personalInfoClass = (*env)->FindClass(env, FETION_PERSONAL_INFO_CLASS);
-
-    if (personalInfoClass == NULL)
-    {
-        jclass exceptionClass = (*env)->FindClass(env, CLASS_NOT_FOUND_EXCEPTION_CLASS);
-
-        (*env)->ThrowNew(env, exceptionClass, FETION_PERSONAL_INFO_CLASS_NOT_FOUND);
-    }
-
-    jmethodID constructor = (*env)->GetMethodID(env, personalInfoClass,
-                                                   "<init>", "()V");
-    jobject jpersonalInfo = (*env)->NewObject(env, personalInfoClass, constructor);
+    jclass personalInfoClass = NULL;
+    jobject jpersonalInfo = buildObject(env, &personalInfoClass, FETION_PERSONAL_INFO_CLASS,
+                                        FETION_PERSONAL_INFO_CLASS_NOT_FOUND);
 
     if (personalInfo->nickname != NULL)
     {
@@ -191,11 +222,11 @@ jobject buildFetionPersonalInfo(JNIEnv* env, Fetion_Personal* personalInfo)
     jfieldID jivrEnabledField = (*env)->GetFieldID(env, personalInfoClass, "ivrEnabled", "I");
     (*env)->SetIntField(env, jpersonalInfo, jivrEnabledField, personalInfo->ivr_enabled);
     
-    jfieldID jportraitCrc = (*env)->GetFieldID(env, personalInfoClass, "portraitCrc", "I");
-    (*env)->SetIntField(env, jpersonalInfo, jportraitCrc, personalInfo->portrait_crc);
+    jfieldID jportraitCrcField = (*env)->GetFieldID(env, personalInfoClass, "portraitCrc", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jportraitCrcField, personalInfo->portrait_crc);
 
-    jfieldID jprovisioning = (*env)->GetFieldID(env, personalInfoClass, "provisioning", "I");
-    (*env)->SetIntField(env, jpersonalInfo, jprovisioning, personalInfo->provisioning);
+    jfieldID jprovisioningField = (*env)->GetFieldID(env, personalInfoClass, "provisioning", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jprovisioningField, personalInfo->provisioning);
 
     if (personalInfo->mobile_no != NULL)
     {
@@ -205,7 +236,523 @@ jobject buildFetionPersonalInfo(JNIEnv* env, Fetion_Personal* personalInfo)
         (*env)->SetObjectField(env, jpersonalInfo, jmobileNumberField, jmobileNumber);
     }
 
+    if (personalInfo->name != NULL)
+    {
+        jstring jname = (*env)->NewStringUTF(env, personalInfo->name);
+        jfieldID jnameField = (*env)->GetFieldID(env, personalInfoClass, "name", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jnameField, jname);
+    }
+
+    if (personalInfo->birth_date != NULL)
+    {
+        jstring jbirthday = (*env)->NewStringUTF(env, personalInfo->birth_date);
+        jfieldID jbirthdayField = (*env)->GetFieldID(env, personalInfoClass, "birthday", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jbirthdayField, jbirthday);
+    }
+
+    jfieldID jbirthdayValidField = (*env)->GetFieldID(env, personalInfoClass, "birthdayValid", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jbirthdayValidField, personalInfo->birthday_valid);
+
+    jfieldID jlunarAnimalField = (*env)->GetFieldID(env, personalInfoClass, "lunarAnimal", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jlunarAnimalField, personalInfo->lunar_animal);
+
+    jfieldID jhoroscopeField = (*env)->GetFieldID(env, personalInfoClass, "horoscope", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jhoroscopeField, personalInfo->horoscope);
+
+    if (personalInfo->profile != NULL)
+    {
+        jstring jprofile = (*env)->NewStringUTF(env, personalInfo->profile);
+        jfieldID jprofileField = (*env)->GetFieldID(env, personalInfoClass, "profile", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jprofileField, jprofile);
+    }
+
+    jfieldID jbloodTypeField = (*env)->GetFieldID(env, personalInfoClass, "bloodType", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jbloodTypeField, personalInfo->blood_type);
+
+    if (personalInfo->occupation != NULL)
+    {
+        jstring joccupation = (*env)->NewStringUTF(env, personalInfo->occupation);
+        jfieldID joccupationField = (*env)->GetFieldID(env, personalInfoClass, "occupation", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, joccupationField, joccupation);
+    }
+
+    if (personalInfo->hobby != NULL)
+    {
+        jstring jhobby = (*env)->NewStringUTF(env, personalInfo->hobby);
+        jfieldID jhobbyField = (*env)->GetFieldID(env, personalInfoClass, "hobby", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jhobbyField, jhobby);
+    }
+
+    if (personalInfo->personal_email != NULL)
+    {
+        jstring jpersonalEmail = (*env)->NewStringUTF(env, personalInfo->personal_email);
+        jfieldID jpersonalEmailField = (*env)->GetFieldID(env, personalInfoClass, "personalEmail", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jpersonalEmailField, jpersonalEmail);
+    }
+
+    if (personalInfo->work_email != NULL)
+    {
+        jstring jworkEmail = (*env)->NewStringUTF(env, personalInfo->work_email);
+        jfieldID jworkEmailField = (*env)->GetFieldID(env, personalInfoClass, "workEmail", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jworkEmailField, jworkEmail);
+    }
+
+    if (personalInfo->other_email != NULL)
+    {
+        jstring jotherEmail = (*env)->NewStringUTF(env, personalInfo->other_email);
+        jfieldID jotherEmailField = (*env)->GetFieldID(env, personalInfoClass, "otherEmail", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jotherEmailField, jotherEmail);
+    }
+
+    jfieldID jprimaryEmailField = (*env)->GetFieldID(env, personalInfoClass, "primaryEmail", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jprimaryEmailField, personalInfo->primary_email);
+
+    if (personalInfo->job_title != NULL)
+    {
+        jstring jjobTitle = (*env)->NewStringUTF(env, personalInfo->job_title);
+        jfieldID jjobTitleField = (*env)->GetFieldID(env, personalInfoClass, "jobTitle", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jjobTitleField, jjobTitle);
+    }
+
+    if (personalInfo->home_phone != NULL)
+    {
+        jstring jhomePhone = (*env)->NewStringUTF(env, personalInfo->home_phone);
+        jfieldID jhomePhoneField = (*env)->GetFieldID(env, personalInfoClass, "homePhone", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jhomePhoneField, jhomePhone);
+    }
+
+    if (personalInfo->work_phone != NULL)
+    {
+        jstring jworkPhone = (*env)->NewStringUTF(env, personalInfo->work_phone);
+        jfieldID jworkPhoneField = (*env)->GetFieldID(env, personalInfoClass, "workPhone", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jworkPhoneField, jworkPhone);
+    }
+
+    if (personalInfo->other_phone != NULL)
+    {
+        jstring jotherPhone = (*env)->NewStringUTF(env, personalInfo->other_phone);
+        jfieldID jotherPhoneField = (*env)->GetFieldID(env, personalInfoClass, "otherPhone", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jotherPhoneField, jotherPhone);
+    }
+
+    if (personalInfo->company != NULL)
+    {
+        jstring jcompany = (*env)->NewStringUTF(env, personalInfo->company);
+        jfieldID jcompanyField = (*env)->GetFieldID(env, personalInfoClass, "company", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jcompanyField, jcompany);
+    }
+
+    if (personalInfo->company_website != NULL)
+    {
+        jstring jcompanyWebsite = (*env)->NewStringUTF(env, personalInfo->company_website);
+        jfieldID jcompanyWebsiteField = (*env)->GetFieldID(env, personalInfoClass, "companyWebsite", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jpersonalInfo, jcompanyWebsiteField, jcompanyWebsite);
+    }
+
+    jfieldID jmatchEnabledField = (*env)->GetFieldID(env, personalInfoClass, "matchEnabled", "I");
+    (*env)->SetIntField(env, jpersonalInfo, jmatchEnabledField, personalInfo->match_enabled);
+
     return jpersonalInfo;
+}
+
+jobject buildFetionGroup(JNIEnv* env, Fetion_Group* group)
+{
+    jclass groupClass;
+    jobject jgroup = buildObject(env, &groupClass, FETION_GROUP_CLASS,
+                                 FETION_GROUP_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, groupClass, "id", "J");
+    (*env)->SetLongField(env, jgroup, jidField, group->id);
+
+    if (group->name != NULL)
+    {
+        jstring jname = (*env)->NewStringUTF(env, group->name);
+        jfieldID jnameField = (*env)->GetFieldID(env, groupClass, "name", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgroup, jnameField, jname);
+    }
+
+    return jgroup;
+}
+
+jobject buildFetionAccount(JNIEnv* env, Fetion_Account* account)
+{
+    jclass accountClass = NULL;
+    jobject jaccount = buildObject(env, &accountClass, FETION_ACCOUNT_CLASS,
+                                   FETION_ACCOUNT_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, accountClass, "id", "J");
+    (*env)->SetLongField(env, jaccount, jidField, account->id);
+
+    if (account->uri != NULL)
+    {
+        jstring juri = (*env)->NewStringUTF(env, account->uri);
+        jfieldID juriField = (*env)->GetFieldID(env, accountClass, "uri", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jaccount, juriField, juri);
+    }
+
+    if (account->local_name != NULL)
+    {
+        jstring jlocalName = (*env)->NewStringUTF(env, account->local_name);
+        jfieldID jlocalNameField = (*env)->GetFieldID(env, accountClass, "localName", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jaccount, jlocalNameField, jlocalName);
+    }
+
+    if (account->buddy_lists != NULL)
+    {
+        jstring jbuddyList = (*env)->NewStringUTF(env, account->buddy_lists);
+        jfieldID jbuddyListField = (*env)->GetFieldID(env, accountClass, "buddyList", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jaccount, jbuddyListField, jbuddyList);
+    }
+
+    jfieldID jgroupIdField = (*env)->GetFieldID(env, accountClass, "groupId", "I");
+    (*env)->SetIntField(env, jaccount, jgroupIdField, account->group_id);
+
+    jfieldID jrelationStatusField = (*env)->GetFieldID(env, accountClass, "relationStatus", "I");
+    (*env)->SetIntField(env, jaccount, jrelationStatusField, account->relation_status);
+
+    jfieldID jonlineNotifyField = (*env)->GetFieldID(env, accountClass, "onlineNotify", "I");
+    (*env)->SetIntField(env, jaccount, jonlineNotifyField, account->online_notify);
+
+    jfieldID jstatusCodeField = (*env)->GetFieldID(env, accountClass, "statusCode", "I");
+    (*env)->SetIntField(env, jaccount, jstatusCodeField, account->status_code);
+
+    jfieldID jonlineStatusField = (*env)->GetFieldID(env, accountClass, "onlineStatus", "I");
+    (*env)->SetIntField(env, jaccount, jonlineStatusField, account->online_status);
+
+    jfieldID jportraitCrcField = (*env)->GetFieldID(env, accountClass, "portraitCrc", "J");
+    (*env)->SetLongField(env, jaccount, jportraitCrcField, account->portrait_crc);
+
+    if (account->personal != NULL)
+    {
+        jfieldID jpersonalInfoField = (*env)->GetFieldID(env, accountClass, "personalInfo", 
+                                                         FETION_PERSONAL_INFO_CLASS_SIG);
+        jobject jpersonalInfo = buildFetionPersonalInfo(env, account->personal);
+        (*env)->SetObjectField(env, jaccount, jpersonalInfoField, jpersonalInfo);
+    }
+
+    jfieldID juserTypeField = (*env)->GetFieldID(env, accountClass, "userType", "I");
+    (*env)->SetIntField(env, jaccount, juserTypeField, account->usr_type);
+
+    return jaccount;
+}
+
+Fetion_Account* buildFetionAccountStruct(JNIEnv* env, Fetion_Account* account,
+                                         jobject jaccount)
+{
+    jclass accountClass = (*env)->GetObjectClass(env, jaccount);
+
+    jfieldID jidField = (*env)->GetFieldID(env, accountClass, "id", "J");
+    account->id = (*env)->GetLongField(env, jaccount, jidField);
+
+    jboolean isCopy;
+
+    jfieldID juriField = (*env)->GetFieldID(env, accountClass, "uri", STRING_CLASS_SIG);
+    jstring juri = (*env)->GetObjectField(env, jaccount, juriField);
+    if (juri != NULL)
+    {
+        const char* src = (*env)->GetStringUTFChars(env, juri, &isCopy);
+        char* dest = (char*) malloc(strlen(src) + 1);
+
+        account->uri = strcpy(dest, src);
+        (*env)->ReleaseStringUTFChars(env, juri, src);
+    }
+
+    jfieldID jlocalNameField = (*env)->GetFieldID(env, accountClass, "localName", STRING_CLASS_SIG);
+    jstring jlocalName = (*env)->GetObjectField(env, jaccount, jlocalNameField);
+    if (jlocalName != NULL)
+    {
+        account->local_name = (char*) (*env)->GetStringUTFChars(env, jlocalName, &isCopy);
+    }
+
+    jfieldID jbuddyListField = (*env)->GetFieldID(env, accountClass, "buddyList", STRING_CLASS_SIG);
+    jstring jbuddyList = (*env)->GetObjectField(env, jaccount, jbuddyListField);
+    if (jbuddyList != NULL)
+    {
+        account->buddy_lists = (char*) (*env)->GetStringUTFChars(env, jbuddyList, &isCopy);
+    }
+
+    jfieldID jgroupIdField = (*env)->GetFieldID(env, accountClass, "groupId", "I");
+    account->group_id = (*env)->GetIntField(env, jaccount, jgroupIdField);
+
+    jfieldID jrelationStatusField = (*env)->GetFieldID(env, accountClass, "relationStatus", "I");
+    account->relation_status = (*env)->GetIntField(env, jaccount, jrelationStatusField);
+
+    jfieldID jonlineNotifyField = (*env)->GetFieldID(env, accountClass, "onlineNotify", "I");
+    account->online_notify = (*env)->GetIntField(env, jaccount, jonlineNotifyField);
+
+    jfieldID jstatusCodeField = (*env)->GetFieldID(env, accountClass, "statusCode", "I");
+    account->status_code = (*env)->GetIntField(env, jaccount, jstatusCodeField);
+
+    jfieldID jonlineStatusField = (*env)->GetFieldID(env, accountClass, "onlineStatus", "I");
+    account->online_status = (*env)->GetIntField(env, jaccount, jonlineStatusField);
+
+    jfieldID jportraitCrcField = (*env)->GetFieldID(env, accountClass, "portraitCrc", "J");
+    account->portrait_crc = (*env)->GetLongField(env, jaccount, jportraitCrcField);
+
+    /* I don't want to build personal info. 
+     * It just sucks and seems not contain useful information. */
+    account->personal = NULL;
+
+    jfieldID juserTypeField = (*env)->GetFieldID(env, accountClass, "userType", "I");
+    account->usr_type = (*env)->GetIntField(env, jaccount, juserTypeField);
+
+    return account;
+}
+
+jobject buildFetionBlacklistItem(JNIEnv* env, Fetion_Black* blacklistItem)
+{
+    jclass blacklistItemClass = NULL;
+    jobject jblacklistItem = buildObject(env, &blacklistItemClass, FETION_BLACKLIST_ITEM_CLASS,
+                                         FETION_BLACKLIST_ITEM_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, blacklistItemClass, "id", "J");
+    (*env)->SetLongField(env, jblacklistItem, jidField, blacklistItem->uid);
+
+    if (blacklistItem->uri != NULL)
+    {
+        jstring juri = (*env)->NewStringUTF(env, blacklistItem->uri);
+        jfieldID juriField = (*env)->GetFieldID(env, blacklistItemClass, "uri", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jblacklistItem, juriField, juri);
+    }
+
+    if (blacklistItem->local_name != NULL)
+    {
+        jstring jlocalName = (*env)->NewStringUTF(env, blacklistItem->local_name);
+        jfieldID jlocalNameField = (*env)->GetFieldID(env, blacklistItemClass, "localName", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jblacklistItem, jlocalNameField, jlocalName);
+    }
+
+    return jblacklistItem;
+}
+
+jobject buildFetionGang(JNIEnv* env, Fetion_Qun* gang)
+{
+    jclass gangClass;
+    jobject jgang = buildObject(env, &gangClass, FETION_GANG_CLASS,
+                                FETION_GANG_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, gangClass, "id", "J");
+    (*env)->SetLongField(env, jgang, jidField, gang->id);
+
+    if (gang->uri != NULL)
+    {
+        jstring juri = (*env)->NewStringUTF(env, gang->uri);
+        jfieldID juriField = (*env)->GetFieldID(env, gangClass, "uri", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgang, juriField, juri);
+    }
+
+    jfieldID jidentityField = (*env)->GetFieldID(env, gangClass, "identity", "I");
+    (*env)->SetIntField(env, jgang, jidentityField, gang->identity);
+
+    if (gang->quninfo != NULL)
+    {
+        jfieldID jgangInfoField = (*env)->GetFieldID(env, gangClass, "gangInfo", 
+                                                         FETION_GANG_INFO_CLASS_SIG);
+        jobject jgangInfo = buildFetionGangInfo(env, gang->quninfo);
+        (*env)->SetObjectField(env, jgang, jgangInfoField, jgangInfo);
+    }
+
+    return jgang;
+}
+
+jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
+{
+    jclass gangInfoClass = NULL;
+    jobject jgangInfo = buildObject(env, &gangInfoClass, FETION_GANG_INFO_CLASS,
+                                    FETION_GANG_INFO_CLASS_NOT_FOUND);
+
+    if (gangInfo->uri != NULL)
+    {
+        jstring juri = (*env)->NewStringUTF(env, gangInfo->uri);
+        jfieldID juriField = (*env)->GetFieldID(env, gangInfoClass, "uri", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangInfo, juriField, juri);
+    }
+
+    jfieldID jgroupAttributesVersionField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                               "groupAttributesVersion", "I");
+    (*env)->SetIntField(env, jgangInfo, jgroupAttributesVersionField, 
+                        gangInfo->group_attributes_version);
+
+    if (gangInfo->name != NULL)
+    {
+        jstring jname = (*env)->NewStringUTF(env, gangInfo->name);
+        jfieldID jnameField = (*env)->GetFieldID(env, gangInfoClass, "name", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangInfo, jnameField, jname);
+    }
+
+    jfieldID jcategoryField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                 "category", "I");
+    (*env)->SetIntField(env, jgangInfo, jcategoryField, gangInfo->category);
+
+    if (gangInfo->introduce != NULL)
+    {
+        jstring jintroduction = (*env)->NewStringUTF(env, gangInfo->introduce);
+        jfieldID jintroductionField = (*env)->GetFieldID(env, gangInfoClass, "introduction", 
+                                                         STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangInfo, jintroductionField, jintroduction);
+    }
+
+    if (gangInfo->bulletin != NULL)
+    {
+        jstring jbulletin = (*env)->NewStringUTF(env, gangInfo->bulletin);
+        jfieldID jbulletinField = (*env)->GetFieldID(env, gangInfoClass, "bulletin", 
+                                                     STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangInfo, jbulletinField, jbulletin);
+    }
+
+    jfieldID jportraitCrcField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                    "portraitCrc", "I");
+    (*env)->SetIntField(env, jgangInfo, jportraitCrcField, gangInfo->portrait_crc);
+
+    jfieldID jsearchableField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                    "searchable", "I");
+    (*env)->SetIntField(env, jgangInfo, jsearchableField, gangInfo->searchable);
+
+    jfieldID jcurrentMemberCountField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                           "currentMemberCount", "I");
+    (*env)->SetIntField(env, jgangInfo, jcurrentMemberCountField, 
+                        gangInfo->current_member_count);
+
+    jfieldID jlimitMemberCountField = (*env)->GetFieldID(env, gangInfoClass, 
+                                                         "limitMemberCount", "I");
+    (*env)->SetIntField(env, jgangInfo, jlimitMemberCountField, 
+                        gangInfo->limit_member_count);
+
+    if (gangInfo->group_activity != NULL)
+    {
+        jstring jgroupActivity = (*env)->NewStringUTF(env, gangInfo->group_activity);
+        jfieldID jgroupActivityField = (*env)->GetFieldID(env, gangInfoClass, "groupActivity", 
+                                                          STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangInfo, jgroupActivityField, jgroupActivity);
+    }
+
+    if (gangInfo->QunMember != NULL)
+    {
+        jobject jarrayList = buildArrayList(env);
+        DList* gangMemberList = gangInfo->QunMember;
+
+        while (gangMemberList)
+        {
+            Fetion_QunMember* gangMember = (Fetion_QunMember*) gangMemberList->data;
+
+            if (gangMember)
+            {
+                jobject jgangMember = buildFetionGangMember(env, gangMember);
+
+                insertToArrayList(env, jarrayList, jgangMember);
+            }
+
+            gangMemberList = d_list_next(gangMemberList);
+        }
+
+        jfieldID jgangMemberListField = (*env)->GetFieldID(env, gangInfoClass,
+                                                           "gangMemberList",
+                                                           ARRAY_LIST_CLASS_SIG);
+        (*env)->SetObjectField(env, jgangInfo, jgangMemberListField,
+            jarrayList);
+    }
+
+    return jgangInfo;
+}
+
+jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
+{
+    jclass gangMemberClass = NULL;
+    jobject jgangMember = buildObject(env, &gangMemberClass,
+                                      FETION_GANG_MEMBER_CLASS,
+                                      FETION_GANG_MEMBER_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, gangMemberClass, "id", "J");
+    (*env)->SetLongField(env, jgangMember, jidField, gangMember->id);
+
+    if (gangMember->uri != NULL)
+    {
+        jstring juri = (*env)->NewStringUTF(env, gangMember->uri);
+        jfieldID juriField = (*env)->GetFieldID(env, gangMemberClass, "uri", 
+                                                STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangMember, juriField, juri);
+    }
+
+    if (gangMember->nickname != NULL)
+    {
+        jstring jnickname = (*env)->NewStringUTF(env, gangMember->nickname);
+        jfieldID jnicknameField = (*env)->GetFieldID(env, gangMemberClass, "nickname", 
+                                                STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangMember, jnicknameField, jnickname);
+    }
+
+    if (gangMember->iicnickname != NULL)
+    {
+        jstring jiicNickname = (*env)->NewStringUTF(env, gangMember->iicnickname);
+        jfieldID jiicNicknameField = (*env)->GetFieldID(env, gangMemberClass, "iicNickname", 
+                                                STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangMember, jiicNicknameField, jiicNickname);
+    }
+
+    jfieldID jidentityField = (*env)->GetFieldID(env, gangMemberClass, "identity", "I");
+    (*env)->SetIntField(env, jgangMember, jidentityField, gangMember->identity);
+
+    jfieldID jstateField = (*env)->GetFieldID(env, gangMemberClass, "state", "I");
+    (*env)->SetIntField(env, jgangMember, jstateField, gangMember->state);
+
+    if (gangMember->client_type != NULL)
+    {
+        jstring jclientType = (*env)->NewStringUTF(env, gangMember->client_type);
+        jfieldID jclientTypeField = (*env)->GetFieldID(env, gangMemberClass, "clientType", 
+                                                STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jgangMember, jclientTypeField, jclientType);
+    }
+
+    return jgangMember;
+}
+
+jobject buildArrayList(JNIEnv* env)
+{
+    jclass arrayListClass = (*env)->FindClass(env, ARRAY_LIST_CLASS);
+    jmethodID constructor = (*env)->GetMethodID(env, arrayListClass,
+                                                   "<init>", "()V");
+    jobject jarrayList = (*env)->NewObject(env, arrayListClass, constructor);
+
+    return jarrayList;
+}
+
+jboolean insertToArrayList(JNIEnv* env, jobject jarrayList, jobject jelement)
+{
+    jclass arrayListClass = (*env)->GetObjectClass(env, jarrayList);
+    jmethodID addMethod = (*env)->GetMethodID(env, arrayListClass,
+                                              "add", "(Ljava/lang/Object;)Z");
+
+    return (*env)->CallBooleanMethod(env, jarrayList, addMethod, jelement);
 }
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
@@ -298,9 +845,13 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getMessage
 (JNIEnv* env, jobject jobj, jlong jid)
 {
     Fetion_MSG* message = fx_get_msg(jid);
-    jobject jmessage = buildFetionMessage(env, message);
+    jobject jmessage = NULL;
 
-    fx_destroy_msg(message);
+    if (message != NULL)
+    {
+        jmessage = buildFetionMessage(env, message);
+        fx_destroy_msg(message);
+    }
 
     return jmessage;
 }
@@ -540,4 +1091,143 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getPersonalInfo
 (JNIEnv* env, jobject obj)
 {
     Fetion_Personal* personalInfo = fx_data_get_PersonalInfo();
+    jobject jpersonalInfo = NULL;
+
+    if (personalInfo != NULL)
+    {
+        jpersonalInfo = buildFetionPersonalInfo(env, personalInfo);
+    }
+
+    return jpersonalInfo;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
+(JNIEnv* env, jobject jobj)
+{
+    jobject jarrayList = buildArrayList(env);
+    DList* groupList = fx_get_group();
+
+    while (groupList)
+    {
+        Fetion_Group* group = (Fetion_Group*) groupList->data;
+
+        if (group != NULL)
+        {
+            jobject jgroup = buildFetionGroup(env, group);
+
+            insertToArrayList(env, jarrayList, jgroup);
+        }
+
+        groupList = d_list_next(groupList);
+    }
+
+    return jarrayList;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountList
+(JNIEnv* env, jobject jobj)
+{
+    jobject jarrayList = buildArrayList(env);
+    DList* accountList = fx_get_account();
+
+    while (accountList)
+    {
+        Fetion_Account* account = (Fetion_Account*) accountList->data;
+
+        if (account != NULL)
+        {
+            jobject jaccount = buildFetionAccount(env, account);
+
+            insertToArrayList(env, jarrayList, jaccount);
+        }
+
+        accountList = d_list_next(accountList);
+    }
+
+    return jarrayList;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
+(JNIEnv* env, jobject jobj)
+{
+    jobject jarrayList = buildArrayList(env);
+    DList* blacklist = fx_get_blacklist();
+
+    while (blacklist)
+    {
+        Fetion_Black* blacklistItem = (Fetion_Black*) blacklist->data;
+
+        if (blacklistItem != NULL)
+        {
+            jobject jblacklistItem = buildFetionBlacklistItem(env, blacklistItem);
+
+            insertToArrayList(env, jarrayList, jblacklistItem);
+        }
+
+        blacklist = d_list_next(blacklist);
+    }
+
+    return jarrayList;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
+(JNIEnv* env, jobject jobj)
+{
+    jobject jarrayList = buildArrayList(env);
+    DList* gangList = fx_get_qun();
+
+    while (gangList)
+    {
+        Fetion_Qun* gang  = (Fetion_Qun*) gangList->data;
+
+        if (gang != NULL)
+        {
+            jobject jgang = buildFetionGang(env, gang);
+
+            insertToArrayList(env, jarrayList, jgang);
+        }
+
+        gangList = d_list_next(gangList);
+    }
+
+    return jarrayList;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountById
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    Fetion_Account* account = fx_get_account_by_id(jid);
+    jobject jaccount = NULL;
+
+    if (account != NULL)
+    {
+        jaccount = buildFetionAccount(env, account);
+    }
+
+    return jaccount;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangById
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    Fetion_Qun* gang = fx_get_qun_by_id(jid);
+    jobject jgang = NULL;
+
+    if (gang != NULL)
+    {
+        jgang = buildFetionGang(env, gang);
+    }
+
+    return jgang;
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserById
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    return fx_is_pc_user_by_id(jid);
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserByAccount
+(JNIEnv* env, jobject jobj, jobject jaccount)
+{
 }

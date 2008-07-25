@@ -60,6 +60,10 @@ public class FetionPersonalInfo
 
     private int bloodType;
 
+    private String occupation;
+
+    private String hobby;
+
     private String personalEmail;
 
     private String workEmail;
@@ -139,6 +143,14 @@ public class FetionPersonalInfo
     public int getGender()
     {
         return gender;
+    }
+
+    /**
+     * @return the hobby
+     */
+    public String getHobby()
+    {
+        return hobby;
     }
 
     /**
@@ -227,6 +239,14 @@ public class FetionPersonalInfo
     public String getNickname()
     {
         return nickname;
+    }
+
+    /**
+     * @return the occupation
+     */
+    public String getOccupation()
+    {
+        return occupation;
     }
 
     /**
@@ -365,6 +385,15 @@ public class FetionPersonalInfo
     }
 
     /**
+     * @param hobby
+     *            the hobby to set
+     */
+    public void setHobby(String hobby)
+    {
+        this.hobby = hobby;
+    }
+
+    /**
      * @param homePhone
      *            the homePhone to set
      */
@@ -461,6 +490,15 @@ public class FetionPersonalInfo
     public void setNickname(String nickname)
     {
         this.nickname = nickname;
+    }
+
+    /**
+     * @param occupation
+     *            the occupation to set
+     */
+    public void setOccupation(String occupation)
+    {
+        this.occupation = occupation;
     }
 
     /**

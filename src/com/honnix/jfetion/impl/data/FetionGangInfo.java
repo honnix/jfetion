@@ -35,6 +35,8 @@ public class FetionGangInfo
 
     private String name;
 
+    private String category;
+
     private String introduction;
 
     private String bulletin;
@@ -62,6 +64,14 @@ public class FetionGangInfo
     public String getBulletin()
     {
         return bulletin;
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory()
+    {
+        return category;
     }
 
     /**
@@ -151,6 +161,15 @@ public class FetionGangInfo
     public void setBulletin(String bulletin)
     {
         this.bulletin = bulletin;
+    }
+
+    /**
+     * @param category
+     *            the category to set
+     */
+    public void setCategory(String category)
+    {
+        this.category = category;
     }
 
     /**

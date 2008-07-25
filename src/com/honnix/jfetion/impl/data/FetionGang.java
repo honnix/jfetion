@@ -27,17 +27,25 @@ public class FetionGang
 {
 
     private long id;
-    
+
     private String uri;
-    
+
     private int identity;
     
-    
+    private FetionGangInfo gangInfo;
+
     public FetionGang()
     {
         super();
     }
 
+    /**
+     * @return the gangInfo
+     */
+    public FetionGangInfo getGangInfo()
+    {
+        return gangInfo;
+    }
 
     /**
      * @return the id
@@ -47,7 +55,6 @@ public class FetionGang
         return id;
     }
 
-
     /**
      * @return the identity
      */
@@ -55,7 +62,6 @@ public class FetionGang
     {
         return identity;
     }
-
 
     /**
      * @return the uri
@@ -65,15 +71,22 @@ public class FetionGang
         return uri;
     }
 
+    /**
+     * @param gangInfo the gangInfo to set
+     */
+    public void setGangInfo(FetionGangInfo gangInfo)
+    {
+        this.gangInfo = gangInfo;
+    }
 
     /**
-     * @param id the id to set
+     * @param id
+     *            the id to set
      */
     public void setId(long id)
     {
         this.id = id;
     }
-
 
     /**
      * @param identity
@@ -84,9 +97,9 @@ public class FetionGang
         this.identity = identity;
     }
 
-
     /**
-     * @param uri the uri to set
+     * @param uri
+     *            the uri to set
      */
     public void setUri(String uri)
     {

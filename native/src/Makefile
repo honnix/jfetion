@@ -13,6 +13,9 @@ FetionImpl.o: FetionImpl.c FetionImpl.h FetionHelper.h
 	$(CC) $(CFLAGS) -c -o FetionImpl.o FetionImpl.c
 
 clean:
-	rm -rf libjfetion.so *.o
+	rm -rf libjfetion.so *.o TAGS
 
-.PHONY: all clean
+etags:
+	find ./ -name '*.[hc]' | xargs etags
+
+.PHONY: all clean etags
