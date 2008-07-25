@@ -51,6 +51,11 @@ Fetion_Account* buildFetionAccountStruct(JNIEnv* env, Fetion_Account* account,
                                          jobject jaccount);
 
 /*
+ * Free memory allocated in Fetion_Account structure.
+ */
+void destroyFetionAccountStruct(Fetion_Account* account);
+
+/*
  * Build FetionBlacklistItem objct.
  */
 jobject buildFetionBlacklistItem(JNIEnv* env, Fetion_Black* blacklistItem);
@@ -59,6 +64,17 @@ jobject buildFetionBlacklistItem(JNIEnv* env, Fetion_Black* blacklistItem);
  * Build FetionGang object.
  */
 jobject buildFetionGang(JNIEnv* env, Fetion_Qun* gang);
+
+/*
+ * Build Fetion_Qun structure.
+ */
+Fetion_Qun* buildFetionGangStruct(JNIEnv* env, Fetion_Qun* gang,
+                                  jobject jgang);
+
+/*
+ * Free memory allocated in Fetion_Qun structure.
+ */
+void destroyFetionGangStruct(Fetion_Qun* gang);
 
 /*
  * Build FetionGangInfo object.
