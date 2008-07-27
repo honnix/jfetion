@@ -9,6 +9,11 @@ extern JavaVM* theVM;
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved);
 
 /*
+ * Check whether the given is NULL, if it is, throw NullPointException.
+ */
+BOOL checkNullPointer(JNIEnv* env, void* pointer);
+
+/*
  * Build arguments for callback function.
  */
 jobjectArray buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs);
