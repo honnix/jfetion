@@ -26,6 +26,7 @@ package com.honnix.jfetion;
 public interface EventListener
 {
 
-    void callback(Object... args);
+    void callback(int message, long firstMessageParam, long secondMessageParam,
+            Object... args);
 
 }

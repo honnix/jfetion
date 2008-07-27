@@ -109,7 +109,7 @@ void callback(int message, unsigned int wparam, unsigned long lparam,
     jobject jobj = (*env)->GetObjectArrayElement(env, jargs, 0);
     jclass eventListenerClass = (*env)->GetObjectClass(env, jobj);
     jmethodID callbackMethod = (*env)->GetMethodID(env, eventListenerClass,
-                                                   "callback", "([Ljava/lang/Object;)V");
+                                                   "callback", "(IJJ[Ljava/lang/Object;)V");
     jsize length = (*env)->GetArrayLength(env, jargs);
     jclass elementClass = (*env)->FindClass(env, OBJECT_CLASS);
     jobjectArray array = (*env)->NewObjectArray(env, length - 1,
@@ -123,7 +123,7 @@ void callback(int message, unsigned int wparam, unsigned long lparam,
                                           env, jargs, index + 1));
     }
 
-    (*env)->CallVoidMethod(env, jobj, callbackMethod, array);
+    (*env)->CallVoidMethod(env, jobj, callbackMethod, message, wparam, lparam, array);
 
     (*env)->DeleteGlobalRef(env, jargs);
 }
