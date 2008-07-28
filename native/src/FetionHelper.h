@@ -6,7 +6,15 @@
 
 extern JavaVM* theVM;
 
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved);
+typedef struct _callback
+{
+    jobject jeventListener;
+    jobjectArray jargs;
+} Callback;
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved);
+
+JNIEXPORT void JNICALL JNI_OnUnLoad(JavaVM* vm, void* reserved);
 
 /*
  * Check whether the given is NULL, if it is, throw NullPointException.
@@ -16,7 +24,7 @@ BOOL checkNullPointer(JNIEnv* env, void* pointer);
 /*
  * Build arguments for callback function.
  */
-jobjectArray buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs);
+Callback* buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs);
 
 /*
  * Callback function for EventListener.
