@@ -154,8 +154,6 @@ public interface FetionAccountControl
 
     boolean setBuddyInfo(long id, String localName);
 
-    void setLoginStatus(int status);
-
     void updateAccountInfoAll();
 
     void updateAccountInfoById(long id);

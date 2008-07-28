@@ -1151,41 +1151,71 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncEndDialog
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserId
 (JNIEnv* env, jobject jobj)
 {
+    jstring jusrId = NULL;
     const char* userId = fx_get_usr_uid();
 
-    return (*env)->NewStringUTF(env, userId);
+    if (userId != NULL)
+    {
+        jusrId = (*env)->NewStringUTF(env, userId);
+    }
+
+    return jusrId;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserPassword
 (JNIEnv* env, jobject jobj)
 {
+    jstring jpassword = NULL;
     const char* password = fx_get_usr_passwd();
 
-    return (*env)->NewStringUTF(env, password);
+    if (password != NULL)
+    {
+        jpassword = (*env)->NewStringUTF(env, password);
+    }
+
+    return jpassword;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserShowName
 (JNIEnv* env, jobject jobj)
 {
+    jstring jshowName = NULL;
     const char* showName = fx_get_usr_show_name();
 
-    return (*env)->NewStringUTF(env, showName);
+    if (showName != NULL)
+    {
+        jshowName = (*env)->NewStringUTF(env, showName);
+    }
+
+    return jshowName;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserUri
 (JNIEnv* env, jobject jobj)
 {
-    const char* userUri = fx_get_usr_uri();
+    jstring juri = NULL;
+    const char* uri = fx_get_usr_uri();
 
-    return (*env)->NewStringUTF(env, userUri);
+    if (uri != NULL)
+    {
+        juri = (*env)->NewStringUTF(env, uri);
+    }
+
+    return juri;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserMobileNumber
 (JNIEnv* env, jobject jobj)
 {
-    const char* userMobileNumber = fx_get_usr_mobilenum();
+    jstring jmobileNumber = NULL;
+    const char* mobileNumber = fx_get_usr_mobilenum();
 
-    return (*env)->NewStringUTF(env, userMobileNumber);
+    if (mobileNumber != NULL)
+    {
+        jmobileNumber = (*env)->NewStringUTF(env, mobileNumber);
+    }
+
+    return jmobileNumber;
 }
 
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserScore
@@ -1499,8 +1529,8 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountShowName
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
-    char* showName = fx_get_account_show_name(&account, jneedImpresa);
     jstring jshowName = NULL;
+    char* showName = fx_get_account_show_name(&account, jneedImpresa);
 
     if (showName != NULL)
     {
@@ -1516,8 +1546,8 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangShowName
     Fetion_Qun gang;
     buildFetionGangStruct(env, &gang, jgang);
 
-    char* showName = fx_get_qun_show_name(&gang);
     jstring jshowName = NULL;
+    char* showName = fx_get_qun_show_name(&gang);
 
     if (showName != NULL)
     {
@@ -1904,8 +1934,8 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownProxy
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
 (JNIEnv* env, jobject jobj)
 {
-    char* proxy = fx_get_proxy();
     jstring jproxy = NULL;
+    char* proxy = fx_get_proxy();
 
     if (proxy != NULL)
     {
@@ -1926,8 +1956,8 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
     jboolean isCopy;
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
 
-    char* newMessage = fx_simple_paser_msg(message);
     jstring jnewMessage = NULL;
+    char* newMessage = fx_simple_paser_msg(message);
 
     if (newMessage != NULL)
     {

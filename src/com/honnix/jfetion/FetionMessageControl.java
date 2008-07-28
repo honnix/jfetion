@@ -60,7 +60,4 @@ public interface FetionMessageControl
 
     boolean sendSmsToSelf(String message);
 
-    void setSystemMessageEventListener(EventListener eventListener,
-            Object... args);
-
 }

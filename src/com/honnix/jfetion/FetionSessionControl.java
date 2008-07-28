@@ -43,10 +43,15 @@ public interface FetionSessionControl
 
     void logout();
 
+    void setLoginStatus(int status);
+
     boolean setProxy(String proxy);
 
-    void setUnknownProxy();
+    void setSystemMessageEventListener(EventListener eventListener,
+            Object... args);
 
+    void setUnknownProxy();
+    
     void terminate();
 
 }
