@@ -30,13 +30,6 @@ import com.honnix.jfetion.impl.event.EventConstant;
 public class TestFetion
 {
 
-    private class Checker
-    {
-
-        private boolean isCalled;
-
-    }
-
     private class MockEventListener
         implements EventListener
     {
@@ -56,18 +49,18 @@ public class TestFetion
 
             case EventConstant.LOGIN_OK:
                 System.out.println("login ok");
-                synchronized (Checker.class)
+                synchronized (TestFetion.class)
                 {
-                    ((Checker) args[0]).isCalled = true;
+                    ((TestFetion) args[0]).isCalled = true;
                 }
                 break;
 
             case EventConstant.LOGIN_FAIL:
             case EventConstant.LOGIN_NETWORK_ERROR:
                 System.out.println("login fail or network error");
-                synchronized (Checker.class)
+                synchronized (TestFetion.class)
                 {
-                    ((Checker) args[0]).isCalled = true;
+                    ((TestFetion) args[0]).isCalled = true;
                 }
                 break;
 
@@ -103,6 +96,32 @@ public class TestFetion
 
     private static final String MESSAGE = "sent using JNI";
 
+    /**
+     * @param args
+     */
+    public static void main(String[] args)
+    {
+        TestFetion test = new TestFetion();
+        
+        test.fetionSession.init();
+        
+        test.isCalled = false;
+        test.fetionSession.asyncLogin(MOBILE_NUMBER, PASSWORD,
+                test.mockEventListener, test);
+        test.waitUntilCalledBack();
+
+        FetionPersonalInfo personalInfo = test.fetionAccount.getPersonalInfo();
+        System.out.println(personalInfo.getBirthday());
+        System.out.println(personalInfo.getNickname());
+        
+        test.fetionMessage.sendSmsToSelf(MESSAGE);
+
+        test.fetionSession.logout();
+        test.fetionSession.terminate();
+    }
+
+    private boolean isCalled;
+
     private FetionSessionControl fetionSession;
 
     private FetionAccountControl fetionAccount;
@@ -111,15 +130,22 @@ public class TestFetion
 
     private MockEventListener mockEventListener;
 
-    private Checker checker;
+    private TestFetion()
+    {
+        fetionSession = FetionFactory.getFetionSessionControl();
+        fetionAccount = FetionFactory.getFetionAccountControl();
+        fetionMessage = FetionFactory.getFetionMessageControl();
+
+        mockEventListener = new MockEventListener();
+    }
 
     private void waitUntilCalledBack()
     {
         while (true)
         {
-            synchronized (Checker.class)
+            synchronized (TestFetion.class)
             {
-                if (checker.isCalled)
+                if (isCalled)
                 {
                     break;
                 }
@@ -135,37 +161,6 @@ public class TestFetion
                 e.printStackTrace();
             }
         }
-    }
-
-    private TestFetion()
-    {
-        fetionSession = FetionFactory.getFetionSessionControl();
-        fetionAccount = FetionFactory.getFetionAccountControl();
-        fetionMessage = FetionFactory.getFetionMessageControl();
-
-        mockEventListener = new MockEventListener();
-        checker = new Checker();
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args)
-    {
-        TestFetion test = new TestFetion();
-        test.fetionSession.init();
-        test.fetionSession.asyncLogin(MOBILE_NUMBER, PASSWORD,
-                test.mockEventListener, test.checker);
-
-        test.waitUntilCalledBack();
-        
-        FetionPersonalInfo personalInfo = test.fetionAccount.getPersonalInfo();
-        System.out.println(personalInfo.getBirthday());
-        System.out.println(personalInfo.getNickname());
-        test.fetionMessage.sendSmsToSelf(MESSAGE);
-        
-        test.fetionSession.logout();
-        test.fetionSession.terminate();
     }
 
 }
