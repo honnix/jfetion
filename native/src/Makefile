@@ -2,7 +2,7 @@ CC=gcc
 LD=g++
 
 CFLAGS=-DDEBUG -ggdb -Wall -I/opt/jdk/include -I/opt/jdk/include/linux -I../include
-LDFLAGS=-shared -Wall ../lib/libfetion_32.a -lpthread -lcurl
+LDFLAGS=-shared -Wall -fpic ../lib/libfetion_32.a -lpthread -lcurl
 
 all: libjfetion.so
 
