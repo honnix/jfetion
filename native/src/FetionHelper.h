@@ -4,13 +4,45 @@
 #include <jni.h>
 #include <libfetion/libfetion.h>
 
-extern JavaVM* theVM;
-
 typedef struct _callback
 {
     jobject jeventListener;
     jobjectArray jargs;
 } Callback;
+
+typedef enum _callbackFunctionIndex
+{
+    ASYNC_LOGIN = 0,
+    ASYNC_RELOGIN,
+    SET_SYSTEM_MESSAGE_EVENT_LISTENER,
+    ASYNC_SEND_SMS,
+    ASYNC_SEND_SMS_TO_SELF,
+    ASYNC_SEND_SMS_BY_MOBILE_NUMBER,
+    ASYNC_BEGIN_DIALOG,
+    ASYNC_DIALOG_SEND,
+    ASYNC_SET_USER_STATE,
+    ASYNC_SET_USER_IMPRESA,
+    ASYNC_MOVE_GROUP_BUDDY_BY_ID,
+    ASYNC_MOVE_GROUP_BUDDY_BY_ACCOUNT,
+    ASYNC_RENAME_BUDDY_LIST,
+    ASYNC_ADD_BUDDY_LIST,
+    ASYNC_ADD_BUDDY_BY_USER_ID,
+    ASYNC_ADD_BUDDY_BY_MOBILE_NUMBER,
+    ASYNC_DELETE_BUDDY_LIST,
+    ASYNC_SET_BUDDY_INFO,
+    ASYNC_DELETE_BUDDY_BY_ID,
+    ASYNC_DELETE_BUDDY_BY_ACCOUNT,
+    ASYNC_ADD_TO_BLACKLIST_BY_ID,
+    ASYNC_ADD_TO_BLACKLIST_BY_ACCOUNT,
+    ASYNC_ADD_TO_BLACKLIST_BY_URI,
+    ASYNC_REMOVE_FROM_BLACKLIST_BY_ID,
+    ASYNC_REMOVE_FROM_BLACKLIST_BY_ACCOUNT,
+    ASYNC_REMOVE_FROM_BLACKLIST_BY_URI
+} CallbackFunctionIndex;
+
+extern JavaVM* theVM;
+extern Callback** callbackArray;
+extern CallbackFunctionIndex callbackFunctionIndex;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved);
 
@@ -19,12 +51,13 @@ JNIEXPORT void JNICALL JNI_OnUnLoad(JavaVM* vm, void* reserved);
 /*
  * Check whether the given is NULL, if it is, throw NullPointException.
  */
-BOOL checkNullPointer(JNIEnv* env, void* pointer);
+BOOL checkNullPointer(JNIEnv* env, int amount, ...);
 
 /*
  * Build arguments for callback function.
  */
-Callback* buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs);
+Callback* buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs,
+    CallbackFunctionIndex index);
 
 /*
  * Callback function for EventListener.

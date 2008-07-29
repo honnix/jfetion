@@ -21,6 +21,8 @@
 package com.honnix.jfetion;
 
 import com.honnix.jfetion.impl.FetionFactory;
+import com.honnix.jfetion.impl.data.FetionPersonalInfo;
+import com.honnix.jfetion.impl.event.EventConstant;
 
 /**
  * 
@@ -42,12 +44,57 @@ public class TestFetion
         public void callback(int message, long firstMessageParam,
                 long secondMessageParam, Object... args)
         {
-            synchronized (Checker.class)
+            switch (message)
             {
-                ((Checker) args[0]).isCalled = true;
+            case EventConstant.LOGIN_CONNECTING:
+                System.out.println("login connecting");
+                break;
+
+            case EventConstant.LOGIN_AUTH_OK:
+                System.out.println("login auth ok");
+                break;
+
+            case EventConstant.LOGIN_OK:
+                System.out.println("login ok");
+                synchronized (Checker.class)
+                {
+                    ((Checker) args[0]).isCalled = true;
+                }
+                break;
+
+            case EventConstant.LOGIN_FAIL:
+            case EventConstant.LOGIN_NETWORK_ERROR:
+                System.out.println("login fail or network error");
+                synchronized (Checker.class)
+                {
+                    ((Checker) args[0]).isCalled = true;
+                }
+                break;
+
+            case EventConstant.LOGIN_GCL_GETTING:
+                System.out.println("login gcl getting");
+                break;
+
+            case EventConstant.LOGIN_GCL_OK:
+                System.out.println("login gcl ok");
+                break;
+
+            case EventConstant.LOGIN_GCL_FAIL:
+                System.out.println("login gcl fail");
+                break;
+
+            case EventConstant.LOGIN_GP_GETTING:
+                System.out.println("login gp getting");
+                break;
+
+            case EventConstant.LOGIN_GP_OK:
+                System.out.println("login gp ok");
+
+            case EventConstant.LOGIN_GP_FAIL:
+                System.out.println("login gp fail");
+                break;
             }
         }
-
     }
 
     private static final String MOBILE_NUMBER = "13761089478";
@@ -56,17 +103,17 @@ public class TestFetion
 
     private static final String MESSAGE = "sent using JNI";
 
-    private static FetionSessionControl fetionSession;
+    private FetionSessionControl fetionSession;
 
-    private static FetionAccountControl fetionAccount;
+    private FetionAccountControl fetionAccount;
 
-    private static FetionMessageControl fetionMessage;
+    private FetionMessageControl fetionMessage;
 
-    private static MockEventListener mockEventListener;
+    private MockEventListener mockEventListener;
 
-    private static Checker checker;
+    private Checker checker;
 
-    private static void waitUntilCalledBack()
+    private void waitUntilCalledBack()
     {
         while (true)
         {
@@ -108,9 +155,17 @@ public class TestFetion
         TestFetion test = new TestFetion();
         test.fetionSession.init();
         test.fetionSession.asyncLogin(MOBILE_NUMBER, PASSWORD,
-                mockEventListener, checker);
+                test.mockEventListener, test.checker);
 
-        waitUntilCalledBack();
+        test.waitUntilCalledBack();
+        
+        FetionPersonalInfo personalInfo = test.fetionAccount.getPersonalInfo();
+        System.out.println(personalInfo.getBirthday());
+        System.out.println(personalInfo.getNickname());
+        test.fetionMessage.sendSmsToSelf(MESSAGE);
+        
+        test.fetionSession.logout();
+        test.fetionSession.terminate();
     }
 
 }

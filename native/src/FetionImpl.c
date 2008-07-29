@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <libfetion/libfetion.h>
 
 #include "FetionImpl.h"
@@ -33,6 +34,8 @@
 #define DEBUG_INFO(message)
 #define DEBUG_INFO_A(message, a)
 #endif
+
+#define CALLBACK_ARRAY_SIZE 50
 
 #define OBJECT_CLASS "java/lang/Object"
 #define ARRAY_LIST_CLASS "java/util/ArrayList"
@@ -77,28 +80,51 @@
 #define FETION_GANG_INFO_CLASS_SIG "Lcom/honnix/jfetion/impl/data/FetionGangInfo;"
 
 JavaVM* theVM = NULL;
+Callback** callbackArray = NULL;
 
-BOOL checkNullPointer(JNIEnv* env, void* pointer)
+BOOL checkNullPointer(JNIEnv* env, int amount, ...)
 {
     BOOL isNull = FALSE;
-
-    if (pointer == NULL)
+    va_list ap;
+    int index;
+    
+    va_start(ap, amount);
+    for (index = 0; index < amount; ++index)
     {
-        isNull = TRUE;
-        jclass exceptionClass = (*env)->FindClass(env, NULL_POINTER_EXCEPTION_CLASS);
+        void* pointer = va_arg(ap, void*);
 
-        (*env)->ThrowNew(env, exceptionClass, "Null pointer exception for some argument.");
+        if (pointer == NULL)
+        {
+            isNull = TRUE;
+
+            jclass exceptionClass = (*env)->FindClass(env, NULL_POINTER_EXCEPTION_CLASS);
+            (*env)->ThrowNew(env, exceptionClass,
+                             "Null pointer exception for some argument.");
+
+            break;
+        }
     }
+    va_end(ap);
 
     return isNull;
 }
 
-Callback* buildCallBackArgs(JNIEnv* env, jobject jeventListener, jobjectArray jargs)
+Callback* buildCallBackArgs(JNIEnv* env, jobject jeventListener, jobjectArray jargs,
+                            CallbackFunctionIndex index)
 {
     Callback* callback = (Callback*) malloc(sizeof(Callback));
 
     callback->jeventListener = (*env)->NewGlobalRef(env, jeventListener);
     callback->jargs = (*env)->NewGlobalRef(env, jargs);
+
+    if (callbackArray[index] != NULL)
+    {
+        (*env)->DeleteGlobalRef(env, callbackArray[index]->jeventListener);
+        (*env)->DeleteGlobalRef(env, callbackArray[index]->jargs);
+        free(callbackArray[index]);
+    }
+
+    callbackArray[index] = callback;
 
     return callback;
 }
@@ -106,11 +132,11 @@ Callback* buildCallBackArgs(JNIEnv* env, jobject jeventListener, jobjectArray ja
 void callback(int message, unsigned int wparam, unsigned long lparam,
               void* args)
 {
-    DEBUG_INFO("1\n");
     DEBUG_INFO_A("message %d\n", message);
-    DEBUG_INFO_A("wparam %ld\n", wparam);
+    DEBUG_INFO_A("wparam %d\n", wparam);
     DEBUG_INFO_A("lparam %ld\n", lparam);
-    DEBUG_INFO_A("args %ld\n", args);
+    DEBUG_INFO_A("args %ld\n", (long) args);
+
     JNIEnv* env = NULL;
     JavaVMAttachArgs vmAttachArgs;
 
@@ -126,11 +152,6 @@ void callback(int message, unsigned int wparam, unsigned long lparam,
     Callback* callback = (Callback*) args;
 
     jclass eventListenerClass = (*env)->GetObjectClass(env, callback->jeventListener);
-    if ((*env)->ExceptionOccurred(env))
-    {
-        (*env)->ExceptionDescribe(env);
-    }
-    DEBUG_INFO("2\n");
     jmethodID callbackMethod = (*env)->GetMethodID(env, eventListenerClass,
                                                    "callback", "(IJJ[Ljava/lang/Object;)V");
     (*env)->CallVoidMethod(env, callback->jeventListener, callbackMethod, message,
@@ -834,14 +855,28 @@ jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     theVM = vm;
 
+    size_t size = sizeof(Callback*) * CALLBACK_ARRAY_SIZE;
+    callbackArray = (Callback**) malloc(size);
+    memset(callbackArray, 0, size);
+
     return JNI_VERSION_1_2;
 }
 
 void JNICALL JNI_OnUnLoad(JavaVM* vm, void* reserved)
 {
     JNIEnv* env = NULL;
-
     (*theVM)->GetEnv(theVM, (void**) &env, JNI_VERSION_1_2);
+
+    int index;
+    for (index = 0; index < CALLBACK_ARRAY_SIZE; ++index)
+    {
+        if (callbackArray[index] != NULL)
+        {
+            (*env)->DeleteGlobalRef(env, callbackArray[index]->jeventListener);
+            (*env)->DeleteGlobalRef(env, callbackArray[index]->jargs);
+            free(callbackArray[index]);            
+        }
+    }
 }
 
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_init
@@ -865,11 +900,7 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_closeNetwork
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_login
 (JNIEnv* env, jobject jobj, jstring juserId, jstring jpassword)
 {
-    if (checkNullPointer(env, juserId))
-    {
-        return JNI_FALSE;
-    }
-    if (checkNullPointer(env, jpassword))
+    if (checkNullPointer(env, 2, juserId, jpassword))
     {
         return JNI_FALSE;
     }
@@ -896,11 +927,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncLogin
 (JNIEnv* env, jobject jobj, jstring juserId, jstring jpassword,
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, juserId))
-    {
-        return 0;
-    }
-    if (checkNullPointer(env, jpassword))
+    if (checkNullPointer(env, 3, juserId, jpassword, jeventListener))
     {
         return 0;
     }
@@ -909,7 +936,8 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncLogin
     const char* userId = (*env)->GetStringUTFChars(env, juserId, &isCopy);
     const char* password = (*env)->GetStringUTFChars(env, jpassword, &isCopy);
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_LOGIN);
 
     jint result = fx_login(userId, password, callback, callbackArgs);
 
@@ -922,7 +950,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncLogin
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncReLogin
 (JNIEnv* env, jobject jobj, jobject jeventListener, jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_RELOGIN);
 
     return fx_relogin(callback, callbackArgs);
 }
@@ -936,7 +970,13 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_logout
 void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setSystemMessageEventListener
 (JNIEnv* env, jobject jobj, jobject jeventListener, jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               SET_SYSTEM_MESSAGE_EVENT_LISTENER);
 
     fx_set_system_msg_cb(callback, callbackArgs);
 }
@@ -959,7 +999,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getMessage
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSms
 (JNIEnv* env, jobject jobj, jlong jwho, jstring jmessage)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 1, jmessage))
     {
         return JNI_FALSE;
     }
@@ -977,11 +1017,7 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSms
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSmsByMobileNumber
 (JNIEnv* env, jobject job, jstring jmobileNumber, jstring jmessage)
 {
-    if (checkNullPointer(env, jmobileNumber))
-    {
-        return JNI_FALSE;
-    }
-    if (checkNullPointer(env, jmobileNumber))
+    if (checkNullPointer(env, 2, jmobileNumber, jmessage))
     {
         return JNI_FALSE;
     }
@@ -1001,7 +1037,7 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSmsByMobileNumber
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSmsToSelf
 (JNIEnv* env, jobject jobj, jstring jmessage)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 1, jmessage))
     {
         return JNI_FALSE;
     }
@@ -1020,14 +1056,15 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSms
 (JNIEnv* env, jobject jobj, jlong jwho, jstring jmessage, 
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 2, jmessage, jeventListener))
     {
         return 0;
     }
 
     jboolean isCopy;
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SEND_SMS);
     
     jint result = fx_send_sms(jwho, message, callback, callbackArgs);
 
@@ -1040,14 +1077,15 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsToSelf
 (JNIEnv* env, jobject jobj, jstring jmessage, 
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 2, jmessage, jeventListener))
     {
         return 0;
     }
 
     jboolean isCopy;
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SEND_SMS_TO_SELF);
 
     jint result = fx_send_sms_to_self(message, callback, callbackArgs);
 
@@ -1060,7 +1098,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsByMobileNumber
 (JNIEnv* env, jobject jobj, jstring jmobileNumber, jstring jmessage, 
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 2, jmessage, jeventListener))
     {
         return 0;
     }
@@ -1068,7 +1106,8 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsByMobileNumber
     jboolean isCopy;
     const char* mobileNumber = (*env)->GetStringUTFChars(env, jmobileNumber, &isCopy);
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SEND_SMS_BY_MOBILE_NUMBER);
 
     jint result = fx_send_sms_by_mobile_no(mobileNumber, message, callback, callbackArgs);
 
@@ -1087,7 +1126,7 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_beginDialog
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_dialogSend
 (JNIEnv* env, jobject jobj, jlong jwho, jstring jmessage)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 1, jmessage))
     {
         return JNI_FALSE;
     }
@@ -1112,7 +1151,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncBeginDialog
 (JNIEnv* env, jobject jobj, jlong jwho, 
  jobject jeventListener, jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_BEGIN_DIALOG);
 
     return fx_begin_dialog(jwho, callback, callbackArgs);
 }
@@ -1121,14 +1166,15 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDialogSend
 (JNIEnv* env, jobject jobj, jlong jwho, jstring jmessage, 
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 2, jmessage, jeventListener))
     {
         return 0;
     }
 
     jboolean isCopy;
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_DIALOG_SEND);
 
     jint result = fx_dialog_send(jwho, message, callback, callbackArgs);
 
@@ -1230,7 +1276,8 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserState
         description = (*env)->GetStringUTFChars(env, jdescription, &isCopy);        
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);    
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_USER_STATE);
 
     int result = fx_set_user_state(jstate, (char*) description, callback, callbackArgs);
 
@@ -1249,14 +1296,15 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserImpresa
 (JNIEnv* env, jobject jobj, jstring jimpresa, 
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jimpresa))
+    if (checkNullPointer(env, 2, jimpresa, jeventListener))
     {
         return 0;
     }
 
     jboolean isCopy;
     const char* impresa = (*env)->GetStringUTFChars(env, jimpresa, &isCopy);
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);    
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_USER_IMPRESA);
 
     int result = fx_set_user_impresa(impresa, callback, callbackArgs);
 
@@ -1447,7 +1495,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBuddyById
 (JNIEnv* env, jobject jobj, jlong jid, jint jgroupId, jobject jeventListener,
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_MOVE_GROUP_BUDDY_BY_ID);
     
     return fx_move_group_buddy_by_id(jid, jgroupId, callback, callbackArgs);
 }
@@ -1456,7 +1510,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBuddyByAccoun
 (JNIEnv* env, jobject jobj, jobject jaccount, jint jgroupId, jobject jeventListener,
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_MOVE_GROUP_BUDDY_BY_ACCOUNT);
 
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
@@ -1590,12 +1650,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRenameBuddyList
 (JNIEnv* env, jobject jobj, jint jid, jstring jname, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, jname))
+    if (checkNullPointer(env, 2, jname, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_RENAME_BUDDY_LIST);
 
     jboolean isCopy;
     const char* name = (*env)->GetStringUTFChars(env, jname, &isCopy);
@@ -1611,12 +1672,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyList
 (JNIEnv* env, jobject jobj, jstring jname, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, jname))
+    if (checkNullPointer(env, 2, jname, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_BUDDY_LIST);
 
     jboolean isCopy;
     const char* name = (*env)->GetStringUTFChars(env, jname, &isCopy);
@@ -1632,12 +1694,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByUserId
 (JNIEnv* env, jobject jobj, jstring juserId, jstring jlocalName,
  jint jgroupId, jstring jdescription, jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, juserId))
+    if (checkNullPointer(env, 2, juserId, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_BUDDY_BY_USER_ID);
 
     jboolean isCopy;
     const char* userId = (*env)->GetStringUTFChars(env, juserId, &isCopy);
@@ -1673,12 +1736,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByMobileNumber
  jstring jlocalName, jint jgroupId, jstring jdescription, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, jmobileNumber))
+    if (checkNullPointer(env, 2, jmobileNumber, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_BUDDY_BY_MOBILE_NUMBER);
 
     jboolean isCopy;
     const char* mobileNumber = (*env)->GetStringUTFChars(env, jmobileNumber, &isCopy);
@@ -1713,7 +1777,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_handleContactRequest
 (JNIEnv* env, jobject jobj, jstring juri, jint jisPassed, jint jgroupId, 
  jstring jlocalName)
 {
-    if (checkNullPointer(env, juri))
+    if (checkNullPointer(env, 1, juri))
     {
         return 0;
     }
@@ -1741,7 +1805,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyList
 (JNIEnv* env, jobject jobj, jint jid, jobject jeventListener,
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_DELETE_BUDDY_LIST);
 
     return fx_delete_buddylist(jid, callback, callbackArgs);
 }
@@ -1749,7 +1819,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyList
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyInfo
 (JNIEnv* env, jobject jobj, jlong jid, jstring jlocalName)
 {
-    if (checkNullPointer(env, jlocalName))
+    if (checkNullPointer(env, 1, jlocalName))
     {
         return JNI_FALSE;
     }
@@ -1768,12 +1838,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetBuddyInfo
 (JNIEnv* env, jobject jobj, jlong jid, jstring jlocalName,
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, jlocalName))
+    if (checkNullPointer(env, 2, jlocalName, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_BUDDY_INFO);
 
     jboolean isCopy;
     const char* localName = (*env)->GetStringUTFChars(env, jlocalName, &isCopy);
@@ -1789,7 +1860,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyById
 (JNIEnv* env, jobject jobj, jlong jid, jobject jeventListener, 
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_DELETE_BUDDY_BY_ID);
 
     return fx_delete_buddy_by_id(jid, callback, callbackArgs);
 }
@@ -1798,10 +1875,16 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener,
  jobjectArray jargs)
 {
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_DELETE_BUDDY_BY_ACCOUNT);
 
     int result = fx_delete_buddy_by_account(&account, callback, callbackArgs);
 
@@ -1814,7 +1897,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistById
 (JNIEnv* env, jobject jobj, jlong jid, jobject jeventListener,
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_TO_BLACKLIST_BY_ID);
 
     return fx_addto_blacklist_by_id(jid, callback, callbackArgs);
 }
@@ -1823,10 +1912,16 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistByAccoun
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener,
  jobjectArray jargs)
 {
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_TO_BLACKLIST_BY_ACCOUNT);
 
     int result = fx_addto_blacklist_by_account(&account, callback, callbackArgs);
 
@@ -1839,12 +1934,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistByUri
 (JNIEnv* env, jobject jobj, jstring juri, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, juri))
+    if (checkNullPointer(env, 2, juri, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_ADD_TO_BLACKLIST_BY_URI);
 
     jboolean isCopy;
     const char* uri = (*env)->GetStringUTFChars(env, juri, &isCopy);
@@ -1860,7 +1956,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByI
 (JNIEnv* env, jobject jobj, jlong jid, jobject jeventListener,
  jobjectArray jargs)
 {
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_REMOVE_FROM_BLACKLIST_BY_ID);
 
     return fx_removefrom_blacklist_by_id(jid, callback, callbackArgs);
 }
@@ -1869,10 +1971,16 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByA
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener, 
  jobjectArray jargs)
 {
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_REMOVE_FROM_BLACKLIST_BY_ACCOUNT);
 
     int result = fx_removefrom_blacklist_by_account(&account, callback, callbackArgs);
 
@@ -1885,12 +1993,13 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByU
 (JNIEnv* env, jobject jobj, jstring juri, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, juri))
+    if (checkNullPointer(env, 2, juri, jeventListener))
     {
         return 0;
     }
 
-    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_REMOVE_FROM_BLACKLIST_BY_URI);
 
     jboolean isCopy;
     const char* uri = (*env)->GetStringUTFChars(env, juri, &isCopy);
@@ -1905,7 +2014,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByU
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxy
 (JNIEnv* env, jobject jobj, jstring jproxy)
 {
-    if (checkNullPointer(env, jproxy))
+    if (checkNullPointer(env, 1, jproxy))
     {
         return JNI_FALSE;
     }
@@ -1943,7 +2052,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
 (JNIEnv* env, jobject jobj, jstring jmessage)
 {
-    if (checkNullPointer(env, jmessage))
+    if (checkNullPointer(env, 1, jmessage))
     {
         return NULL;
     }
