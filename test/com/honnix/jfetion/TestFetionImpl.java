@@ -3,8 +3,6 @@ package com.honnix.jfetion;
 import junit.framework.TestCase;
 
 import com.honnix.jfetion.impl.FetionFactory;
-import com.honnix.jfetion.impl.data.FetionAccount;
-import com.honnix.jfetion.impl.event.EventConstant;
 
 public class TestFetionImpl
     extends TestCase
@@ -26,7 +24,7 @@ public class TestFetionImpl
         {
             synchronized (Checker.class)
             {
-                //((Checker) args[0]).isCalled = true;
+                // ((Checker) args[0]).isCalled = true;
             }
         }
 
@@ -47,6 +45,35 @@ public class TestFetionImpl
     private MockEventListener mockEventListener;
 
     private Checker checker;
+
+    @Override
+    protected void setUp()
+        throws Exception
+    {
+        fetionSession = FetionFactory.getFetionSessionControl();
+        fetionAccount = FetionFactory.getFetionAccountControl();
+        fetionMessage = FetionFactory.getFetionMessageControl();
+
+        mockEventListener = new MockEventListener();
+        checker = new Checker();
+    }
+
+    @Override
+    protected void tearDown()
+        throws Exception
+    {
+        fetionSession.logout();
+        fetionSession.terminate();
+    }
+
+    public void testAsyncLogin()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertEquals("wrong login status?", 1, fetionSession.asyncLogin(
+                MOBILE_NUMBER, PASSWORD, mockEventListener));
+
+        waitUntilCalledBack();
+    }
 
     private void waitUntilCalledBack()
     {
@@ -72,107 +99,81 @@ public class TestFetionImpl
         }
     }
 
-    protected void setUp()
-        throws Exception
-    {
-        fetionSession = FetionFactory.getFetionSessionControl();
-        fetionAccount = FetionFactory.getFetionAccountControl();
-        fetionMessage = FetionFactory.getFetionMessageControl();
-
-        mockEventListener = new MockEventListener();
-        checker = new Checker();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        fetionSession.logout();
-        fetionSession.terminate();
-    }
-
-    public void testAsyncLogin()
-    {
-        assertTrue("init failed??", fetionSession.init());
-        assertEquals("wrong login status?", 1, fetionSession.asyncLogin(
-                MOBILE_NUMBER, PASSWORD, mockEventListener));
-
-        waitUntilCalledBack();
-    }
-
-    //    public void testAsyncRelogin()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
-    //        assertEquals("wrong relogin status?", 0, fetionSession.asyncReLogin(
-    //                mockEventListener, this));
+    // public void testAsyncRelogin()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    // assertEquals("wrong relogin status?", 0, fetionSession.asyncReLogin(
+    // mockEventListener, this));
     //
-    //        waitUntilCalledBack();
-    //    }
+    // waitUntilCalledBack();
+    // }
     //
-    //    public void testSendSms()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
+    // public void testSendSms()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
     //
-    //        String id = fetionAccount.getUserId();
-    //        assertNotNull("User ID is null?", id);
+    // String id = fetionAccount.getUserId();
+    // assertNotNull("User ID is null?", id);
     //
-    //        assertTrue("send sms failed?", fetionMessage.sendSms(Long.parseLong(id), MESSAGE));
-    //    }
+    // assertTrue("send sms failed?", fetionMessage.sendSms(Long.parseLong(id),
+    // MESSAGE));
+    // }
     //
-    //    public void testSetSystemMessageEventListener()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
+    // public void testSetSystemMessageEventListener()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
     //
-    //        fetionSession.setSystemMessageEventListener(mockEventListener, this);
+    // fetionSession.setSystemMessageEventListener(mockEventListener, this);
     //
-    //        waitUntilCalledBack();
-    //    }
+    // waitUntilCalledBack();
+    // }
     //
-    //    public void testLogin()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
-    //    }
+    // public void testLogin()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    // }
     //
-    //    public void testSendSmsToSelf()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
-    //        assertTrue("send sms failed??", fetionMessage.sendSmsToSelf(MESSAGE));
-    //    }
+    // public void testSendSmsToSelf()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    // assertTrue("send sms failed??", fetionMessage.sendSmsToSelf(MESSAGE));
+    // }
     //
-    //    public void testSetLoginStatus()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
+    // public void testSetLoginStatus()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
     //
-    //        fetionSession.setLoginStatus(EventConstant.LOGIN_AUTH_OK);
-    //    }
+    // fetionSession.setLoginStatus(EventConstant.LOGIN_AUTH_OK);
+    // }
     //
-    //    public void testSetUserStatus()
-    //    {
-    //        assertTrue("init failed??", fetionSession.init());
-    //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    //                PASSWORD));
+    // public void testSetUserStatus()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
     //
-    //        fetionAccount.asyncSetUserState(EventConstant.STATUS_AWAY, null,
-    //                mockEventListener, this);
+    // fetionAccount.asyncSetUserState(EventConstant.STATUS_AWAY, null,
+    // mockEventListener, this);
     //
-    //        waitUntilCalledBack();
+    // waitUntilCalledBack();
     //
-    //        FetionAccount account = new FetionAccount();
-    //        account.setId(728801465);
+    // FetionAccount account = new FetionAccount();
+    // account.setId(728801465);
     //
-    //        assertEquals("wrong status?", EventConstant.STATUS_AWAY, fetionAccount
-    //                .getUserState());
-    //    }
+    // assertEquals("wrong status?", EventConstant.STATUS_AWAY, fetionAccount
+    // .getUserState());
+    // }
 
 }

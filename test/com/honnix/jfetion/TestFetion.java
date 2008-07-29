@@ -102,9 +102,9 @@ public class TestFetion
     public static void main(String[] args)
     {
         TestFetion test = new TestFetion();
-        
+
         test.fetionSession.init();
-        
+
         test.isCalled = false;
         test.fetionSession.asyncLogin(MOBILE_NUMBER, PASSWORD,
                 test.mockEventListener, test);
@@ -113,7 +113,7 @@ public class TestFetion
         FetionPersonalInfo personalInfo = test.fetionAccount.getPersonalInfo();
         System.out.println(personalInfo.getBirthday());
         System.out.println(personalInfo.getNickname());
-        
+
         test.fetionMessage.sendSmsToSelf(MESSAGE);
 
         test.fetionSession.logout();
@@ -122,13 +122,13 @@ public class TestFetion
 
     private boolean isCalled;
 
-    private FetionSessionControl fetionSession;
+    private final FetionSessionControl fetionSession;
 
-    private FetionAccountControl fetionAccount;
+    private final FetionAccountControl fetionAccount;
 
-    private FetionMessageControl fetionMessage;
+    private final FetionMessageControl fetionMessage;
 
-    private MockEventListener mockEventListener;
+    private final MockEventListener mockEventListener;
 
     private TestFetion()
     {

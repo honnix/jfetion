@@ -329,7 +329,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param birthday the birthday to set
+     * @param birthday
+     *            the birthday to set
      */
     public void setBirthday(String birthday)
     {
@@ -337,7 +338,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param birthdayValid the birthdayValid to set
+     * @param birthdayValid
+     *            the birthdayValid to set
      */
     public void setBirthdayValid(int birthdayValid)
     {
@@ -345,7 +347,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param bloodType the bloodType to set
+     * @param bloodType
+     *            the bloodType to set
      */
     public void setBloodType(int bloodType)
     {
@@ -353,7 +356,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param city the city to set
+     * @param city
+     *            the city to set
      */
     public void setCity(int city)
     {
@@ -361,7 +365,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param company the company to set
+     * @param company
+     *            the company to set
      */
     public void setCompany(String company)
     {
@@ -369,7 +374,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param companyWebsite the companyWebsite to set
+     * @param companyWebsite
+     *            the companyWebsite to set
      */
     public void setCompanyWebsite(String companyWebsite)
     {
@@ -377,7 +383,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param gender the gender to set
+     * @param gender
+     *            the gender to set
      */
     public void setGender(int gender)
     {
@@ -385,7 +392,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param hobby the hobby to set
+     * @param hobby
+     *            the hobby to set
      */
     public void setHobby(String hobby)
     {
@@ -393,7 +401,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param homePhone the homePhone to set
+     * @param homePhone
+     *            the homePhone to set
      */
     public void setHomePhone(String homePhone)
     {
@@ -401,7 +410,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param horoscope the horoscope to set
+     * @param horoscope
+     *            the horoscope to set
      */
     public void setHoroscope(int horoscope)
     {
@@ -409,7 +419,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param impresa the impresa to set
+     * @param impresa
+     *            the impresa to set
      */
     public void setImpresa(String impresa)
     {
@@ -417,7 +428,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param ivrEnabled the ivrEnabled to set
+     * @param ivrEnabled
+     *            the ivrEnabled to set
      */
     public void setIvrEnabled(int ivrEnabled)
     {
@@ -425,7 +437,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param jobTitle the jobTitle to set
+     * @param jobTitle
+     *            the jobTitle to set
      */
     public void setJobTitle(String jobTitle)
     {
@@ -433,7 +446,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param lunarAnimal the lunarAnimal to set
+     * @param lunarAnimal
+     *            the lunarAnimal to set
      */
     public void setLunarAnimal(int lunarAnimal)
     {
@@ -441,7 +455,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param matchEnabled the matchEnabled to set
+     * @param matchEnabled
+     *            the matchEnabled to set
      */
     public void setMatchEnabled(int matchEnabled)
     {
@@ -449,7 +464,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param mobileNumber the mobileNumber to set
+     * @param mobileNumber
+     *            the mobileNumber to set
      */
     public void setMobileNumber(String mobileNumber)
     {
@@ -457,7 +473,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param name the name to set
+     * @param name
+     *            the name to set
      */
     public void setName(String name)
     {
@@ -465,7 +482,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param nation the nation to set
+     * @param nation
+     *            the nation to set
      */
     public void setNation(String nation)
     {
@@ -473,7 +491,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param nickname the nickname to set
+     * @param nickname
+     *            the nickname to set
      */
     public void setNickname(String nickname)
     {
@@ -481,7 +500,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param occupation the occupation to set
+     * @param occupation
+     *            the occupation to set
      */
     public void setOccupation(String occupation)
     {
@@ -489,7 +509,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param otherEmail the otherEmail to set
+     * @param otherEmail
+     *            the otherEmail to set
      */
     public void setOtherEmail(String otherEmail)
     {
@@ -502,7 +523,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param personalEmail the personalEmail to set
+     * @param personalEmail
+     *            the personalEmail to set
      */
     public void setPersonalEmail(String personalEmail)
     {
@@ -510,7 +532,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param portraitCrc the portraitCrc to set
+     * @param portraitCrc
+     *            the portraitCrc to set
      */
     public void setPortraitCrc(int portraitCrc)
     {
@@ -518,7 +541,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param primaryEmail the primaryEmail to set
+     * @param primaryEmail
+     *            the primaryEmail to set
      */
     public void setPrimaryEmail(int primaryEmail)
     {
@@ -526,7 +550,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param profile the profile to set
+     * @param profile
+     *            the profile to set
      */
     public void setProfile(String profile)
     {
@@ -534,7 +559,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param province the province to set
+     * @param province
+     *            the province to set
      */
     public void setProvince(String province)
     {
@@ -542,7 +568,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param provisioning the provisioning to set
+     * @param provisioning
+     *            the provisioning to set
      */
     public void setProvisioning(int provisioning)
     {
@@ -550,7 +577,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param workEmail the workEmail to set
+     * @param workEmail
+     *            the workEmail to set
      */
     public void setWorkEmail(String workEmail)
     {
@@ -558,7 +586,8 @@ public class FetionPersonalInfo
     }
 
     /**
-     * @param workPhone the workPhone to set
+     * @param workPhone
+     *            the workPhone to set
      */
     public void setWorkPhone(String workPhone)
     {
