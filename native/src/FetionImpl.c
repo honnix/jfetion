@@ -972,7 +972,7 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setSystemMessageEventListen
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
