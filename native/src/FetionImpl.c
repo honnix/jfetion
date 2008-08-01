@@ -817,8 +817,8 @@ jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
     jfieldID jidentityField = (*env)->GetFieldID(env, gangMemberClass, "identity", "I");
     (*env)->SetIntField(env, jgangMember, jidentityField, gangMember->identity);
 
-    jfieldID jstateField = (*env)->GetFieldID(env, gangMemberClass, "state", "I");
-    (*env)->SetIntField(env, jgangMember, jstateField, gangMember->state);
+    jfieldID jstatusField = (*env)->GetFieldID(env, gangMemberClass, "status", "I");
+    (*env)->SetIntField(env, jgangMember, jstatusField, gangMember->state);
 
     if (gangMember->client_type != NULL)
     {
@@ -1265,8 +1265,8 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserScore
     return fx_get_usr_score();
 }
 
-jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserState
-(JNIEnv* env, jobject jobj, jint jstate, jstring jdescription,
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserStatus
+(JNIEnv* env, jobject jobj, jint jstatus, jstring jdescription,
  jobject jeventListener, jobjectArray jargs)
 {
     jboolean isCopy;
@@ -1277,16 +1277,16 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserState
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
-                                               ASYNC_SET_USER_STATE);
+                                               ASYNC_SET_USER_STATUS);
 
-    int result = fx_set_user_state(jstate, (char*) description, callback, callbackArgs);
+    int result = fx_set_user_state(jstatus, (char*) description, callback, callbackArgs);
 
     (*env)->ReleaseStringUTFChars(env, jdescription, description);
 
     return result;
 }
 
-jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserState
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserStatus
 (JNIEnv* env, jobject jobj)
 {
     return fx_get_user_state();

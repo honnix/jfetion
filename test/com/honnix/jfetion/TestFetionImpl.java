@@ -1,14 +1,22 @@
 package com.honnix.jfetion;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import com.honnix.jfetion.impl.FetionFactory;
+import com.honnix.jfetion.impl.data.FetionAccount;
+import com.honnix.jfetion.impl.data.FetionBlacklistItem;
+import com.honnix.jfetion.impl.data.FetionGang;
+import com.honnix.jfetion.impl.data.FetionGroup;
+import com.honnix.jfetion.impl.data.FetionPersonalInfo;
+import com.honnix.jfetion.impl.data.FetionUserType;
 import com.honnix.jfetion.impl.event.BeginDialogEventListener;
 import com.honnix.jfetion.impl.event.DialogSendEventListener;
 import com.honnix.jfetion.impl.event.EventConstant;
 import com.honnix.jfetion.impl.event.LoginEventListener;
+import com.honnix.jfetion.impl.event.SetStatusEventListener;
 import com.honnix.jfetion.impl.event.SmsEventListener;
-import com.honnix.jfetion.impl.event.SetStateEventListener;
 import com.honnix.jfetion.impl.event.SystemMessageEventListener;
 
 public class TestFetionImpl
@@ -20,6 +28,8 @@ public class TestFetionImpl
     private static final String PASSWORD = "honnix548";
 
     private static final String MESSAGE = "sent using JNI";
+
+    private static final String URI = "honnix@honnix.com";
 
     private Checker checker;
 
@@ -33,7 +43,7 @@ public class TestFetionImpl
 
     private SystemMessageEventListener systemMessageEventListener;
 
-    private SetStateEventListener setStatusEventListener;
+    private SetStatusEventListener setStatusEventListener;
 
     private SmsEventListener smsEventListener;
 
@@ -74,7 +84,7 @@ public class TestFetionImpl
 
         loginEventListener = new LoginEventListener();
         systemMessageEventListener = new SystemMessageEventListener();
-        setStatusEventListener = new SetStateEventListener();
+        setStatusEventListener = new SetStatusEventListener();
         smsEventListener = new SmsEventListener();
         beginDialogEventListener = new BeginDialogEventListener();
         dialogSendEventListener = new DialogSendEventListener();
@@ -206,13 +216,13 @@ public class TestFetionImpl
                 PASSWORD));
 
         checker.setCalled(false);
-        fetionAccount.asyncSetUserState(EventConstant.STATE_AWAY, null,
+        fetionAccount.asyncSetUserStatus(EventConstant.STATUS_AWAY, null,
                 setStatusEventListener, checker);
 
         waitUntilCalledBack();
 
-        assertEquals("wrong status?", EventConstant.STATE_AWAY, fetionAccount
-                .getUserState());
+        assertEquals("wrong status?", EventConstant.STATUS_AWAY, fetionAccount
+                .getUserStatus());
     }
 
     public void testGetInfo()
@@ -226,7 +236,7 @@ public class TestFetionImpl
                 .getUserPassword());
         assertEquals("wrong show name?", "honnix", fetionAccount
                 .getUserShowName());
-        assertEquals("wrong uri?", "honnix", fetionAccount.getUserUri());
+        assertEquals("wrong uri?", URI, fetionAccount.getUserUri());
         assertEquals("wrong mobile number?", MOBILE_NUMBER, fetionAccount
                 .getUserMobileNumber());
         assertEquals("wrong score?", 0, fetionAccount.getUserScore());
@@ -285,11 +295,126 @@ public class TestFetionImpl
 
     public void testSetSystemMessageEventListener()
     {
+        assertTrue("init failed??", fetionSession.init());
         fetionSession.setSystemMessageEventListener(systemMessageEventListener,
                 checker);
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+    }
+
+    public void testGetPersonalInfo()
+    {
         assertTrue("init failed??", fetionSession.init());
         assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
                 PASSWORD));
+
+        FetionPersonalInfo personalInfo = fetionAccount.getPersonalInfo();
+
+        assertEquals("wrong nickname?", "honnix", personalInfo.getNickname());
+        assertEquals("wrong impresa?", "what is this", personalInfo
+                .getNickname());
+        assertEquals("wrong gender", 1, personalInfo.getGender());
+        assertEquals("wrong nation?", "China", personalInfo.getNation());
+        assertEquals("wrong province?", "Shanghai", personalInfo.getProvince());
+        assertEquals("wrong city?", 1, personalInfo.getCity());
+        assertEquals("wrong ivrEnabled?", 0, personalInfo.getIvrEnabled());
+        assertEquals("wrong portraitCrc?", 1, personalInfo.getPortraitCrc());
+        assertEquals("wrong provisioning?", 1, personalInfo.getProvisioning());
+        assertEquals("wrong mobileNumber?", MOBILE_NUMBER, personalInfo
+                .getMobileNumber());
+        assertEquals("wrong name?", "honnix", personalInfo.getName());
+        assertEquals("wrong birthday?", "1900-1-1", personalInfo.getBirthday());
+        assertEquals("wrong birthdayValid?", 1, personalInfo.getBirthdayValid());
+        assertEquals("wrong lunarAnimal?", 1, personalInfo.getLunarAnimal());
+        assertEquals("wrong horoscope?", 1, personalInfo.getHoroscope());
+        assertEquals("wrong profile?", "profile", personalInfo.getProfile());
+        assertEquals("wrong bloodType?", 1, personalInfo.getBloodType());
+        assertEquals("wrong occupation?", "occupation", personalInfo
+                .getOccupation());
+        assertEquals("wrong hobby?", "music", personalInfo.getHobby());
+        assertEquals("wrong personalEmail?", "hxliang1982@gmail.com",
+                personalInfo.getPersonalEmail());
+        assertEquals("wrong workEmail?", "hongxin.liang@ericsson.com",
+                personalInfo.getWorkEmail());
+        assertEquals("wrong otherEmail?", "hxliang1982@gmail.com", personalInfo
+                .getOtherEmail());
+        assertEquals("wrong primaryEmail?", 1, personalInfo.getPrimaryEmail());
+        assertEquals("wrong jobTitle?", "SE", personalInfo.getJobTitle());
+        assertEquals("wrong homePhone?", "11111111", personalInfo
+                .getHomePhone());
+        assertEquals("wrong workPhone?", "22222222", personalInfo
+                .getWorkPhone());
+        assertEquals("wrong otherPhone?", "33333333", personalInfo
+                .getOtherPhone());
+        assertEquals("wrong company?", "Ericsson", personalInfo.getCompany());
+        assertEquals("wrong companyWebsite?", "www.ericsson.com", personalInfo
+                .getCompanyWebsite());
+        assertEquals("wrong matchEnabled?", 1, personalInfo.getMatchEnabled());
+    }
+
+    public void testGetList()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        List<FetionGroup> groupList = fetionAccount.getGroupList();
+        assertNull("should have no group", groupList);
+
+        List<FetionAccount> accountList = fetionAccount.getAccountList();
+        assertEquals("should have only one account", 1, accountList);
+
+        List<FetionBlacklistItem> blacklist = fetionAccount.getBlacklist();
+        assertNull("should have no blacklist", blacklist);
+
+        List<FetionGang> gangList = fetionAccount.getGangList();
+        assertNull("should have no gang", gangList);
+    }
+
+    public void testGetInfoById()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        String id = fetionAccount.getUserId();
+        assertNotNull("User ID is null?", id);
+
+        FetionAccount account = fetionAccount
+                .getAccountById(Long.parseLong(id));
+
+        assertEquals("wrong id?", Long.parseLong(id), account.getId());
+        assertEquals("wrong uri?", URI, account.getUri());
+        assertEquals("wrong localName?", "honnix", account.getLocalName());
+        assertEquals("wrong buddyList?", "shadow", account.getBuddyList());
+        assertEquals("wrong groupId?", 1, account.getGroupId());
+        assertEquals("wrong relationStatus?", 1, account.getRelationStatus());
+        assertEquals("wrong onlineNotify?", 1, account.getOnlineNotify());
+        assertEquals("wrong statusCode?", 200, account.getStatusCode());
+        assertEquals("wrong onlineStatus?", 1, account.getOnlineStatus());
+        assertEquals("wrong portraitCrc?", 1, account.getPortraitCrc());
+        assertNotNull("wrong personalInfo", account.getPersonalInfo());
+        assertEquals("wrong userType?", FetionUserType.FETION_UTYPE_PC, account
+                .getUserType());
+
+        FetionGang gang = fetionAccount.getGangById(Long.parseLong(id));
+        assertNull("should have no gang", gang);
+
+        assertTrue("should be PC user", fetionAccount.isPCUserById(Long
+                .parseLong(id)));
+        assertFalse("should not be gang", fetionAccount.isGangById(Long
+                .parseLong(id)));
+        assertEquals("should have been authorized",
+                EventConstant.LOGIN_AUTH_OK, fetionAccount
+                        .isAuthorizedById(Long.parseLong(id)));
+        assertFalse("should no in blacklist", fetionAccount
+                .isInBlacklistById(Long.parseLong(id)));
+        assertTrue("should be online", fetionAccount.isOnlineById(Long
+                .parseLong(id)));
+        assertEquals("should be online", EventConstant.STATUS_ONLINE,
+                fetionAccount.getOnlineStatusById(Long.parseLong(id)));
+
+        fetionAccount.updateAccountInfoById(Long.parseLong(id));
     }
 
 }

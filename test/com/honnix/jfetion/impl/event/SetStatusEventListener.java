@@ -26,7 +26,7 @@ import com.honnix.jfetion.EventListener;
 /**
  *
  */
-public class SetStateEventListener
+public class SetStatusEventListener
     implements EventListener
 {
 
@@ -41,15 +41,15 @@ public class SetStateEventListener
     {
         switch (message)
         {
-        case EventConstant.SET_STATE_OK:
+        case EventConstant.SET_STATUS_OK:
             System.out.println("set state ok");
             break;
 
-        case EventConstant.SET_STATE_FAIL:
+        case EventConstant.SET_STATUS_FAIL:
             System.out.println("set state fail");
             break;
 
-        case EventConstant.SET_STATE_TIMEOUT:
+        case EventConstant.SET_STATUS_TIMEOUT:
             System.out.println("set state timeout");
             break;
 

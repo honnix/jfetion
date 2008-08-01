@@ -86,7 +86,7 @@ public interface FetionAccountControl
     int asyncSetUserImpresa(String impresa, EventListener eventListener,
             Object... args);
 
-    int asyncSetUserState(int state, String description,
+    int asyncSetUserStatus(int status, String description,
             EventListener eventListener, Object... args);
 
     boolean deleteBuddyList(int id);
@@ -125,7 +125,7 @@ public interface FetionAccountControl
 
     String getUserShowName();
 
-    int getUserState();
+    int getUserStatus();
 
     String getUserUri();
 

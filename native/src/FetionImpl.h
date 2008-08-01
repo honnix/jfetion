@@ -401,10 +401,10 @@ JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserShowNam
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    getUserState
+ * Method:    getUserStatus
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserState
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserStatus
   (JNIEnv *, jobject);
 
 /*
@@ -609,10 +609,10 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserImpre
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    asyncSetUserState
+ * Method:    asyncSetUserStatus
  * Signature: (ILjava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserState
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserStatus
   (JNIEnv *, jobject, jint, jstring, jobject, jobjectArray);
 
 /*

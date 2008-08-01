@@ -36,7 +36,7 @@ public class FetionGangMember
 
     private int identity;
 
-    private int state;
+    private int status;
 
     private String clientType;
 
@@ -86,11 +86,11 @@ public class FetionGangMember
     }
 
     /**
-     * @return the state
+     * @return the status
      */
-    public int getState()
+    public int getStatus()
     {
-        return state;
+        return status;
     }
 
     /**
@@ -147,12 +147,12 @@ public class FetionGangMember
     }
 
     /**
-     * @param state
-     *            the state to set
+     * @param status
+     *            the status to set
      */
-    public void setState(int state)
+    public void setStatus(int status)
     {
-        this.state = state;
+        this.status = status;
     }
 
     /**
