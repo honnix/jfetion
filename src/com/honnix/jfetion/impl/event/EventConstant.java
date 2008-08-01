@@ -96,33 +96,33 @@ public final class EventConstant
 
     public static final int DIA_UNKNOWN_ERROR = EVENT_BASE + 0x0035;
 
-    public static final int STATUS_UNSET = EVENT_BASE + 0x0040;
+    public static final int STATE_UNSET = EVENT_BASE + 0x0040;
 
-    public static final int STATUS_ONLINE = EVENT_BASE + 0x0042;
+    public static final int STATE_ONLINE = EVENT_BASE + 0x0042;
 
-    public static final int STATUS_BUSY = EVENT_BASE + 0x0043;
+    public static final int STATE_BUSY = EVENT_BASE + 0x0043;
 
-    public static final int STATUS_OFFLINE = EVENT_BASE + 0x0044;
+    public static final int STATE_OFFLINE = EVENT_BASE + 0x0044;
 
-    public static final int STATUS_AWAY = EVENT_BASE + 0x0045;
+    public static final int STATE_AWAY = EVENT_BASE + 0x0045;
 
-    public static final int STATUS_MEETING = EVENT_BASE + 0x0046;
+    public static final int STATE_MEETING = EVENT_BASE + 0x0046;
 
-    public static final int STATUS_PHONE = EVENT_BASE + 0x0047;
+    public static final int STATE_PHONE = EVENT_BASE + 0x0047;
 
-    public static final int STATUS_DINNER = EVENT_BASE + 0x0048;
+    public static final int STATE_DINNER = EVENT_BASE + 0x0048;
 
-    public static final int STATUS_EXTENDED_AWAY = EVENT_BASE + 0x0049;
+    public static final int STATE_EXTENDED_AWAY = EVENT_BASE + 0x0049;
 
-    public static final int STATUS_NUM_PRIMITIVES = EVENT_BASE + 0x004A;
+    public static final int STATE_NUM_PRIMITIVES = EVENT_BASE + 0x004A;
 
-    public static final int STATUS_WAITING_AUTH = EVENT_BASE + 0x004B;
+    public static final int STATE_WAITING_AUTH = EVENT_BASE + 0x004B;
 
-    public static final int STATUS_REFUSE = EVENT_BASE + 0x004C;
+    public static final int STATE_REFUSE = EVENT_BASE + 0x004C;
 
-    public static final int STATUS_BLACK = EVENT_BASE + 0x004D;
+    public static final int STATE_BLACK = EVENT_BASE + 0x004D;
 
-    public static final int STATUS_MOBILE = EVENT_BASE + 0x004E;
+    public static final int STATE_MOBILE = EVENT_BASE + 0x004E;
 
     public static final int ACCOUNT_UPDATE_OK = EVENT_BASE + 0x0050;
 
