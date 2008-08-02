@@ -1108,7 +1108,6 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsByMobileNumber
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
                                                ASYNC_SEND_SMS_BY_MOBILE_NUMBER);
-
     jint result = fx_send_sms_by_mobile_no(mobileNumber, message, callback, callbackArgs);
 
     (*env)->ReleaseStringUTFChars(env, jmobileNumber, mobileNumber);

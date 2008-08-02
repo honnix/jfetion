@@ -24,7 +24,7 @@ import com.honnix.jfetion.Checker;
 import com.honnix.jfetion.EventListener;
 
 /**
- *
+ * 
  */
 public class LoginEventListener
     implements EventListener
@@ -34,7 +34,7 @@ public class LoginEventListener
      * (non-Javadoc)
      * 
      * @see com.honnix.jfetion.EventListener#callback(int, long, long,
-     * java.lang.Object[])
+     *      java.lang.Object[])
      */
     public void callback(int message, long firstMessageParam,
             long secondMessageParam, Object... args)
@@ -43,6 +43,10 @@ public class LoginEventListener
         {
         case EventConstant.LOGIN_CONNECTING:
             System.out.println("login connecting");
+            break;
+
+        case EventConstant.LOGIN_WAIT_AUTH:
+            System.out.println("login with auth");
             break;
 
         case EventConstant.LOGIN_AUTH_OK:
