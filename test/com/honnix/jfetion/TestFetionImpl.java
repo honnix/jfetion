@@ -284,71 +284,71 @@ public class TestFetionImpl
 //                .getAccountGroupId(account));
 //    }
 //
-    public void testGetInfoById()
-    {
-        assertTrue("init failed??", fetionSession.init());
-        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-                PASSWORD));
-
-        String id = fetionAccount.getUserId();
-        assertNotNull("User ID is null?", id);
-
-        FetionAccount account =
-                fetionAccount.getAccountById(Long.parseLong(id));
-
-        assertEquals("wrong id?", Long.parseLong(id), account.getId());
-        assertEquals("wrong uri?", URI, account.getUri());
-        assertEquals("wrong localName?", "honnix", account.getLocalName());
-        assertEquals("wrong buddyList?", "shadow", account.getBuddyList());
-        assertEquals("wrong groupId?", 1, account.getGroupId());
-        assertEquals("wrong relationStatus?", 1, account.getRelationStatus());
-        assertEquals("wrong onlineNotify?", 1, account.getOnlineNotify());
-        assertEquals("wrong statusCode?", 200, account.getStatusCode());
-        assertEquals("wrong onlineStatus?", 1, account.getOnlineStatus());
-        assertEquals("wrong portraitCrc?", 1, account.getPortraitCrc());
-        assertNotNull("wrong personalInfo", account.getPersonalInfo());
-        assertEquals("wrong userType?", FetionUserType.FETION_UTYPE_PC, account
-                .getUserType());
-
-        FetionGang gang = fetionAccount.getGangById(Long.parseLong(id));
-        assertNull("should have no gang", gang);
-
-        assertTrue("should be PC user", fetionAccount.isPCUserById(Long
-                .parseLong(id)));
-        assertFalse("should not be gang", fetionAccount.isGangById(Long
-                .parseLong(id)));
-        assertEquals("should have been authorized",
-                EventConstant.LOGIN_AUTH_OK, fetionAccount
-                        .isAuthorizedById(Long.parseLong(id)));
-        assertFalse("should no in blacklist", fetionAccount
-                .isInBlacklistById(Long.parseLong(id)));
-        assertTrue("should be online", fetionAccount.isOnlineById(Long
-                .parseLong(id)));
-        assertEquals("should be online", EventConstant.STATUS_ONLINE,
-                fetionAccount.getOnlineStatusById(Long.parseLong(id)));
-
-        fetionAccount.updateAccountInfoById(Long.parseLong(id));
-        fetionAccount.updateAccountInfoAll();
-    }
-//
-//    public void testGetList()
+//    public void testGetInfoById()
 //    {
 //        assertTrue("init failed??", fetionSession.init());
 //        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
 //                PASSWORD));
 //
-//        List<FetionGroup> groupList = fetionAccount.getGroupList();
-//        assertNull("should have no group", groupList);
+//        String id = fetionAccount.getUserId();
+//        assertNotNull("User ID is null?", id);
 //
-//        List<FetionAccount> accountList = fetionAccount.getAccountList();
-//        assertEquals("should have only one account", 1, accountList);
+//        FetionAccount account =
+//                fetionAccount.getAccountById(Long.parseLong(id));
 //
-//        List<FetionBlacklistItem> blacklist = fetionAccount.getBlacklist();
-//        assertNull("should have no blacklist", blacklist);
+//        assertEquals("wrong id?", Long.parseLong(id), account.getId());
+//        assertEquals("wrong uri?", URI, account.getUri());
+//        assertEquals("wrong localName?", "honnix", account.getLocalName());
+//        assertEquals("wrong buddyList?", "shadow", account.getBuddyList());
+//        assertEquals("wrong groupId?", 1, account.getGroupId());
+//        assertEquals("wrong relationStatus?", 1, account.getRelationStatus());
+//        assertEquals("wrong onlineNotify?", 1, account.getOnlineNotify());
+//        assertEquals("wrong statusCode?", 200, account.getStatusCode());
+//        assertEquals("wrong onlineStatus?", 1, account.getOnlineStatus());
+//        assertEquals("wrong portraitCrc?", 1, account.getPortraitCrc());
+//        assertNotNull("wrong personalInfo", account.getPersonalInfo());
+//        assertEquals("wrong userType?", FetionUserType.FETION_UTYPE_PC, account
+//                .getUserType());
 //
-//        List<FetionGang> gangList = fetionAccount.getGangList();
-//        assertNull("should have no gang", gangList);
+//        FetionGang gang = fetionAccount.getGangById(Long.parseLong(id));
+//        assertNull("should have no gang", gang);
+//
+//        assertTrue("should be PC user", fetionAccount.isPCUserById(Long
+//                .parseLong(id)));
+//        assertFalse("should not be gang", fetionAccount.isGangById(Long
+//                .parseLong(id)));
+//        assertEquals("should have been authorized",
+//                EventConstant.LOGIN_AUTH_OK, fetionAccount
+//                        .isAuthorizedById(Long.parseLong(id)));
+//        assertFalse("should no in blacklist", fetionAccount
+//                .isInBlacklistById(Long.parseLong(id)));
+//        assertTrue("should be online", fetionAccount.isOnlineById(Long
+//                .parseLong(id)));
+//        assertEquals("should be online", EventConstant.STATUS_ONLINE,
+//                fetionAccount.getOnlineStatusById(Long.parseLong(id)));
+//
+//        fetionAccount.updateAccountInfoById(Long.parseLong(id));
+//        fetionAccount.updateAccountInfoAll();
 //    }
+//
+    public void testGetList()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        List<FetionGroup> groupList = fetionAccount.getGroupList();
+        assertEquals("should have no group", 0, groupList.size());
+
+        List<FetionAccount> accountList = fetionAccount.getAccountList();
+        assertEquals("should have only one account", 1, accountList);
+
+        List<FetionBlacklistItem> blacklist = fetionAccount.getBlacklist();
+        assertEquals("should have no blacklist", 0, blacklist.size());
+
+        List<FetionGang> gangList = fetionAccount.getGangList();
+        assertEquals("should have no gang", 0, gangList.size());
+    }
 //
 //    public void testGetMessage()
 //    {
