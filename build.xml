@@ -107,5 +107,6 @@
             <fileset dir="${bin.dir}" />
         </copy>
         <copy file="${native.src.dir}/${native.bin}" todir="${dist.dir}/${dist.name}-${dist.version}/${bin.dir}" />
+        <chmod perm="a+x" file="${dist.dir}/${dist.name}-${dist.version}/${bin.dir}/${native.bin}" />
     </target>
 </project>
