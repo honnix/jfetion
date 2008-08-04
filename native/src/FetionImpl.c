@@ -657,7 +657,7 @@ Fetion_Qun* buildFetionGangStruct(JNIEnv* env, Fetion_Qun* gang, jobject jgang)
     }
     
     jfieldID jidentityField = (*env)->GetFieldID(env, gangClass, "identity", "I");
-    gang->id = (*env)->GetIntField(env, jgang, jidentityField);
+    gang->identity = (*env)->GetIntField(env, jgang, jidentityField);
 
     /*
      * Why bother Fetion_QunInfo?

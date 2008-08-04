@@ -28,9 +28,9 @@ public class FetionBlacklistItem
 
     private long id;
 
-    String uri;
+    private String uri;
 
-    String localName;
+    private String localName;
 
     public FetionBlacklistItem()
     {

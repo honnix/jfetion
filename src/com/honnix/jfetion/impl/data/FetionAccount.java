@@ -48,7 +48,7 @@ public class FetionAccount
 
     private int userType;
 
-    FetionPersonalInfo personalInfo;
+    private FetionPersonalInfo personalInfo;
 
     public FetionAccount()
     {

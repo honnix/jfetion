@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<ruleset name="jfetion"
+    xmlns="http://pmd.sf.net/ruleset/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+    xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+        This PMD ruleset for jfetion.
+    </description>
+
+    <rule ref="rulesets/basic.xml" />
+     
+    <rule ref="rulesets/braces.xml" />
+    
+    <rule ref="rulesets/clone.xml" />
+    
+    <!-- seems that currently we can not afford this -->
+    <!--rule ref="rulesets/codesize.xml" /-->
+    
+    <rule ref="rulesets/controversial.xml">
+        <exclude name="UnnecessaryConstructor" />
+        <exclude name="NullAssignment" />
+        <exclude name="AssignmentInOperand" />
+        <exclude name="SuspiciousOctalEscape" />
+        <exclude name="DataflowAnomalyAnalysis" />
+        <exclude name="AvoidFinalLocalVariable" />
+        <exclude name="AvoidUsingNativeCode" />
+        <exclude name="CallSuperInConstructor" />
+    </rule>
+    
+    <rule ref="rulesets/coupling.xml" />
+
+    <rule ref="rulesets/design.xml">
+        <exclude name="UseSingleton" />
+        <exclude name="ConfusingTernary" />
+        <exclude name="UseLocaleWithCaseConversions" />
+        <exclude name="ImmutableField" />
+        <!-- could not work under some condition -->
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
+        <exclude name="PreserveStackTrace" />
+        <exclude name="ConstructorCallsOverridableMethod" />
+        <exclude name="AvoidDeeplyNestedIfStmts" />
+    </rule>
+    
+    <rule ref="rulesets/finalizers.xml" />
+    
+    <rule ref="rulesets/imports.xml" />
+    
+    <rule ref="rulesets/junit.xml" />
+    
+    <rule ref="rulesets/logging-jakarta-commons.xml" />
+    
+    <rule ref="rulesets/logging-java.xml/MoreThanOneLogger" />
+    
+    <rule ref="rulesets/logging-java.xml/LoggerIsNotStaticFinal" />
+    
+    <rule ref="rulesets/logging-java.xml/SystemPrintln">
+        <priority>5</priority>
+    </rule>
+    
+    <rule ref="rulesets/logging-java.xml/AvoidPrintStackTrace">
+        <priority>5</priority>
+    </rule>
+    
+    <rule ref="rulesets/migrating.xml">
+        <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
+        <exclude name="JUnit4TestShouldUseAfterAnnotation" />
+        <exclude name="JUnit4TestShouldUseTestAnnotation" />
+        <exclude name="JUnit4SuitesShouldUseSuiteAnnotation" />
+    </rule>
+    
+    <rule ref="rulesets/naming.xml">
+        <exclude name="ShortVariable" />
+        <exclude name="LongVariable" />
+        <exclude name="AbstractNaming" />
+    </rule>
+    
+    <rule ref="rulesets/optimizations.xml">
+        <exclude name="LocalVariableCouldBeFinal" />
+        <exclude name="MethodArgumentCouldBeFinal" />
+        <exclude name="AvoidInstantiatingObjectsInLoops" />
+    </rule>
+    
+    <rule ref="rulesets/strictexception.xml" />
+    
+    <rule ref="rulesets/strings.xml" />
+    
+    <rule ref="rulesets/sunsecure.xml" />
+    
+    <rule ref="rulesets/typeresolution.xml">
+        <!-- NullPointerException if used -->
+        <exclude name="UnusedImports" />
+    </rule>
+    
+    <rule ref="rulesets/unusedcode.xml" />
+</ruleset>

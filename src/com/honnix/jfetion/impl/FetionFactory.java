@@ -27,22 +27,22 @@ import com.honnix.jfetion.FetionSessionControl;
 /**
  * 
  */
-public class FetionFactory
+public final class FetionFactory
 {
 
     private static FetionImpl instance = new FetionImpl();
 
-    public synchronized static FetionAccountControl getFetionAccountControl()
+    public static FetionAccountControl getFetionAccountControl()
     {
         return instance;
     }
 
-    public synchronized static FetionMessageControl getFetionMessageControl()
+    public static FetionMessageControl getFetionMessageControl()
     {
         return instance;
     }
 
-    public synchronized static FetionSessionControl getFetionSessionControl()
+    public static FetionSessionControl getFetionSessionControl()
     {
         return instance;
     }

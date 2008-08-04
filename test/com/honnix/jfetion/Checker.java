@@ -26,7 +26,7 @@ package com.honnix.jfetion;
 public class Checker
 {
 
-    private boolean isCalled;
+    private boolean called;
 
     public Checker()
     {
@@ -35,12 +35,12 @@ public class Checker
 
     public boolean isCalled()
     {
-        return isCalled;
+        return called;
     }
 
-    public void setCalled(boolean isCalled)
+    public void setCalled(boolean called)
     {
-        this.isCalled = isCalled;
+        this.called = called;
     }
 
 }
