@@ -1,5 +1,5 @@
 /**
- * Fetion.java
+ * FetionSessionControl.java
  * 
  * Copyright : (C) 2008 by Honnix
  * Email     : hxliang1982@gmail.com

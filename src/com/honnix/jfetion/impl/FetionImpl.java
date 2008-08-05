@@ -40,8 +40,6 @@ public class FetionImpl
     implements FetionSessionControl, FetionAccountControl, FetionMessageControl
 {
 
-    // private static Fetion fetion = new FetionImpl();
-
     static
     {
         System.loadLibrary("jfetion");

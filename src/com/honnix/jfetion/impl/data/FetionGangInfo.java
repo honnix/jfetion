@@ -1,5 +1,5 @@
 /**
- * FetionImpl.java
+ * FetionGangInfo.java
  * 
  * Copyright : (C) 2008 by Honnix
  * Email     : hxliang1982@gmail.com
@@ -23,7 +23,6 @@ package com.honnix.jfetion.impl.data;
 import java.util.List;
 
 /**
- * @author ehonlia
  * 
  */
 public class FetionGangInfo
