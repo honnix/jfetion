@@ -202,8 +202,9 @@ FETION_COMPILE_TIME_ASSERT(sint64, sizeof(Sint64) == 8);
 #if defined(__LIBFETION_LIB__)
 #define FX_EXPORT       __declspec(dllexport)
 #else
-#define FX_EXPORT
+//fixme: in windows we usual usr static library.
 //#define FX_EXPORT       __declspec(dllimport) 
+#define FX_EXPORT
 #endif //defined(__LIBFETION_LIB__)
 #else
 #define FX_EXPORT

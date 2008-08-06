@@ -172,11 +172,11 @@ extern "C" {
 #define FX_LOGIN_SERVER_ERROR       FX_EVENT_SPARE  + 0x0002
 
 /**
-* \def FX_LOGIN_SERVER_ERROR
-* \brief login state is login fail of your login error fetion server.  
+* \def FX_LOGIN_SERVER_REFUSE
+* \brief login state is fetion server refuse, you should relogin again.  
 * 
 */
-#define FX_LOGIN_SERVER_ERROR       FX_EVENT_SPARE  + 0x0002//获取登陆ip失败，可能原因有错误飞信（手机）号或没注册，
+#define FX_LOGIN_SERVER_REFUSE       FX_EVENT_SPARE  + 0x0003
 
 /** @} end of login_event */
 
@@ -241,6 +241,17 @@ extern "C" {
   * \sa fx_get_msg Fetion_MSG
 */
 #define FX_SYS_MESSAGE            FX_EVENT_BASE + 0x0012
+
+/**
+* \def FX_UNDGE_MESSAGE
+* \brief a undge message received
+*
+* This message is posted when the client receive a undge message..
+ *
+ * \param lParam The message sender.
+* 
+*/
+#define FX_UNDGE_MESSAGE           FX_EVENT_BASE + 0x0013
 /** @} end of recv_msg_event */
 
 
@@ -455,6 +466,13 @@ extern "C" {
 *
 */
 #define FX_STATUS_MOBILE  FX_EVENT_BASE + 0x004E
+
+/**
+* \def FX_STATUS_SMSEXTENED
+* \brief the user of sms extend is chagend.
+*
+*/
+#define FX_STATUS_SMSEXTENED  FX_EVENT_BASE + 0x004F
 /** @} end of online_event */
 
 
@@ -615,17 +633,46 @@ extern "C" {
 
 /**
 * \def FX_SET_IMPRESA_OK
-* \brief fetion set user state timeout.
+* \brief fetion set user impresa ok.
 *
 */
 #define FX_SET_IMPRESA_OK  FX_EVENT_BASE + 0x0066  
 
 /**
 * \def FX_SET_IMPRESA_FAIL
-* \brief fetion set user state timeout.
+* \brief fetion set user impresa fail.
 *
 */
 #define FX_SET_IMPRESA_FAIL  FX_EVENT_BASE + 0x0067  
+
+/**
+* \def FX_SET_NICKNAME_OK
+* \brief fetion set user nickname ok
+*
+*/
+#define FX_SET_NICKNAME_OK  FX_EVENT_BASE + 0x0068  
+
+/**
+* \def FX_SET_NICKNAME_FAIL
+* \brief fetion set user nickname fail
+*
+*/
+#define FX_SET_NICKNAME_FAIL  FX_EVENT_BASE + 0x0069  
+
+/**
+* \def FX_SET_REFUSE_SMS_DAY_OK
+* \brief fetion set user refuse sms day ok
+*
+*/
+#define FX_SET_REFUSE_SMS_DAY_OK  FX_EVENT_BASE + 0x006A  
+
+/**
+* \def FX_SET_REFUSE_SMS_DAY_FAIL
+* \brief fetion set user refuse sms day fail 
+*
+*/
+#define FX_SET_REFUSE_SMS_DAY_FAIL  FX_EVENT_BASE + 0x006B  
+
 /**
 * \def FX_ADD_BLACKLIST_OK
 * \brief fetion add user blacklist ok. 
@@ -719,6 +766,8 @@ extern "C" {
 * \def FX_RECEIVE_FILE
 * \brief fetion receive a file message. 
 *
+* wParam is F_FILE_INFO 
+* lParam is uid
 */
 #define FX_RECEIVE_FILE  FX_EVENT_BASE + 0x0085 
 
@@ -806,6 +855,19 @@ extern "C" {
 #define FX_QUN_SMS_FAIL_LIMIT  FX_EVENT_BASE + 0x009A
 /** @} end of qun_event */
 
+
+/**
+ * \defgroup net_test_event Libfetion Qun Event
+ * @{
+ */
+/**
+* \def FX_GET_QUNLIST_OK
+* \brief fetion get qun list ok. 
+*
+*/
+#define FX_NET_OK  FX_EVENT_BASE + 0x00A1
+
+/** @} end of net_test_event */
 
 /** @} end of events */
 

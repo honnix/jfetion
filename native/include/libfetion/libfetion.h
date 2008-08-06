@@ -481,6 +481,17 @@ FX_EXPORT int fx_send_sms_to_self(const char *message, EventListener func,void *
 */
 FX_EXPORT int fx_send_sms_by_mobile_no(const char *mobile_no, const char *message, EventListener func, void *args);
 
+/**
+  * \fn void fetion_set_catsms(BOOL bl)
+  * \brief set the send sms mode, it maybe smscat or sms normally. 
+  *
+  *  smscat mode: it will send 180 at a time,
+  *  sms normally mode: it will send 70 at a time
+  *
+  * \param bl The TRUE is set smscat mode, FALSE set normally mode .
+*/
+FX_EXPORT void fx_set_catsms(BOOL bl);
+
 /** @} end of generic_send_sms_functions */
 
 /** @} end of fetion_send_sms */
@@ -683,6 +694,37 @@ FX_EXPORT int fx_get_user_state(void);
   * \return non zero on successfully, otherwise return zero.
 */
 FX_EXPORT int fx_set_user_impresa(const char *impresa, EventListener func, void *args);
+
+/**
+  * \fn int fx_set_user_nickname(const char *nickname, EventListener func, void *args)
+  * \brief set the user nickname. 
+  *
+  * \param nickname The nickname which you want to set.
+  *
+  * \return non zero on successfully, otherwise return zero.
+*/
+FX_EXPORT int fx_set_user_nickname(const char *nickname, EventListener func, void *args);
+
+/**
+  * \fn int fx_get_user_refuse_sms_day(void)
+  * \brief get the user how long day to receive the sms message. 
+  *
+  * This function get the usr fetion day. 
+  * \return the day.
+*/
+FX_EXPORT int fx_get_user_refuse_sms_day(void);
+
+/**
+  * \fn int fx_set_user_refuse_sms_day(int day, EventListener func, void *args)
+  * \brief set the user how long day to receive the sms message. 
+  *
+  * \param day The day which you want to set, if day = 0, show will 
+  * receive sms, or it is the refuse sms days. .
+  *
+  * \return non zero on successfully, otherwise return zero.
+*/
+FX_EXPORT int fx_set_user_refuse_sms_day(int day, EventListener func, void *args);
+
 
 /**
   * \fn int fx_get_expirestime(void)
@@ -995,6 +1037,15 @@ FX_EXPORT int fx_get_online_status_by_id(const long uid);
   *
 */
 FX_EXPORT int fx_get_online_status_by_account(const Fetion_Account * account);
+
+/**
+  * \fn int fx_get_refuse_sms_day(Fetion_Account *account)
+  * \brief return fetion account's refuse_sms_day.  
+  *
+  * \return the numbers of refuse_sms_day.  
+  *
+*/
+FX_EXPORT int fx_get_refuse_sms_day(Fetion_Account *account);
 
 /**
   * \fn fx_updata_account_info_by_id(long id)
@@ -1315,7 +1366,20 @@ FX_EXPORT int fx_removefrom_blacklist_by_uri(const char* uri, EventListener func
 */
 
 /**
-  * \fn BOOL fx_set_proxy(const char * proxy)
+  * \fn BOOL fx_send_nudge(long who)
+  * \brief send a nudge 
+  *
+  * 
+  * this function should send by 5 minute pre time . or it will return FALSE, and the receicer must be online.
+  *
+  * \param who which one you want to send.
+  *
+  * \return TRUE when success, FALSE when send fail .
+*/
+FX_EXPORT BOOL fx_send_nudge(long who);
+
+/**
+  * \fn BOOL fx_set_serve_address(const char *serve_address)
   * \brief set the fetion proxy ip and port, the proxy format is  ip:port(192.168.0.1:8080). 
   *
   *
@@ -1325,30 +1389,83 @@ FX_EXPORT int fx_removefrom_blacklist_by_uri(const char* uri, EventListener func
   *
   * \return TRUE when set success, FALSE when set fail of the proxy format is wrong.
 */
-FX_EXPORT BOOL fx_set_proxy(const char *proxy);
+FX_EXPORT BOOL fx_set_serve_address(const char *serve_address);
 
 /**
-  * \fn void fx_set_unknow_proxy(void)
-  * \brief let the fetion get the proxy ip and port by it self. 
+  * \fn void fx_set_unknow_serve_address(void)
+  * \brief let the fetion get the serve_address ip and port by it self. 
   *
   *
-  * This function tell libfetion to get proxy ip and port by it self. 
+  * This function tell libfetion to get serve_address ip and port by it self. 
   * ****this function will be removed in later version****.
   *
   *
 */
-FX_EXPORT void fx_set_unknow_proxy(void);
+FX_EXPORT void fx_set_unknow_serve_address(void);
 
 /**
-  * \fn char* fx_get_proxy(void)
+  * \fn char* fx_get_serve_address(void)
   * \brief get the current fetion id 's proxy sever ip. the ip format is  ip:port(192.168.0.1:8080).
   *
   * This function can use just after login success. 
   *
   * \return the the current fetion id 's proxy sever ip, if no will return NULL.
 */
-FX_EXPORT char* fx_get_proxy(void);
+FX_EXPORT char* fx_get_serve_address(void);
 
+/**
+ * \fn BOOL fx_set_proxy(PROXY_ITEM *item)
+ * \brief Set the proxy when you use proxy to connnect the network.
+ *
+ * \param item The proxy information.
+ * \return TRUE on success, FALSE on error.
+ *
+ * \sa fetion_get_proxy
+ */
+FX_EXPORT BOOL fx_set_proxy(PROXY_ITEM *item);
+
+/**
+ * \fn const PROXY_ITEM * fx_get_proxy()
+ * \brief Get the proxy information.
+ *
+ * \return no NULL if have proxy info, or return NULL.
+ *
+ * \sa fetion_set_proxy
+ */
+FX_EXPORT const PROXY_ITEM * fx_get_proxy();
+
+/**
+ * \fn void fetion_setProxyEnabled(BOOL status)
+ * \brief Set the proxy isEnabled.
+ *
+ * \param status Active proxy.
+ *
+ * \sa fetion_proxyEnabled
+ */
+FX_EXPORT void fx_setProxyEnabled(BOOL status);
+
+/**
+ * \fn BOOL fetion_proxyEnabled()
+ * \brief Get the proxy isEnabled.
+ *
+ * \return TRUE on Enabled, or return FALSE .
+ *
+ * \sa fetion_set_proxy
+ */
+FX_EXPORT BOOL fx_proxyEnabled();
+
+
+/**
+ * \fn int fx_test_network(PROXY_ITEM *item, EventListener func, void *args)
+ * \brief Get the fetion network is working of proxy_item.
+ *
+ * if item is NULL, will test direct connect to net is working.
+ *
+  * \return 0 if fail immediately, or can get the result from func.
+ *
+ * \sa fetion_set_proxy
+ */
+FX_EXPORT int fx_test_network(PROXY_ITEM *item, EventListener func, void *args);
 /** @} end of fetion_ext */
 
 /**

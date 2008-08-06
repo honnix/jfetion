@@ -130,6 +130,39 @@ typedef struct _fetion_msg {
 	long ext_id;
 }Fetion_MSG;
 
+/**
+ * The proxy type.
+ * \sa PROXY_ITEM, fetion_get_proxy
+ */
+typedef enum {
+    /** DIRECT. */
+    PROXY_DIRECT = 0,
+    /** HTTP. */
+    PROXY_HTTP,
+    /** SOCKS4. */
+    PROXY_SOCKS4,
+    /** SOCKS5. */
+    PROXY_SOCKS5,
+    PROXY_MAX
+}PROXY_TYPE;
+
+/**
+ * The proxy item information structure.
+ *
+ * \sa fetion_get_proxy, PROXY_INFO
+ */
+typedef struct _PROXY_ITEM{
+    /** Proxy host. */
+    char *host;
+    /** Proxy port. */
+    char *port;
+    /** User name. */
+    char *name;
+    /** User password. */
+    char *pwd;
+    /** Proxy type, which can be HTTP, SOCKS4, or SOCKS5. */
+    PROXY_TYPE  type; 
+}PROXY_ITEM;
 
 /**
  * \defgroup fetion_blist LibFetion Contact struct Define
@@ -208,6 +241,8 @@ typedef enum
 		char *company_website;
 		/** match_enabled. */
 		int match_enabled;
+		/** 0 accept sms  other show refuse sms days... */
+		int refuse_sms_day; 
 	}Fetion_Personal;
 
 /**
