@@ -20,24 +20,33 @@
  */
 package com.honnix.jfetion;
 
+import com.honnix.jfetion.impl.data.FetionProxyInfo;
+
 /**
  * 
  */
 public interface FetionSessionControl
 {
 
-    int asyncLogin(String userId, String password, EventListener eventListener,
+    int asyncLogin(String id, String password, EventListener eventListener,
             Object... args);
 
     int asyncReLogin(EventListener eventListener, Object... args);
+
+    int asyncTestNetwork(FetionProxyInfo proxyInfo,
+            EventListener eventListener, Object... args);
 
     boolean closeNetwork();
 
     int getExpireTime();
 
-    String getProxy();
+    FetionProxyInfo getProxy();
+
+    String getServerAddress();
 
     boolean init();
+
+    boolean isProxyEnabled();
 
     boolean login(String id, String password);
 
@@ -45,13 +54,17 @@ public interface FetionSessionControl
 
     void setLoginStatus(int status);
 
-    boolean setProxy(String proxy);
+    boolean setProxy(FetionProxyInfo proxyInfo);
+
+    void setProxyEnabled(boolean enabled);
+
+    boolean setServerAddress(String address);
 
     void setSystemMessageEventListener(EventListener eventListener,
             Object... args);
 
-    void setUnknownProxy();
-    
+    void setUnknownServerAddress();
+
     void terminate();
 
 }

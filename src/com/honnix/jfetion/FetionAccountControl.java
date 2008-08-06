@@ -34,12 +34,12 @@ import com.honnix.jfetion.impl.data.FetionPersonalInfo;
 public interface FetionAccountControl
 {
 
+    int asyncAddBuddyById(String id, String localName, int groupId,
+            String description, EventListener eventListener, Object... args);
+
     int asyncAddBuddyByMobileNumber(String mobileNumber, String localName,
             int groupId, String description, EventListener eventListener,
             Object... args);
-
-    int asyncAddBuddyByUserId(String id, String localName, int groupId,
-            String description, EventListener eventListener, Object... args);
 
     int asyncAddBuddyList(String name, EventListener eventListener,
             Object... args);
@@ -83,8 +83,14 @@ public interface FetionAccountControl
     int asyncSetBuddyInfo(long id, String localName,
             EventListener eventListener, Object... args);
 
+    int asyncSetUerNickname(String nickname, EventListener eventListener,
+            Object... args);
+
     int asyncSetUserImpresa(String impresa, EventListener eventListener,
             Object... args);
+
+    int asyncSetUserRefuseSmsDayCount(int dayCount,
+            EventListener eventListener, Object... args);
 
     int asyncSetUserStatus(int status, String description,
             EventListener eventListener, Object... args);
@@ -120,6 +126,10 @@ public interface FetionAccountControl
     String getUserMobileNumber();
 
     String getUserPassword();
+
+    int getUserRefuseSmsDayCount();
+
+    int getUserRefuseSmsDayCountByAccount(FetionAccount account);
 
     int getUserScore();
 

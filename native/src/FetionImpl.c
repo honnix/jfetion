@@ -898,20 +898,20 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_closeNetwork
 }
 
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_login
-(JNIEnv* env, jobject jobj, jstring juserId, jstring jpassword)
+(JNIEnv* env, jobject jobj, jstring jid, jstring jpassword)
 {
-    if (checkNullPointer(env, 2, juserId, jpassword))
+    if (checkNullPointer(env, 2, jid, jpassword))
     {
         return JNI_FALSE;
     }
 
     jboolean isCopy;
-    const char* userId = (*env)->GetStringUTFChars(env, juserId, &isCopy);
+    const char* id = (*env)->GetStringUTFChars(env, jid, &isCopy);
     const char* password = (*env)->GetStringUTFChars(env, jpassword, &isCopy);
 
-    jboolean result = fs_login(userId, password);
+    jboolean result = fs_login(id, password);
 
-    (*env)->ReleaseStringUTFChars(env, juserId, userId);
+    (*env)->ReleaseStringUTFChars(env, jid, id);
     (*env)->ReleaseStringUTFChars(env, jpassword, password);
 
     return result;
@@ -924,24 +924,24 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLoginStatus
 }
 
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncLogin
-(JNIEnv* env, jobject jobj, jstring juserId, jstring jpassword,
+(JNIEnv* env, jobject jobj, jstring jid, jstring jpassword,
  jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, 3, juserId, jpassword, jeventListener))
+    if (checkNullPointer(env, 3, jid, jpassword, jeventListener))
     {
         return 0;
     }
 
     jboolean isCopy;
-    const char* userId = (*env)->GetStringUTFChars(env, juserId, &isCopy);
+    const char* id = (*env)->GetStringUTFChars(env, jid, &isCopy);
     const char* password = (*env)->GetStringUTFChars(env, jpassword, &isCopy);
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
                                                ASYNC_LOGIN);
 
-    jint result = fx_login(userId, password, callback, callbackArgs);
+    jint result = fx_login(id, password, callback, callbackArgs);
 
-    (*env)->ReleaseStringUTFChars(env, juserId, userId);
+    (*env)->ReleaseStringUTFChars(env, jid, id);
     (*env)->ReleaseStringUTFChars(env, jpassword, password);
 
     return result;
@@ -1191,15 +1191,15 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncEndDialog
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserId
 (JNIEnv* env, jobject jobj)
 {
-    jstring jusrId = NULL;
+    jstring juserId = NULL;
     const char* userId = fx_get_usr_uid();
 
     if (userId != NULL)
     {
-        jusrId = (*env)->NewStringUTF(env, userId);
+        juserId = (*env)->NewStringUTF(env, userId);
     }
 
-    return jusrId;
+    return juserId;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserPassword
@@ -1689,11 +1689,11 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyList
     return result;
 }
 
-jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByUserId
-(JNIEnv* env, jobject jobj, jstring juserId, jstring jlocalName,
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyById
+(JNIEnv* env, jobject jobj, jstring jid, jstring jlocalName,
  jint jgroupId, jstring jdescription, jobject jeventListener, jobjectArray jargs)
 {
-    if (checkNullPointer(env, 2, juserId, jeventListener))
+    if (checkNullPointer(env, 2, jid, jeventListener))
     {
         return 0;
     }
@@ -1702,7 +1702,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByUserId
                                                ASYNC_ADD_BUDDY_BY_USER_ID);
 
     jboolean isCopy;
-    const char* userId = (*env)->GetStringUTFChars(env, juserId, &isCopy);
+    const char* id = (*env)->GetStringUTFChars(env, jid, &isCopy);
     const char* localName = NULL;
     if (jlocalName != NULL)
     {
@@ -1714,10 +1714,10 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByUserId
         description = (*env)->GetStringUTFChars(env, jdescription, &isCopy);
     }
 
-    jint result = fx_add_buddy_by_uid(userId, localName, jgroupId, description,
+    jint result = fx_add_buddy_by_uid(id, localName, jgroupId, description,
                                       callback, callbackArgs);
 
-    (*env)->ReleaseStringUTFChars(env, juserId, userId);
+    (*env)->ReleaseStringUTFChars(env, jid, id);
     if (jlocalName != NULL)
     {
         (*env)->ReleaseStringUTFChars(env, jlocalName, localName);

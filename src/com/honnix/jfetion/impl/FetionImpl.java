@@ -32,6 +32,7 @@ import com.honnix.jfetion.impl.data.FetionGang;
 import com.honnix.jfetion.impl.data.FetionGroup;
 import com.honnix.jfetion.impl.data.FetionMessage;
 import com.honnix.jfetion.impl.data.FetionPersonalInfo;
+import com.honnix.jfetion.impl.data.FetionProxyInfo;
 
 /**
  * 
@@ -53,6 +54,17 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
+     * @see com.honnix.jfetion.FetionAccountControl#asyncAddBuddyById(java.lang
+     * .String, java.lang.String, int, java.lang.String,
+     * com.honnix.jfetion.EventListener, java.lang.Object[])
+     */
+    public native int asyncAddBuddyById(String id, String localName,
+            int groupId, String description, EventListener eventListener,
+            Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see
      * com.honnix.jfetion.FetionAccountControl#asyncAddBuddyByMobileNumber(java
      * .lang.String, java.lang.String, int, java.lang.String,
@@ -61,18 +73,6 @@ public class FetionImpl
     public native int asyncAddBuddyByMobileNumber(String mobileNumber,
             String localName, int groupId, String description,
             EventListener eventListener, Object... args);
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.honnix.jfetion.FetionAccountControl#asyncAddBuddyByUserId(java.lang
-     * .String, java.lang.String, int, java.lang.String,
-     * com.honnix.jfetion.EventListener, java.lang.Object[])
-     */
-    public native int asyncAddBuddyByUserId(String id, String localName,
-            int groupId, String description, EventListener eventListener,
-            Object... args);
 
     /*
      * (non-Javadoc)
@@ -291,10 +291,30 @@ public class FetionImpl
      * (non-Javadoc)
      * 
      * @see
-     * com.honnix.jfetion.FetionAccountControl#setUserImpresa(java.lang.String,
-     * com.honnix.jfetion.EventListener, java.lang.Object[])
+     * com.honnix.jfetion.FetionAccountControl#asyncSetUerNickname(java.lang
+     * .String, com.honnix.jfetion.EventListener, java.lang.Object[])
+     */
+    public native int asyncSetUerNickname(String nickname,
+            EventListener eventListener, Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionAccountControl#asyncSetUserImpresa(java.lang
+     * .String, com.honnix.jfetion.EventListener, java.lang.Object[])
      */
     public native int asyncSetUserImpresa(String impresa,
+            EventListener eventListener, Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionAccountControl#asyncSetUserRefuseSmsDayCount
+     * (int, com.honnix.jfetion.EventListener, java.lang.Object[])
+     */
+    public native int asyncSetUserRefuseSmsDayCount(int dayCount,
             EventListener eventListener, Object... args);
 
     /*
@@ -304,6 +324,17 @@ public class FetionImpl
      * java.lang.String, com.honnix.jfetion.EventListener, java.lang.Object[])
      */
     public native int asyncSetUserStatus(int state, String description,
+            EventListener eventListener, Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionSessionControl#asyncTestNetwork(com.honnix.jfetion
+     * .impl.data.FetionProxyInfo, com.honnix.jfetion.EventListener,
+     * java.lang.Object[])
+     */
+    public native int asyncTestNetwork(FetionProxyInfo proxyInfo,
             EventListener eventListener, Object... args);
 
     /*
@@ -463,7 +494,14 @@ public class FetionImpl
      * 
      * @see com.honnix.jfetion.FetionSessionControl#getProxy()
      */
-    public native String getProxy();
+    public native FetionProxyInfo getProxy();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionSessionControl#getServerAddress()
+     */
+    public native String getServerAddress();
 
     /*
      * (non-Javadoc)
@@ -485,6 +523,22 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionAccountControl#getUserPassword()
      */
     public native String getUserPassword();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionAccountControl#getUserRefuseSmsDayCount()
+     */
+    public native int getUserRefuseSmsDayCount();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionAccountControl#getUserRefuseSmsDayCountByAccount
+     * (com.honnix.jfetion.impl.data.FetionAccount)
+     */
+    public native int getUserRefuseSmsDayCountByAccount(FetionAccount account);
 
     /*
      * (non-Javadoc)
@@ -605,6 +659,13 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
+     * @see com.honnix.jfetion.FetionSessionControl#isProxyEnabled()
+     */
+    public native boolean isProxyEnabled();
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.honnix.jfetion.Fetion#login(java.lang.String, java.lang.String)
      */
     public native boolean login(String uid, String password);
@@ -631,6 +692,13 @@ public class FetionImpl
      * java.lang.String)
      */
     public native boolean renameBuddyList(int id, String name);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionMessageControl#sendNudge(long)
+     */
+    public native boolean sendNudge(long who);
 
     /*
      * (non-Javadoc)
@@ -668,6 +736,13 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
+     * @see com.honnix.jfetion.FetionMessageControl#setCatSmsEnabled(boolean)
+     */
+    public native void setCatSmsEnabled(boolean enabled);
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.honnix.jfetion.FetionSessionControl#setLoginStatus(int)
      */
     public native void setLoginStatus(int status);
@@ -675,9 +750,27 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionSessionControl#setProxy(java.lang.String)
+     * @see
+     * com.honnix.jfetion.FetionSessionControl#setProxy(com.honnix.jfetion.impl
+     * .data.FetionProxyInfo)
      */
-    public native boolean setProxy(String proxy);
+    public native boolean setProxy(FetionProxyInfo proxyInfo);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionSessionControl#setProxyEnabled(boolean)
+     */
+    public native void setProxyEnabled(boolean enabled);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionSessionControl#setServerAddress(java.lang.String
+     * )
+     */
+    public native boolean setServerAddress(String address);
 
     /*
      * (non-Javadoc)
@@ -695,6 +788,13 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionSessionControl#setUnknownProxy()
      */
     public native void setUnknownProxy();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionSessionControl#setUnknownServerAddress()
+     */
+    public native void setUnknownServerAddress();
 
     /*
      * (non-Javadoc)

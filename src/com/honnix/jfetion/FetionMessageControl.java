@@ -59,5 +59,9 @@ public interface FetionMessageControl
     boolean sendSmsByMobileNumber(String mobileNumber, String message);
 
     boolean sendSmsToSelf(String message);
+    
+    void setCatSmsEnabled(boolean enabled);
+    
+    boolean sendNudge(long who);
 
 }

@@ -9,18 +9,18 @@ extern "C" {
 #endif
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    asyncAddBuddyByMobileNumber
+ * Method:    asyncAddBuddyById
  * Signature: (Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByMobileNumber
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyById
   (JNIEnv *, jobject, jstring, jstring, jint, jstring, jobject, jobjectArray);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    asyncAddBuddyByUserId
+ * Method:    asyncAddBuddyByMobileNumber
  * Signature: (Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByUserId
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddBuddyByMobileNumber
   (JNIEnv *, jobject, jstring, jstring, jint, jstring, jobject, jobjectArray);
 
 /*
@@ -201,6 +201,46 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetBuddyInfo
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncSetUerNickname
+ * Signature: (Ljava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUerNickname
+  (JNIEnv *, jobject, jstring, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncSetUserImpresa
+ * Signature: (Ljava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserImpresa
+  (JNIEnv *, jobject, jstring, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncSetUserRefuseSmsDayCount
+ * Signature: (ILcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserRefuseSmsDayCount
+  (JNIEnv *, jobject, jint, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncSetUserStatus
+ * Signature: (ILjava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserStatus
+  (JNIEnv *, jobject, jint, jstring, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncTestNetwork
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionProxyInfo;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncTestNetwork
+  (JNIEnv *, jobject, jobject, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    beginDialog
  * Signature: (J)Z
  */
@@ -222,6 +262,14 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_closeNetwork
  */
 JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_deleteBuddyList
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    destroyMessage
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionMessage;)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_destroyMessage
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -354,9 +402,17 @@ JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getPersonalInf
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getProxy
+ * Signature: ()Lcom/honnix/jfetion/impl/data/FetionProxyInfo;
+ */
+JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getServerAddress
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
+JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getServerAddress
   (JNIEnv *, jobject);
 
 /*
@@ -382,6 +438,22 @@ JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserMobileN
  */
 JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserPassword
   (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getUserRefuseSmsDayCount
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserRefuseSmsDayCount
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getUserRefuseSmsDayCountByAccount
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserRefuseSmsDayCountByAccount
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -505,6 +577,14 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserById
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    isProxyEnabled
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isProxyEnabled
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    login
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
  */
@@ -534,6 +614,14 @@ JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
  */
 JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_renameBuddyList
   (JNIEnv *, jobject, jint, jstring);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    sendNudge
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendNudge
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -569,6 +657,14 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyInfo
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setCatSmsEnabled
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setCatSmsEnabled
+  (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    setLoginStatus
  * Signature: (I)V
  */
@@ -578,9 +674,25 @@ JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLoginStatus
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    setProxy
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionProxyInfo;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxy
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setProxyEnabled
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxyEnabled
+  (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setServerAddress
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setServerAddress
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -601,19 +713,11 @@ JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownProxy
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    asyncSetUserImpresa
- * Signature: (Ljava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ * Method:    setUnknownServerAddress
+ * Signature: ()V
  */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserImpresa
-  (JNIEnv *, jobject, jstring, jobject, jobjectArray);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    asyncSetUserStatus
- * Signature: (ILjava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
- */
-JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserStatus
-  (JNIEnv *, jobject, jint, jstring, jobject, jobjectArray);
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownServerAddress
+  (JNIEnv *, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl

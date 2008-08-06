@@ -86,6 +86,8 @@ public class FetionPersonalInfo
 
     private int matchEnabled;
 
+    private int refuseSmsDayCount;
+
     public FetionPersonalInfo()
     {
         super();
@@ -310,6 +312,15 @@ public class FetionPersonalInfo
     public int getProvisioning()
     {
         return provisioning;
+    }
+
+    /**
+     * 
+     * @return the refuseSmsDayCount
+     */
+    public int getRefuseSmsDayCount()
+    {
+        return refuseSmsDayCount;
     }
 
     /**
@@ -574,6 +585,15 @@ public class FetionPersonalInfo
     public void setProvisioning(int provisioning)
     {
         this.provisioning = provisioning;
+    }
+
+    /**
+     * 
+     * @param refuseSmsDayCount
+     */
+    public void setRefuseSmsDayCount(int refuseSmsDayCount)
+    {
+        this.refuseSmsDayCount = refuseSmsDayCount;
     }
 
     /**
