@@ -60,12 +60,6 @@
         </javac>
     </target>
 
-    <target depends="init" name="pack-src">
-        <zip destfile="${classes.dir}/${src.dir}.zip">
-            <zipfileset dir="${src.dir}" />
-        </zip>
-    </target>
-
     <target depends="init" name="build-native">
         <exec executable="make">
         </exec>
@@ -90,7 +84,7 @@
         <xslt in="${pmd.report.output.dir}/${pmd.report.file}" style="${report.dir}/${pmd.report.xslt}" out="${pmd.report.output.dir}/${pmd.report.output.file}" />
     </target>
 
-    <target depends="pack-src, build" name="jar">
+    <target depends="build" name="jar">
         <jar destfile="${bin.dir}/${dist.name}-${dist.version}.jar">
             <fileset dir="${classes.dir}" excludes="**/Test*.class" />
             <manifest>
