@@ -226,24 +226,24 @@ public class TestFetionImpl
     // .getUserStatus());
     // }
     //
-    public void testDialog()
-    {
-        assertTrue("init failed??", fetionSession.init());
-        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-                PASSWORD));
-
-        String id = fetionAccount.getUserId();
-        assertNotNull("User ID is null?", id);
-
-        assertTrue("begin dialog error?", fetionMessage.beginDialog(Long
-                .parseLong(id)));
-
-        checker.setCalled(false);
-        assertTrue("dialog send error?", fetionMessage.dialogSend(Long
-                .parseLong(id), MESSAGE));
-
-        fetionMessage.endDialog(Long.parseLong(id));
-    }
+//    public void testDialog()
+//    {
+//        assertTrue("init failed??", fetionSession.init());
+//        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+//                PASSWORD));
+//
+//        String id = fetionAccount.getUserId();
+//        assertNotNull("User ID is null?", id);
+//
+//        assertTrue("begin dialog error?", fetionMessage.beginDialog(Long
+//                .parseLong(id)));
+//
+//        checker.setCalled(false);
+//        assertTrue("dialog send error?", fetionMessage.dialogSend(Long
+//                .parseLong(id), MESSAGE));
+//
+//        fetionMessage.endDialog(Long.parseLong(id));
+//    }
 
     // public void testGangShowName()
     // {
@@ -384,49 +384,49 @@ public class TestFetionImpl
     // .parseLong(id)));
     // }
 
-    // public void testGetPersonalInfo()
-    // {
-    // assertTrue("init failed??", fetionSession.init());
-    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-    // PASSWORD));
-    //
-    // FetionPersonalInfo personalInfo = fetionAccount.getPersonalInfo();
-    //
-    // assertEquals("wrong nickname?", "honnix", personalInfo.getNickname());
-    // assertEquals("wrong impresa?", "", personalInfo.getImpresa());
-    // assertEquals("wrong gender", 1, personalInfo.getGender());
-    // assertEquals("wrong nation?", "CN", personalInfo.getNation());
-    // assertEquals("wrong province?", "sh", personalInfo.getProvince());
-    // assertEquals("wrong city?", 21, personalInfo.getCity());
-    // assertEquals("wrong ivrEnabled?", 1, personalInfo.getIvrEnabled());
-    // assertEquals("wrong portraitCrc?", -709378836, personalInfo
-    // .getPortraitCrc());
-    // assertEquals("wrong provisioning?", 0, personalInfo.getProvisioning());
-    // assertEquals("wrong mobileNumber?", MOBILE_NUMBER, personalInfo
-    // .getMobileNumber());
-    // assertEquals("wrong name?", "", personalInfo.getName());
-    // assertEquals("wrong birthday?", "1900-01-01", personalInfo
-    // .getBirthday());
-    // assertEquals("wrong birthdayValid?", 0, personalInfo.getBirthdayValid());
-    // assertEquals("wrong lunarAnimal?", 0, personalInfo.getLunarAnimal());
-    // assertEquals("wrong horoscope?", 0, personalInfo.getHoroscope());
-    // assertEquals("wrong profile?", "", personalInfo.getProfile());
-    // assertEquals("wrong bloodType?", 0, personalInfo.getBloodType());
-    // assertEquals("wrong occupation?", "", personalInfo.getOccupation());
-    // assertEquals("wrong hobby?", "", personalInfo.getHobby());
-    // assertEquals("wrong personalEmail?", "", personalInfo
-    // .getPersonalEmail());
-    // assertEquals("wrong workEmail?", "", personalInfo.getWorkEmail());
-    // assertEquals("wrong otherEmail?", "", personalInfo.getOtherEmail());
-    // assertEquals("wrong primaryEmail?", 0, personalInfo.getPrimaryEmail());
-    // assertEquals("wrong jobTitle?", "", personalInfo.getJobTitle());
-    // assertEquals("wrong homePhone?", "", personalInfo.getHomePhone());
-    // assertEquals("wrong workPhone?", "", personalInfo.getWorkPhone());
-    // assertEquals("wrong otherPhone?", "", personalInfo.getOtherPhone());
-    // assertEquals("wrong company?", "", personalInfo.getCompany());
-    // assertNull("wrong companyWebsite?", personalInfo.getCompanyWebsite());
-    // assertEquals("wrong matchEnabled?", 0, personalInfo.getMatchEnabled());
-    // }
+     public void testGetPersonalInfo()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        FetionPersonalInfo personalInfo = fetionAccount.getPersonalInfo();
+
+        assertEquals("wrong nickname?", "honnix", personalInfo.getNickname());
+        assertEquals("wrong impresa?", "", personalInfo.getImpresa());
+        assertEquals("wrong gender", 1, personalInfo.getGender());
+        assertEquals("wrong nation?", "CN", personalInfo.getNation());
+        assertEquals("wrong province?", "sh", personalInfo.getProvince());
+        assertEquals("wrong city?", 21, personalInfo.getCity());
+        assertEquals("wrong ivrEnabled?", 1, personalInfo.getIvrEnabled());
+        assertEquals("wrong portraitCrc?", -709378836, personalInfo
+                .getPortraitCrc());
+        assertEquals("wrong provisioning?", 0, personalInfo.getProvisioning());
+        assertEquals("wrong mobileNumber?", MOBILE_NUMBER, personalInfo
+                .getMobileNumber());
+        assertEquals("wrong name?", "", personalInfo.getName());
+        assertEquals("wrong birthday?", "1900-01-01", personalInfo
+                .getBirthday());
+        assertEquals("wrong birthdayValid?", 0, personalInfo.getBirthdayValid());
+        assertEquals("wrong lunarAnimal?", 0, personalInfo.getLunarAnimal());
+        assertEquals("wrong horoscope?", 0, personalInfo.getHoroscope());
+        assertEquals("wrong profile?", "", personalInfo.getProfile());
+        assertEquals("wrong bloodType?", 0, personalInfo.getBloodType());
+        assertEquals("wrong occupation?", "", personalInfo.getOccupation());
+        assertEquals("wrong hobby?", "", personalInfo.getHobby());
+        assertEquals("wrong personalEmail?", "", personalInfo
+                .getPersonalEmail());
+        assertEquals("wrong workEmail?", "", personalInfo.getWorkEmail());
+        assertEquals("wrong otherEmail?", "", personalInfo.getOtherEmail());
+        assertEquals("wrong primaryEmail?", 0, personalInfo.getPrimaryEmail());
+        assertEquals("wrong jobTitle?", "", personalInfo.getJobTitle());
+        assertEquals("wrong homePhone?", "", personalInfo.getHomePhone());
+        assertEquals("wrong workPhone?", "", personalInfo.getWorkPhone());
+        assertEquals("wrong otherPhone?", "", personalInfo.getOtherPhone());
+        assertEquals("wrong company?", "", personalInfo.getCompany());
+        assertNull("wrong companyWebsite?", personalInfo.getCompanyWebsite());
+        assertEquals("wrong matchEnabled?", 0, personalInfo.getMatchEnabled());
+    }
     //    
     // public void testLogin()
     // {
