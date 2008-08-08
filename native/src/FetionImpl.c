@@ -1589,6 +1589,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountShowName
     if (showName != NULL)
     {
         jshowName = (*env)->NewStringUTF(env, showName);
+        free(showName);
     }
 
     return jshowName;
@@ -1606,6 +1607,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangShowName
     if (showName != NULL)
     {
         jshowName = (*env)->NewStringUTF(env, showName);
+        free(showName);
     }
 
     destroyFetionGangStruct(&gang);
@@ -2043,6 +2045,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
     if (proxy != NULL)
     {
         jproxy = (*env)->NewStringUTF(env, proxy);
+        free(proxy);
     }
 
     return jproxy;
@@ -2065,6 +2068,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
     if (newMessage != NULL)
     {
         jnewMessage = (*env)->NewStringUTF(env, newMessage);
+        free(newMessage);
     }
     
     (*env)->ReleaseStringUTFChars(env, jmessage, message);
