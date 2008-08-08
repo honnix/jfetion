@@ -265,14 +265,6 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_deleteBuddyLi
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    destroyMessage
- * Signature: (Lcom/honnix/jfetion/impl/data/FetionMessage;)V
- */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_destroyMessage
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    dialogSend
  * Signature: (JLjava/lang/String;)Z
  */
@@ -702,14 +694,6 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setServerAddr
  */
 JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setSystemMessageEventListener
   (JNIEnv *, jobject, jobject, jobjectArray);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    setUnknownProxy
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownProxy
-  (JNIEnv *, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl

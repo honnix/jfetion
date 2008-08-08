@@ -43,6 +43,8 @@ typedef enum _callbackFunctionIndex
     ASYNC_DIALOG_SEND,
     ASYNC_SET_USER_STATUS,
     ASYNC_SET_USER_IMPRESA,
+    ASYNC_SET_USER_NICKNAME,
+    ASYNC_SET_USER_REFUSE_SMS_DAY_COUNT,
     ASYNC_MOVE_GROUP_BUDDY_BY_ID,
     ASYNC_MOVE_GROUP_BUDDY_BY_ACCOUNT,
     ASYNC_RENAME_BUDDY_LIST,
@@ -58,7 +60,8 @@ typedef enum _callbackFunctionIndex
     ASYNC_ADD_TO_BLACKLIST_BY_URI,
     ASYNC_REMOVE_FROM_BLACKLIST_BY_ID,
     ASYNC_REMOVE_FROM_BLACKLIST_BY_ACCOUNT,
-    ASYNC_REMOVE_FROM_BLACKLIST_BY_URI
+    ASYNC_REMOVE_FROM_BLACKLIST_BY_URI,
+    ASYNC_TEST_NETWORK
 } CallbackFunctionIndex;
 
 extern JavaVM* theVM;
@@ -152,6 +155,22 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo);
  * Build FetionGangMember object.
  */
 jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember);
+
+/*
+ * Build FetionProxyInfo object.
+ */
+jobject buildFetionProxyInfo(JNIEnv* env, const PROXY_ITEM* proxyInfo);
+
+/*
+ * Build PROXY_ITEM structure.
+ */
+PROXY_ITEM* buildFetionProxyInfoStruct(JNIEnv* env, PROXY_ITEM* proxyInfo,
+                                       jobject jproxyInfo);
+
+/*
+ * Free memory allocated in PROXY_ITEM structure.
+ */
+void destroyFetionProxyInfoStruct(PROXY_ITEM* proxyInfo);
 
 /*
  * Build ArrayList object.

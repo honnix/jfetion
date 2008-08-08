@@ -361,15 +361,6 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * com.honnix.jfetion.FetionMessageControl#destroyMessage(com.honnix.jfetion
-     * .impl.data.FetionMessage)
-     */
-    public native void destroyMessage(FetionMessage message);
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see com.honnix.jfetion.FetionMessageControl#dialogSend(long,
      * java.lang.String)
      */
@@ -781,13 +772,6 @@ public class FetionImpl
      */
     public native void setSystemMessageEventListener(
             EventListener eventListener, Object... args);
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.honnix.jfetion.FetionSessionControl#setUnknownProxy()
-     */
-    public native void setUnknownProxy();
 
     /*
      * (non-Javadoc)

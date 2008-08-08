@@ -74,6 +74,10 @@
 #define FETION_GANG_MEMBER_CLASS_NOT_FOUND \
     "Class com/honnix/jfetion/impl/data/FetionGangMember not found."
 
+#define FETION_PROXY_INFO_CLASS "com/honnix/jfetion/impl/data/FetionProxyInfo"
+#define FETION_PROXY_INFO_CLASS_NOT_FOUND \
+    "Class com/honnix/jfetion/impl/data/FetionProxyInfo not found."
+
 #define STRING_CLASS_SIG "Ljava/lang/String;"
 #define ARRAY_LIST_CLASS_SIG "Ljava/util/ArrayList;"
 #define FETION_PERSONAL_INFO_CLASS_SIG "Lcom/honnix/jfetion/impl/data/FetionPersonalInfo;"
@@ -672,6 +676,121 @@ void destroyFetionGangStruct(Fetion_Qun* gang)
     free(gang->uri);
 }
 
+jobject buildFetionProxyInfo(JNIEnv* env, const PROXY_ITEM* proxyInfo)
+{
+    jclass proxyInfoClass = NULL;
+    jobject jproxyInfo = buildObject(env, &proxyInfoClass, FETION_PROXY_INFO_CLASS,
+                                     FETION_PROXY_INFO_CLASS_NOT_FOUND);
+
+    if (proxyInfo->host != NULL)
+    {
+        jstring jhost = (*env)->NewStringUTF(env, proxyInfo->host);
+        jfieldID jhostField = (*env)->GetFieldID(env, proxyInfoClass, "host", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jproxyInfo, jhostField, jhost);
+    }
+
+    if (proxyInfo->port != NULL)
+    {
+        jstring jport = (*env)->NewStringUTF(env, proxyInfo->port);
+        jfieldID jportField = (*env)->GetFieldID(env, proxyInfoClass, "port", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jproxyInfo, jportField, jport);
+    }
+
+    if (proxyInfo->name != NULL)
+    {
+        jstring juser = (*env)->NewStringUTF(env, proxyInfo->name);
+        jfieldID juserField = (*env)->GetFieldID(env, proxyInfoClass, "user", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jproxyInfo, juserField, juser);
+    }
+
+    if (proxyInfo->pwd != NULL)
+    {
+        jstring jpassword = (*env)->NewStringUTF(env, proxyInfo->pwd);
+        jfieldID jpasswordField = (*env)->GetFieldID(env, proxyInfoClass, "password", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jproxyInfo, jpasswordField, jpassword);
+    }
+
+    jfieldID jtypeField = (*env)->GetFieldID(env, proxyInfoClass, 
+                                             "type", "I");
+    (*env)->SetIntField(env, jproxyInfo, jtypeField, 
+                        proxyInfo->type);
+
+    return jproxyInfo;
+}
+
+PROXY_ITEM* buildFetionProxyInfoStruct(JNIEnv* env, PROXY_ITEM* proxyInfo,
+                                       jobject jproxyInfo)
+{
+    jclass proxyInfoClass = (*env)->GetObjectClass(env, jproxyInfo);
+
+    jboolean isCopy;
+
+    jfieldID jhostField = (*env)->GetFieldID(env, proxyInfoClass, "host", STRING_CLASS_SIG);
+    jstring jhost = (*env)->GetObjectField(env, jproxyInfo, jhostField);
+    proxyInfo->host = NULL;
+    if (jhost != NULL)
+    {
+        const char* src = (*env)->GetStringUTFChars(env, jhost, &isCopy);
+        char* dest = (char*) malloc(strlen(src) + 1);
+
+        proxyInfo->host = strcpy(dest, src);
+        (*env)->ReleaseStringUTFChars(env, jhost, src);
+    }
+
+    jfieldID jportField = (*env)->GetFieldID(env, proxyInfoClass, "port", STRING_CLASS_SIG);
+    jstring jport = (*env)->GetObjectField(env, jproxyInfo, jportField);
+    proxyInfo->port = NULL;
+    if (jport != NULL)
+    {
+        const char* src = (*env)->GetStringUTFChars(env, jport, &isCopy);
+        char* dest = (char*) malloc(strlen(src) + 1);
+
+        proxyInfo->port = strcpy(dest, src);
+        (*env)->ReleaseStringUTFChars(env, jport, src);
+    }
+
+    jfieldID juserField = (*env)->GetFieldID(env, proxyInfoClass, "user", STRING_CLASS_SIG);
+    jstring juser = (*env)->GetObjectField(env, jproxyInfo, juserField);
+    proxyInfo->name = NULL;
+    if (juser != NULL)
+    {
+        const char* src = (*env)->GetStringUTFChars(env, juser, &isCopy);
+        char* dest = (char*) malloc(strlen(src) + 1);
+
+        proxyInfo->name = strcpy(dest, src);
+        (*env)->ReleaseStringUTFChars(env, juser, src);
+    }
+
+    jfieldID jpasswordField = (*env)->GetFieldID(env, proxyInfoClass, "password", STRING_CLASS_SIG);
+    jstring jpassword = (*env)->GetObjectField(env, jproxyInfo, jpasswordField);
+    proxyInfo->pwd = NULL;
+    if (jpassword != NULL)
+    {
+        const char* src = (*env)->GetStringUTFChars(env, jpassword, &isCopy);
+        char* dest = (char*) malloc(strlen(src) + 1);
+
+        proxyInfo->pwd = strcpy(dest, src);
+        (*env)->ReleaseStringUTFChars(env, jpassword, src);
+    }
+
+    jfieldID jtypeField = (*env)->GetFieldID(env, proxyInfoClass, "type", "I");
+    proxyInfo->type = (*env)->GetIntField(env, jproxyInfo, jtypeField);
+
+    return proxyInfo;
+}
+
+void destroyFetionProxyInfoStruct(PROXY_ITEM* proxyInfo)
+{
+    free(proxyInfo->host);
+    free(proxyInfo->port);
+    free(proxyInfo->name);
+    free(proxyInfo->pwd);
+}
+
 jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
 {
     jclass gangInfoClass = NULL;
@@ -1116,6 +1235,12 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsByMobileNumber
     return result;
 }
 
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setCatSmsEnabled
+(JNIEnv* env, jobject jobj, jboolean jenabled)
+{
+    fx_set_catsms(jenabled);
+}
+
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_beginDialog
 (JNIEnv* env, jobject jobj, jlong jwho)
 {
@@ -1312,6 +1437,48 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserImpresa
     return result;
 }
 
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUerNickname
+(JNIEnv* env, jobject jobj, jstring jnickname,
+ jobject jeventListener, jobjectArray jargs)
+{
+    if (checkNullPointer(env, 2, jnickname, jeventListener))
+    {
+        return 0;
+    }
+
+    jboolean isCopy;
+    const char* nickname = (*env)->GetStringUTFChars(env, jnickname, &isCopy);
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_USER_NICKNAME);
+
+    int result = fx_set_user_nickname(nickname, callback, callbackArgs);
+
+    (*env)->ReleaseStringUTFChars(env, jnickname, nickname);
+
+    return result;
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserRefuseSmsDayCount
+(JNIEnv* env, jobject jobj)
+{
+    return fx_get_user_refuse_sms_day();
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserRefuseSmsDayCount
+(JNIEnv* env, jobject jobj, jint jdayCount, jobject jeventListener, jobjectArray jargs)
+{
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return 0;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_USER_REFUSE_SMS_DAY_COUNT);
+
+    return fx_set_user_refuse_sms_day(jdayCount, callback, callbackArgs);
+}
+
+
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getExpireTime
 (JNIEnv* env, jobject jobj)
 {
@@ -1458,13 +1625,48 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserById
     return fx_is_pc_user_by_id(jid);
 }
 
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isGangById
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    return fx_is_qun_by_id(jid);
+}
+
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount)
 {
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
     jboolean result = fx_is_pc_user_by_account(&account);
+
+    destroyFetionAccountStruct(&account);
+
+    return result;
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isAuthorizedById
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    return fx_is_authed_by_id(jid);
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isAuthorizedByAccount
+(JNIEnv* env, jobject jobj, jobject jaccount)
+{
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return -1;
+    }
+
+    Fetion_Account account;
+    buildFetionAccountStruct(env, &account, jaccount);
+
+    jboolean result = fx_is_authed_by_account(&account);
 
     destroyFetionAccountStruct(&account);
 
@@ -1480,6 +1682,11 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isInBlacklistById
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isInBlacklistByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount)
 {
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
@@ -1509,7 +1716,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBuddyByAccoun
 (JNIEnv* env, jobject jobj, jobject jaccount, jint jgroupId, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, 1, jeventListener))
+    if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
         return JNI_FALSE;
     }
@@ -1536,6 +1743,11 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isOnlineById
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isOnlineByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount)
 {
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return JNI_FALSE;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
@@ -1555,10 +1767,33 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusById
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount)
 {
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return -1;
+    }
+
     Fetion_Account account;
     buildFetionAccountStruct(env, &account, jaccount);
 
     jint result = fx_get_online_status_by_account(&account);
+
+    destroyFetionAccountStruct(&account);
+
+    return result;
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserRefuseSmsDayCountByAccount
+(JNIEnv* env, jobject jobj, jobject jaccount)
+{
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return -1;
+    }
+
+    Fetion_Account account;
+    buildFetionAccountStruct(env, &account, jaccount);
+
+    jint result = fx_get_refuse_sms_day(&account);
 
     destroyFetionAccountStruct(&account);
 
@@ -1589,6 +1824,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountShowName
     if (showName != NULL)
     {
         jshowName = (*env)->NewStringUTF(env, showName);
+        free(showName);
     }
 
     return jshowName;
@@ -1606,6 +1842,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangShowName
     if (showName != NULL)
     {
         jshowName = (*env)->NewStringUTF(env, showName);
+        free(showName);
     }
 
     destroyFetionGangStruct(&gang);
@@ -1874,7 +2111,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyByAccount
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, 1, jeventListener))
+    if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
         return JNI_FALSE;
     }
@@ -1911,7 +2148,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistByAccoun
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener,
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, 1, jeventListener))
+    if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
         return JNI_FALSE;
     }
@@ -1970,7 +2207,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByA
 (JNIEnv* env, jobject jobj, jobject jaccount, jobject jeventListener, 
  jobjectArray jargs)
 {
-    if (checkNullPointer(env, 1, jeventListener))
+    if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
         return JNI_FALSE;
     }
@@ -2010,42 +2247,115 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByU
     return result;
 }
 
-jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxy
-(JNIEnv* env, jobject jobj, jstring jproxy)
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendNudge
+(JNIEnv* env, jobject jobj, jlong jwho)
 {
-    if (checkNullPointer(env, 1, jproxy))
+    return fx_send_nudge(jwho);
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setServerAddress
+(JNIEnv* env, jobject jobj, jstring jserverAddress)
+{
+    if (checkNullPointer(env, 1, jserverAddress))
     {
         return JNI_FALSE;
     }
 
     jboolean isCopy;
-    const char* proxy = (*env)->GetStringUTFChars(env, jproxy, &isCopy);
+    const char* serverAddress = (*env)->GetStringUTFChars(env, jserverAddress, &isCopy);
 
-    jboolean result = fx_set_proxy(proxy);
-    
-    (*env)->ReleaseStringUTFChars(env, jproxy, proxy);
+    jboolean result = fx_set_serve_address(serverAddress);
+
+    (*env)->ReleaseStringUTFChars(env, jserverAddress, serverAddress);
 
     return result;
 }
 
-void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownProxy
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownServerAddress
 (JNIEnv* env, jobject jobj)
 {
-    fx_set_unknow_proxy();
+    fx_set_unknow_serve_address();
 }
 
-jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
+jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getServerAddress
 (JNIEnv* env, jobject jobj)
 {
-    jstring jproxy = NULL;
-    char* proxy = fx_get_proxy();
+    jstring jserverAddress = NULL;
+    char* serverAddress = fx_get_serve_address();
 
-    if (proxy != NULL)
+    if (serverAddress != NULL)
     {
-        jproxy = (*env)->NewStringUTF(env, proxy);
+        jserverAddress = (*env)->NewStringUTF(env, serverAddress);
+        free(serverAddress);
     }
 
-    return jproxy;
+    return jserverAddress;
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxy
+(JNIEnv* env, jobject jobj, jobject jproxyInfo)
+{
+    if (checkNullPointer(env, 1, jproxyInfo))
+    {
+        return JNI_FALSE;
+    }
+
+    PROXY_ITEM proxyInfo;
+    buildFetionProxyInfoStruct(env, &proxyInfo, jproxyInfo);
+
+    jboolean result = fx_set_proxy(&proxyInfo);
+
+    destroyFetionProxyInfoStruct(&proxyInfo);
+
+    return result;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
+(JNIEnv* env, jobject jobj)
+{
+    const PROXY_ITEM* proxyInfo = fx_get_proxy();
+    jobject jproxyInfo = NULL;
+
+    if (proxyInfo != NULL)
+    {
+        jproxyInfo = buildFetionProxyInfo(env, proxyInfo);
+    }
+
+    return jproxyInfo;
+}
+
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setProxyEnabled
+(JNIEnv* env, jobject jobj, jboolean jenabled)
+{
+    fx_setProxyEnabled(jenabled);
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isProxyEnabled
+(JNIEnv* env, jobject jobj)
+{
+    return fx_proxyEnabled();
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncTestNetwork
+(JNIEnv* env, jobject jobj, jobject jproxyInfo, 
+ jobject jeventListener, jobjectArray jargs)
+{
+    if (checkNullPointer(env, 2, jproxyInfo, jeventListener))
+    {
+        return 0;
+    }
+
+    PROXY_ITEM proxyInfo;
+    buildFetionProxyInfoStruct(env, &proxyInfo, jproxyInfo);
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_TEST_NETWORK);
+
+    jboolean result = fx_test_network(&proxyInfo, callback, callbackArgs);
+
+    destroyFetionProxyInfoStruct(&proxyInfo);
+
+    return result;
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
@@ -2065,6 +2375,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
     if (newMessage != NULL)
     {
         jnewMessage = (*env)->NewStringUTF(env, newMessage);
+        free(newMessage);
     }
     
     (*env)->ReleaseStringUTFChars(env, jmessage, message);
