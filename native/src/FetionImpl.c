@@ -1550,6 +1550,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
 {
     jobject jarrayList = buildArrayList(env);
     DList* blacklist = fx_get_blacklist();
+    DList* head = blacklist;
 
     while (blacklist)
     {
@@ -1565,6 +1566,8 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
         blacklist = d_list_next(blacklist);
     }
 
+    d_list_free(head);
+
     return jarrayList;
 }
 
@@ -1573,6 +1576,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
 {
     jobject jarrayList = buildArrayList(env);
     DList* gangList = fx_get_qun();
+    DList* head = gangList;
 
     while (gangList)
     {
@@ -1587,6 +1591,8 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
 
         gangList = d_list_next(gangList);
     }
+
+    d_list_free(head);
 
     return jarrayList;
 }
