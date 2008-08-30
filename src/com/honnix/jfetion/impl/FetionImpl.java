@@ -727,9 +727,9 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionMessageControl#setCatSmsEnabled(boolean)
+     * @see com.honnix.jfetion.FetionMessageControl#setLongSmsEnabled(boolean)
      */
-    public native void setCatSmsEnabled(boolean enabled);
+    public native void setLongSmsEnabled(boolean enabled);
 
     /*
      * (non-Javadoc)

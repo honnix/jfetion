@@ -1235,10 +1235,10 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSendSmsByMobileNumber
     return result;
 }
 
-void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setCatSmsEnabled
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
 (JNIEnv* env, jobject jobj, jboolean jenabled)
 {
-    fx_set_catsms(jenabled);
+    fx_set_longsms(jenabled);
 }
 
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_beginDialog

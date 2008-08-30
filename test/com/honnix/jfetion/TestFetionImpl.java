@@ -490,9 +490,9 @@ public class TestFetionImpl
         assertTrue("init failed??", fetionSession.init());
         assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
                 PASSWORD));
-        fetionMessage.setCatSmsEnabled(false);
+        fetionMessage.setLongSmsEnabled(false);
         assertTrue("send sms failed??", fetionMessage.sendSmsToSelf("自动安装盘"));
-        fetionMessage.setCatSmsEnabled(true);
+        fetionMessage.setLongSmsEnabled(true);
         assertTrue(
                 "send sms failed??",
                 fetionMessage

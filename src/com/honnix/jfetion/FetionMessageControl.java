@@ -54,14 +54,14 @@ public interface FetionMessageControl
 
     String removeFontTag(String message);
 
+    boolean sendNudge(long who);
+
     boolean sendSms(long who, String message);
 
     boolean sendSmsByMobileNumber(String mobileNumber, String message);
 
     boolean sendSmsToSelf(String message);
-    
-    void setCatSmsEnabled(boolean enabled);
-    
-    boolean sendNudge(long who);
+
+    void setLongSmsEnabled(boolean enabled);
 
 }

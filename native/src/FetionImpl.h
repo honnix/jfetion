@@ -649,10 +649,10 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyInfo
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    setCatSmsEnabled
+ * Method:    setLongSmsEnabled
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setCatSmsEnabled
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
   (JNIEnv *, jobject, jboolean);
 
 /*
