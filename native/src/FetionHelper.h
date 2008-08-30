@@ -1,5 +1,5 @@
 /*
- * FetionImpl.c
+ * FetionHelper.c
  * 
  * Copyright : (C) 2008 by Honnix
  * Email     : hxliang1982@gmail.com
