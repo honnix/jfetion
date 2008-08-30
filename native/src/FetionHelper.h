@@ -102,7 +102,7 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message);
 /*
  * Build FetionPersonalInfo object.
  */
-jobject buildFetionPersonalInfo(JNIEnv* env, Fetion_Personal* personalInfo);
+jobject buildFetionPersonalInfo(JNIEnv* env, const Fetion_Personal* personalInfo);
 
 /*
  * Build FetionGroup object.
@@ -112,7 +112,7 @@ jobject buildFetionGroup(JNIEnv* env, Fetion_Group* group);
 /*
  * Build FetionAccount object.
  */
-jobject buildFetionAccount(JNIEnv* env, Fetion_Account* account);
+jobject buildFetionAccount(JNIEnv* env, const Fetion_Account* account);
 
 /*
  * Build Fetion_Account structure.
@@ -133,7 +133,7 @@ jobject buildFetionBlacklistItem(JNIEnv* env, Fetion_Black* blacklistItem);
 /*
  * Build FetionGang object.
  */
-jobject buildFetionGang(JNIEnv* env, Fetion_Qun* gang);
+jobject buildFetionGang(JNIEnv* env, const Fetion_Qun* gang);
 
 /*
  * Build Fetion_Qun structure.

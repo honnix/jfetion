@@ -218,7 +218,7 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
     return jmessage;
 }
 
-jobject buildFetionPersonalInfo(JNIEnv* env, Fetion_Personal* personalInfo)
+jobject buildFetionPersonalInfo(JNIEnv* env, const Fetion_Personal* personalInfo)
 {
     jclass personalInfoClass = NULL;
     jobject jpersonalInfo = buildObject(env, &personalInfoClass, FETION_PERSONAL_INFO_CLASS,
@@ -432,7 +432,7 @@ jobject buildFetionGroup(JNIEnv* env, Fetion_Group* group)
     return jgroup;
 }
 
-jobject buildFetionAccount(JNIEnv* env, Fetion_Account* account)
+jobject buildFetionAccount(JNIEnv* env, const Fetion_Account* account)
 {
     jclass accountClass = NULL;
     jobject jaccount = buildObject(env, &accountClass, FETION_ACCOUNT_CLASS,
@@ -608,7 +608,7 @@ jobject buildFetionBlacklistItem(JNIEnv* env, Fetion_Black* blacklistItem)
     return jblacklistItem;
 }
 
-jobject buildFetionGang(JNIEnv* env, Fetion_Qun* gang)
+jobject buildFetionGang(JNIEnv* env, const Fetion_Qun* gang)
 {
     jclass gangClass;
     jobject jgang = buildObject(env, &gangClass, FETION_GANG_CLASS,
@@ -1488,7 +1488,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getExpireTime
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getPersonalInfo
 (JNIEnv* env, jobject obj)
 {
-    Fetion_Personal* personalInfo = fx_data_get_PersonalInfo();
+    const Fetion_Personal* personalInfo = fx_data_get_PersonalInfo();
     jobject jpersonalInfo = NULL;
 
     if (personalInfo != NULL)
@@ -1503,7 +1503,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
 (JNIEnv* env, jobject jobj)
 {
     jobject jarrayList = buildArrayList(env);
-    DList* groupList = fx_get_group();
+    const DList* groupList = fx_get_group();
 
     while (groupList)
     {
@@ -1526,7 +1526,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountList
 (JNIEnv* env, jobject jobj)
 {
     jobject jarrayList = buildArrayList(env);
-    DList* accountList = fx_get_account();
+    const DList* accountList = fx_get_account();
 
     while (accountList)
     {
@@ -1549,8 +1549,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
 (JNIEnv* env, jobject jobj)
 {
     jobject jarrayList = buildArrayList(env);
-    DList* blacklist = fx_get_blacklist();
-    DList* head = blacklist;
+    const DList* blacklist = fx_get_blacklist();
 
     while (blacklist)
     {
@@ -1566,8 +1565,6 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
         blacklist = d_list_next(blacklist);
     }
 
-    d_list_free(head);
-
     return jarrayList;
 }
 
@@ -1575,8 +1572,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
 (JNIEnv* env, jobject jobj)
 {
     jobject jarrayList = buildArrayList(env);
-    DList* gangList = fx_get_qun();
-    DList* head = gangList;
+    const DList* gangList = fx_get_qun();
 
     while (gangList)
     {
@@ -1592,15 +1588,13 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
         gangList = d_list_next(gangList);
     }
 
-    d_list_free(head);
-
     return jarrayList;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountById
 (JNIEnv* env, jobject jobj, jlong jid)
 {
-    Fetion_Account* account = fx_get_account_by_id(jid);
+    const Fetion_Account* account = fx_get_account_by_id(jid);
     jobject jaccount = NULL;
 
     if (account != NULL)
@@ -1614,7 +1608,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountById
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangById
 (JNIEnv* env, jobject jobj, jlong jid)
 {
-    Fetion_Qun* gang = fx_get_qun_by_id(jid);
+    const Fetion_Qun* gang = fx_get_qun_by_id(jid);
     jobject jgang = NULL;
 
     if (gang != NULL)
