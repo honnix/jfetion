@@ -482,15 +482,15 @@ FX_EXPORT int fx_send_sms_to_self(const char *message, EventListener func,void *
 FX_EXPORT int fx_send_sms_by_mobile_no(const char *mobile_no, const char *message, EventListener func, void *args);
 
 /**
-  * \fn void fetion_set_catsms(BOOL bl)
-  * \brief set the send sms mode, it maybe smscat or sms normally. 
+  * \fn void fx_set_longsms(BOOL bl)
+  * \brief set the send sms mode, it maybe longsms or sms normally. 
   *
-  *  smscat mode: it will send 180 at a time,
-  *  sms normally mode: it will send 70 at a time
+  *  longsms mode: it will send 180 characters in one short message,
+  *  sms normally mode: it will send 70 characters in one short message,
   *
-  * \param bl The TRUE is set smscat mode, FALSE set normally mode .
+  * \param bl The TRUE is set longsms mode, FALSE set normally mode .
 */
-FX_EXPORT void fx_set_catsms(BOOL bl);
+FX_EXPORT void fx_set_longsms(BOOL bl);
 
 /** @} end of generic_send_sms_functions */
 
@@ -739,14 +739,14 @@ FX_EXPORT int fx_set_user_refuse_sms_day(int day, EventListener func, void *args
 FX_EXPORT int  fx_get_expirestime(void);
 
 /**
-  * \fn Fetion_Personal *fx_data_get_PersonalInfo(void)
+  * \fn const Fetion_Personal *fx_data_get_PersonalInfo(void)
   * \brief get a current user is personal info
   *
   * \sa Fetion_Personal
   *
   * \return the Fetion_Personal info struct of the user
 */
-FX_EXPORT Fetion_Personal *fx_data_get_PersonalInfo(void);
+FX_EXPORT const Fetion_Personal *fx_data_get_PersonalInfo(void);
 
 /**
   * \fn Ftion_Status_Primitive fetion_data_get_status(void)
@@ -767,7 +767,7 @@ FX_EXPORT Fetion_Personal *fx_data_get_PersonalInfo(void);
 */
 
 /**
-  * \fn DList *fx_get_group()
+  * \fn const DList *fx_get_group()
   * \brief get the fetion's group info
   *
   * this function will return a list which store the group info
@@ -780,7 +780,7 @@ FX_EXPORT Fetion_Personal *fx_data_get_PersonalInfo(void);
   * \code
   * 
   * Fetion_Group *group = NULL;
-  *	DList *tmp = fx_get_group();
+  *	DList *tmp = (DList *)fx_get_group();
   *
   *	while(tmp)
   *	{
@@ -796,11 +796,11 @@ FX_EXPORT Fetion_Personal *fx_data_get_PersonalInfo(void);
   * \sa Fetion_Group DList 
   */
 
-FX_EXPORT DList *fx_get_group();
+FX_EXPORT const DList *fx_get_group();
 
 
 /**
-  * \fn DList *fx_get_account()
+  * \fn const DList *fx_get_account()
   * \brief get the fetion's all accounts info
   *
   * this function will return a list which store all account info
@@ -813,7 +813,7 @@ FX_EXPORT DList *fx_get_group();
   * \code
   * 
   * Fetion_Account *account = NULL;
-  *	DList *tmp = fx_get_account();
+  *	DList *tmp = (DList *)fx_get_account();
   *	while(tmp) 
   *	{
   *		if(	account =(Fetion_Account *)tmp->data ) {
@@ -827,10 +827,10 @@ FX_EXPORT DList *fx_get_group();
   *
   * \sa Fetion_Account DList 
 */
-FX_EXPORT DList *fx_get_account();
+FX_EXPORT const DList *fx_get_account();
 
 /**
-  * \fn DList *fx_get_blacklist()
+  * \fn const DList *fx_get_blacklist()
   * \brief get the fetion's all black's accounts info
   *
   * this function will return a list which store all black's account info
@@ -843,7 +843,7 @@ FX_EXPORT DList *fx_get_account();
   * \code
   * 
   * Fetion_Black *black = NULL;
-  *	DList *tmp = fx_get_blacklist();
+  *	DList *tmp = (DList *)fx_get_blacklist();
   *	while(tmp) 
   *	{
   *		if(	black =(Fetion_Black *)tmp->data ) {
@@ -857,10 +857,10 @@ FX_EXPORT DList *fx_get_account();
   *
   * \sa Fetion_Black DList 
 */
-FX_EXPORT DList *fx_get_blacklist();
+FX_EXPORT const DList *fx_get_blacklist();
 
 /**
-  * \fn DList *fx_get_qun()
+  * \fn const DList *fx_get_qun()
   * \brief get the fetion's qun info
   *
   * this function will return a list which store the qun info
@@ -873,7 +873,7 @@ FX_EXPORT DList *fx_get_blacklist();
   * \code
   * 
   * Fetion_Qun *qun = NULL;
-  *	DList *tmp = fx_get_qun();
+  *	DList *tmp = (DList *)fx_get_qun();
   *
   *	while(tmp)
   *	{
@@ -889,28 +889,28 @@ FX_EXPORT DList *fx_get_blacklist();
   * \sa Fetion_Qun DList 
   */
 
-FX_EXPORT DList *fx_get_qun();
+FX_EXPORT const DList *fx_get_qun();
 
 
 /**
-  * \fn Fetion_Account *fx_get_account_by_id(long id)
+  * \fn const Fetion_Account *fx_get_account_by_id(long id)
   * \brief get a account which uid 's the gived id
   *
   * \sa Fetion_Account
   *
   * \return a account value if successfully, otherwise return NULL..
 */
-FX_EXPORT Fetion_Account *fx_get_account_by_id(long id);
+FX_EXPORT const Fetion_Account *fx_get_account_by_id(long id);
 
 /**
-  * \fn Fetion_Qun *fx_get_qun_by_id(long id)
+  * \fn const Fetion_Qun *fx_get_qun_by_id(long id)
   * \brief get  qun which uid 's the gived id
   *
   * \sa Fetion_Qun
   *
   * \return a qun value if successfully, otherwise return NULL..
 */
-FX_EXPORT Fetion_Qun *fx_get_qun_by_id(long id);
+FX_EXPORT const Fetion_Qun *fx_get_qun_by_id(long id);
 
 
 /**
@@ -930,12 +930,12 @@ FX_EXPORT BOOL fx_is_pc_user_by_id(long id);
 FX_EXPORT BOOL fx_is_qun_by_id(long id);
 
 /**
-  * \fn BOOL fx_is_pc_user_by_account(Fetion_Account *account)
+  * \fn BOOL fx_is_pc_user_by_account(const Fetion_Account *account)
   * \brief judge this account is PC USER or not
   *
   * \return TRUE if id is PC USER, otherwise return FALSE..
 */
-FX_EXPORT BOOL fx_is_pc_user_by_account(Fetion_Account *account);
+FX_EXPORT BOOL fx_is_pc_user_by_account(const Fetion_Account *account);
 
 
 /**
@@ -1014,12 +1014,12 @@ FX_EXPORT int fx_move_group_buddy(const Fetion_Account *account, int group_id, E
 FX_EXPORT BOOL fx_is_on_line_by_id(long id);
 
 /**
-  * \fn BOOL fx_is_on_line_by_account(Fetion_Account *account)
+  * \fn BOOL fx_is_on_line_by_account(const Fetion_Account *account)
   * \brief judge this account is OnLine or not
   *
   * \return TRUE if id is OnLine, otherwise return FALSE..
 */
-FX_EXPORT BOOL fx_is_on_line_by_account(Fetion_Account *account);
+FX_EXPORT BOOL fx_is_on_line_by_account(const Fetion_Account *account);
 
 /**
   * \fn int fx_get_online_status_by_id(const long uid)
@@ -1039,13 +1039,13 @@ FX_EXPORT int fx_get_online_status_by_id(const long uid);
 FX_EXPORT int fx_get_online_status_by_account(const Fetion_Account * account);
 
 /**
-  * \fn int fx_get_refuse_sms_day(Fetion_Account *account)
+  * \fn int fx_get_refuse_sms_day(const Fetion_Account *account)
   * \brief return fetion account's refuse_sms_day.  
   *
   * \return the numbers of refuse_sms_day.  
   *
 */
-FX_EXPORT int fx_get_refuse_sms_day(Fetion_Account *account);
+FX_EXPORT int fx_get_refuse_sms_day(const Fetion_Account *account);
 
 /**
   * \fn fx_updata_account_info_by_id(long id)
@@ -1070,7 +1070,7 @@ FX_EXPORT void fx_updata_account_info_all();
 
 
 /**
-  * \fn char *fx_get_account_show_name(Fetion_Account *account, BOOL needImpresa)
+  * \fn char *fx_get_account_show_name(const Fetion_Account *account, BOOL needImpresa)
   * \brief get the show name of the account
   *
   * note: this function maybe modify at late version....
@@ -1082,7 +1082,7 @@ FX_EXPORT void fx_updata_account_info_all();
   *
   * \return the show name of account
 */
-FX_EXPORT char *fx_get_account_show_name(Fetion_Account *account, BOOL needImpresa);
+FX_EXPORT char *fx_get_account_show_name(const Fetion_Account *account, BOOL needImpresa);
 
 /**
   * \fn char *fx_get_qun_show_name(Fetion_Qun *qun)
@@ -1099,7 +1099,7 @@ FX_EXPORT char *fx_get_account_show_name(Fetion_Account *account, BOOL needImpre
 FX_EXPORT char *fx_get_qun_show_name(Fetion_Qun *qun);
 
 /**
-  * \fn int fx_get_account_group_id(Fetion_Account *account)
+  * \fn int fx_get_account_group_id(const Fetion_Account *account)
   * \brief get the group id of the account
   *
   * note: group_id is started by 0,
@@ -1110,7 +1110,7 @@ FX_EXPORT char *fx_get_qun_show_name(Fetion_Qun *qun);
   *
   * \return the id of account's group if successfully, otherwise return -1..
 */
-FX_EXPORT int fx_get_account_group_id(Fetion_Account *account);
+FX_EXPORT int fx_get_account_group_id(const Fetion_Account *account);
 
 
 /** @} end of get_contact_info */
