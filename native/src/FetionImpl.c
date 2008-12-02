@@ -2382,3 +2382,18 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
 
     return jnewMessage;
 }
+
+jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOriginalId
+(JNIEnv* env, jobject jobj, jlong jid)
+{
+    jstring joriginalId = NULL;
+    char* originalId = fx_get_original_ID(jid);
+
+    if (originalId != NULL)
+    {
+        joriginalId = (*env)->NewStringUTF(env, originalId);
+        free(originalId);
+    }
+
+    return joriginalId;
+}

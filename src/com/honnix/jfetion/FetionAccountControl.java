@@ -119,6 +119,8 @@ public interface FetionAccountControl
 
     int getOnlineStatusById(long id);
 
+    String getOriginalId(long id);
+
     FetionPersonalInfo getPersonalInfo();
 
     String getUserId();
@@ -136,7 +138,7 @@ public interface FetionAccountControl
     String getUserShowName();
 
     int getUserStatus();
-
+    
     String getUserUri();
 
     int handleContactRequest(String uri, int isPassed, int groupId,

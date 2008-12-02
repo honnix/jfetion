@@ -88,13 +88,13 @@ public final class EventConstant
 
     public static final int DIA_BEGIG_TIMEOUT = EVENT_BASE + 0x0033;
 
-    public static final int DIA_SEND_OK = EVENT_BASE + 0x0032;
+    public static final int DIA_SEND_OK = EVENT_BASE + 0x0034;
 
-    public static final int DIA_SEND_FAIL = EVENT_BASE + 0x0033;
+    public static final int DIA_SEND_FAIL = EVENT_BASE + 0x0035;
 
-    public static final int DIA_SEND_TIMEOUT = EVENT_BASE + 0x0034;
+    public static final int DIA_SEND_TIMEOUT = EVENT_BASE + 0x0036;
 
-    public static final int DIA_UNKNOWN_ERROR = EVENT_BASE + 0x0035;
+    public static final int DIA_UNKNOWN_ERROR = EVENT_BASE + 0x0037;
 
     public static final int STATUS_UNSET = EVENT_BASE + 0x0040;
 
@@ -190,9 +190,9 @@ public final class EventConstant
 
     public static final int MOVE_GROUP_FAIL = EVENT_BASE + 0x0085;
 
-    public static final int RECEIVE_FILE = EVENT_BASE + 0x0085;
+    public static final int RECEIVE_FILE = EVENT_BASE + 0x0087;
 
-    public static final int CURRENT_VERSION = EVENT_BASE + 0x0086;
+    public static final int CURRENT_VERSION = EVENT_BASE + 0x0088;
 
     public static final int GET_GANG_LIST_OK = EVENT_BASE + 0x0091;
 

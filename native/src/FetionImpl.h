@@ -377,6 +377,14 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusBy
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getOriginalId
+ * Signature: (J)I
+ */
+JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOriginalId
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getOnlineStatusById
  * Signature: (J)I
  */

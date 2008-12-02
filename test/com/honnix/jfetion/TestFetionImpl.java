@@ -56,6 +56,8 @@ public class TestFetionImpl
     private static final String LP_ID = "1816082319";
 
     private static final String LP_URI = "tel:13816082319";
+    
+    private static final String LP_MOBILE_NUMBER = "13816082319";
 
     private static final String USER_ID = "728801465";
 
@@ -399,6 +401,15 @@ public class TestFetionImpl
                 .parseLong(id)));
     }
 
+    public void testGetOriginalId()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+        
+        assertEquals("wrong original id?", LP_MOBILE_NUMBER, fetionAccount.getOriginalId(Long.parseLong(LP_ID)));
+    }
+
     public void testGetPersonalInfo()
     {
         assertTrue("init failed??", fetionSession.init());
@@ -448,6 +459,25 @@ public class TestFetionImpl
         assertTrue("init failed??", fetionSession.init());
         assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
                 PASSWORD));
+    }
+
+    public void testProxy()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        FetionProxyInfo proxyInfo = new FetionProxyInfo();
+        proxyInfo.setHost("192.168.17.2");
+        proxyInfo.setPort("80");
+        proxyInfo.setType(FetionProxyType.HTTP);
+
+        fetionSession.setProxy(proxyInfo);
+        proxyInfo = fetionSession.getProxy();
+
+        assertEquals("wrong host?", "192.168.17.2", proxyInfo.getHost());
+        assertEquals("wrong port?", "80", proxyInfo.getPort());
+        assertEquals("wrong type", FetionProxyType.HTTP, proxyInfo.getType());
     }
 
     public void testRemoveFontTag()
@@ -515,7 +545,7 @@ public class TestFetionImpl
         assertNull("should have no server address", fetionSession
                 .getServerAddress());
     }
-
+    
     public void testSetSystemMessageEventListener()
     {
         assertTrue("init failed??", fetionSession.init());
@@ -523,25 +553,6 @@ public class TestFetionImpl
                 checker);
         assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
                 PASSWORD));
-    }
-
-    public void testProxy()
-    {
-        assertTrue("init failed??", fetionSession.init());
-        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-                PASSWORD));
-
-        FetionProxyInfo proxyInfo = new FetionProxyInfo();
-        proxyInfo.setHost("192.168.17.2");
-        proxyInfo.setPort("80");
-        proxyInfo.setType(FetionProxyType.HTTP);
-
-        fetionSession.setProxy(proxyInfo);
-        proxyInfo = fetionSession.getProxy();
-
-        assertEquals("wrong host?", "192.168.17.2", proxyInfo.getHost());
-        assertEquals("wrong port?", "80", proxyInfo.getPort());
-        assertEquals("wrong type", FetionProxyType.HTTP, proxyInfo.getType());
     }
 
 }

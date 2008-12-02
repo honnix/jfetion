@@ -473,6 +473,19 @@ public class FetionImpl
      */
     public native int getOnlineStatusById(long id);
 
+    public String getOriginalId()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionAccountControl#getOriginalId()
+     */
+    public native String getOriginalId(long id);
+
     /*
      * (non-Javadoc)
      * 
@@ -555,7 +568,7 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionAccountControl#getUserUri()
+     * @see com.honnix.jfetion.FetionAccountControl#getUserUri(long)
      */
     public native String getUserUri();
 
@@ -727,16 +740,16 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionMessageControl#setLongSmsEnabled(boolean)
+     * @see com.honnix.jfetion.FetionSessionControl#setLoginStatus(int)
      */
-    public native void setLongSmsEnabled(boolean enabled);
+    public native void setLoginStatus(int status);
 
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionSessionControl#setLoginStatus(int)
+     * @see com.honnix.jfetion.FetionMessageControl#setLongSmsEnabled(boolean)
      */
-    public native void setLoginStatus(int status);
+    public native void setLongSmsEnabled(boolean enabled);
 
     /*
      * (non-Javadoc)
