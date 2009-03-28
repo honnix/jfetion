@@ -16,7 +16,7 @@
     <property name="meta.info.dir" value="META-INF" />
     <property name="dist.dir" value="dist" />
     <property name="dist.name" value="${ant.project.name}" />
-    <property name="dist.version" value="0.9.1" />
+    <property name="dist.version" value="0.9.2" />
     <property name="report.dir" value="report" />
     <property name="pmd.ruleset.file" value="pmd.xml" />
     <property name="pmd.report.format" value="xml" />
