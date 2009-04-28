@@ -2370,7 +2370,7 @@ jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_removeFontTag
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
 
     jstring jnewMessage = NULL;
-    char* newMessage = fx_simple_paser_msg(message);
+    char* newMessage = fx_msg_no_format(message);
 
     if (newMessage != NULL)
     {
