@@ -36,6 +36,10 @@ import com.honnix.jfetion.impl.data.FetionProxyInfo;
 
 /**
  * 
+ * This class loads JNI library when loaded by certain classloader.
+ * <p>
+ * All methos are native ones. Refer to native C implementation.
+ * 
  */
 public class FetionImpl
     implements FetionSessionControl, FetionAccountControl, FetionMessageControl

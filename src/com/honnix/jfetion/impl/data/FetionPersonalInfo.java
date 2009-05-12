@@ -22,6 +22,8 @@ package com.honnix.jfetion.impl.data;
 
 /**
  * 
+ * Data structure of persion information.
+ * 
  */
 public class FetionPersonalInfo
 {

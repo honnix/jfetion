@@ -21,7 +21,9 @@
 package com.honnix.jfetion.impl.data;
 
 /**
- *
+ * 
+ * This class defines constants for proxy type.
+ * 
  */
 public final class FetionProxyType
 {

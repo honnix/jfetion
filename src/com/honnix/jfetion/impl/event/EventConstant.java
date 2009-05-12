@@ -22,6 +22,8 @@ package com.honnix.jfetion.impl.event;
 
 /**
  * 
+ * This class defines all event related constants.
+ * 
  */
 public final class EventConstant
 {

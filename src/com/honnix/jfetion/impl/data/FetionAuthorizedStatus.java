@@ -21,7 +21,9 @@
 package com.honnix.jfetion.impl.data;
 
 /**
- *
+ * 
+ * Data structure of authorized status.
+ * 
  */
 public final class FetionAuthorizedStatus
 {

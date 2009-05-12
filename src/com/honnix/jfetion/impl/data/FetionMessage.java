@@ -22,6 +22,8 @@ package com.honnix.jfetion.impl.data;
 
 /**
  * 
+ * Data structure of message.
+ * 
  */
 public class FetionMessage
 {

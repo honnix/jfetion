@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * 
+ * Data structure of gang information.
+ * 
  */
 public class FetionGangInfo
 {

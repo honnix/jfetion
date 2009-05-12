@@ -22,6 +22,12 @@ package com.honnix.jfetion;
 
 /**
  * 
+ * Event listener.
+ * <p>
+ * Any class needs to implement callback functionality should implement this
+ * interface. The reference of this class should be passed to asynchronized
+ * method.
+ * 
  */
 public interface EventListener
 {

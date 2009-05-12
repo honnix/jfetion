@@ -22,6 +22,8 @@ package com.honnix.jfetion.impl.data;
 
 /**
  * 
+ * This class defines constants of user type.
+ * 
  */
 public final class FetionUserType
 {

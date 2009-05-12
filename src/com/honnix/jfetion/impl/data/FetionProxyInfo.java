@@ -21,7 +21,9 @@
 package com.honnix.jfetion.impl.data;
 
 /**
- *
+ * 
+ * Data structure of proxy information.
+ * 
  */
 public class FetionProxyInfo
 {

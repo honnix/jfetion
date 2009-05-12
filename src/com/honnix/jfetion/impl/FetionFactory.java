@@ -26,6 +26,9 @@ import com.honnix.jfetion.FetionSessionControl;
 
 /**
  * 
+ * Always use this factory to get account, message and session control
+ * interfaces. Since there must be only one libfetion instance in one process.
+ * 
  */
 public final class FetionFactory
 {

@@ -24,6 +24,8 @@ import com.honnix.jfetion.impl.data.FetionMessage;
 
 /**
  * 
+ * This interface declares all message related operations.
+ * 
  */
 public interface FetionMessageControl
 {

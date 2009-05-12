@@ -30,6 +30,8 @@ import com.honnix.jfetion.impl.data.FetionPersonalInfo;
 
 /**
  * 
+ * This interface declares all account related operations.
+ * 
  */
 public interface FetionAccountControl
 {
@@ -138,7 +140,7 @@ public interface FetionAccountControl
     String getUserShowName();
 
     int getUserStatus();
-    
+
     String getUserUri();
 
     int handleContactRequest(String uri, int isPassed, int groupId,

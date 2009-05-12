@@ -22,6 +22,9 @@ package com.honnix.jfetion.impl.data;
 
 /**
  * 
+ * Data structure of gang (well, I'm not sure which word I should use, this is
+ * not group anyway).
+ * 
  */
 public class FetionGang
 {
@@ -31,7 +34,7 @@ public class FetionGang
     private String uri;
 
     private int identity;
-    
+
     private FetionGangInfo gangInfo;
 
     public FetionGang()
@@ -72,7 +75,8 @@ public class FetionGang
     }
 
     /**
-     * @param gangInfo the gangInfo to set
+     * @param gangInfo
+     *            the gangInfo to set
      */
     public void setGangInfo(FetionGangInfo gangInfo)
     {

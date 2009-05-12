@@ -24,6 +24,8 @@ import com.honnix.jfetion.impl.data.FetionProxyInfo;
 
 /**
  * 
+ * This interface declares all session related operations.
+ * 
  */
 public interface FetionSessionControl
 {
