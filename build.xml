@@ -55,7 +55,6 @@
 	<target depends="build-project, build-native" name="build" />
 
 	<target depends="init" name="build-project">
-		<echo message="${ant.project.name}: ${ant.file}" />
 		<javac debug="${debug}" debuglevel="${debuglevel}" destdir="${classes.dir}" source="${source}" target="${target}">
 			<src path="${src.dir}" />
 			<classpath refid="classpath" />
