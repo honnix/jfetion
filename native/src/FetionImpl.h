@@ -65,6 +65,14 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncBeginDialog
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    cancelLogin
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_cancelLogin
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    asyncDeleteBuddyByAccount
  * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
@@ -85,6 +93,14 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyB
  * Signature: (ILcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
 JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyList
+  (JNIEnv *, jobject, jint, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncDeleteScheduledSMS
+ * Signature: (ILcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteScheduledSMS
   (JNIEnv *, jobject, jint, jobject, jobjectArray);
 
 /*
@@ -201,6 +217,14 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetBuddyInfo
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    asyncSetScheduledSMS
+ * Signature: (Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ */
+JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetScheduledSMS
+  (JNIEnv *, jobject, jobject, jstring, jstring, jobject, jobjectArray);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    asyncSetUerNickname
  * Signature: (Ljava/lang/String;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
@@ -257,6 +281,14 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_closeNetwork
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    convertScheduledSMSReceiverListToString
+ * Signature: (Ljava/util/List;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_convertScheduledSMSReceiverListToString
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    deleteBuddyList
  * Signature: (I)Z
  */
@@ -297,14 +329,6 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountGroupId
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    getAccountList
- * Signature: ()Ljava/util/List;
- */
-JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountList
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getAccountShowName
  * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;Z)Ljava/lang/String;
  */
@@ -325,6 +349,14 @@ JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getExpireTime
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getFirstAccount
+ * Signature: ()Lcom/honnix/jfetion/impl/data/FetionAccount;
+ */
+JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getFirstAccount
   (JNIEnv *, jobject);
 
 /*
@@ -369,6 +401,14 @@ JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getMessage
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getNextAccount
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)Lcom/honnix/jfetion/impl/data/FetionAccount;
+ */
+JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getOnlineStatusByAccount
  * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)I
  */
@@ -377,18 +417,18 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusBy
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    getOriginalId
- * Signature: (J)I
- */
-JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOriginalId
-  (JNIEnv *, jobject, jlong);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getOnlineStatusById
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusById
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getOriginalId
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOriginalId
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -405,6 +445,22 @@ JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getPersonalInf
  * Signature: ()Lcom/honnix/jfetion/impl/data/FetionProxyInfo;
  */
 JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getProxy
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getScheduledSMSById
+ * Signature: (I)Lcom/honnix/jfetion/impl/data/FetionScheduledSMS;
+ */
+JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSById
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    getScheduledSMSList
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSList
   (JNIEnv *, jobject);
 
 /*
@@ -545,6 +601,14 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isInBlacklist
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    isLoginByMobile
+ * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isLoginByMobile
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    isOnlineByAccount
  * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)Z
  */
@@ -657,19 +721,19 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyInfo
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    setLongSmsEnabled
- * Signature: (Z)V
- */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
-  (JNIEnv *, jobject, jboolean);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    setLoginStatus
  * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLoginStatus
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setLongSmsEnabled
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
+  (JNIEnv *, jobject, jboolean);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -717,14 +781,6 @@ JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownServerA
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_terminate
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    updateAccountInfoAll
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_updateAccountInfoAll
   (JNIEnv *, jobject);
 
 /*

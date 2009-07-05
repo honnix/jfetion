@@ -33,6 +33,7 @@ import com.honnix.jfetion.impl.data.FetionGroup;
 import com.honnix.jfetion.impl.data.FetionMessage;
 import com.honnix.jfetion.impl.data.FetionPersonalInfo;
 import com.honnix.jfetion.impl.data.FetionProxyInfo;
+import com.honnix.jfetion.impl.data.FetionScheduledSMS;
 
 /**
  * 
@@ -156,6 +157,15 @@ public class FetionImpl
      */
     public native int asyncDeleteBuddyList(int id, EventListener eventListener,
             Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionMessageControl#asyncDeleteScheduledSMS(int,
+     * com.honnix.jfetion.EventListener, java.lang.Object[])
+     */
+    public native int asyncDeleteScheduledSMS(int id,
+            EventListener eventListener, Object... args);
 
     /*
      * (non-Javadoc)
@@ -295,6 +305,18 @@ public class FetionImpl
      * (non-Javadoc)
      * 
      * @see
+     * com.honnix.jfetion.FetionMessageControl#asyncSetScheduledSMS(java.util
+     * .List, java.lang.String, java.lang.String,
+     * com.honnix.jfetion.EventListener, java.lang.Object[])
+     */
+    public native int asyncSetScheduledSMS(List<Integer> receiverList,
+            String message, String sendTime, EventListener eventListener,
+            Object... args);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
      * com.honnix.jfetion.FetionAccountControl#asyncSetUerNickname(java.lang
      * .String, com.honnix.jfetion.EventListener, java.lang.Object[])
      */
@@ -351,9 +373,25 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
+     * @see com.honnix.jfetion.FetionSessionControl#cancelLogin()
+     */
+    public native void cancelLogin();
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.honnix.jfetion.FetionSessionControl#closeNetwork()
      */
     public native boolean closeNetwork();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @seecom.honnix.jfetion.FetionMessageControl#
+     * convertScheduledSMSReceiverListToString (java.util.List)
+     */
+    public native String convertScheduledSMSReceiverListToString(
+            List<Integer> receiverList);
 
     /*
      * (non-Javadoc)
@@ -396,13 +434,6 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see com.honnix.jfetion.FetionAccountControl#getAccountList()
-     */
-    public native List<FetionAccount> getAccountList();
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see
      * com.honnix.jfetion.FetionAccountControl#getAccountShowName(com.honnix
      * .jfetion.impl.data.FetionAccount, boolean)
@@ -423,6 +454,13 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionSessionControl#getExpireTime()
      */
     public native int getExpireTime();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionAccountControl#getFirstAccount()
+     */
+    public native FetionAccount getFirstAccount();
 
     /*
      * (non-Javadoc)
@@ -460,6 +498,15 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionMessageControl#getMessage(long)
      */
     public native FetionMessage getMessage(long id);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionAccountControl#getNextAccount(com.honnix.jfetion
+     * .impl.data.FetionAccount)
+     */
+    public native FetionAccount getNextAccount(FetionAccount currentAccount);
 
     /*
      * (non-Javadoc)
@@ -503,6 +550,20 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionSessionControl#getProxy()
      */
     public native FetionProxyInfo getProxy();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionMessageControl#getScheduledSMSById(int)
+     */
+    public native FetionScheduledSMS getScheduledSMSById(int id);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionMessageControl#getScheduledSMSList()
+     */
+    public native List<FetionScheduledSMS> getScheduledSMSList();
 
     /*
      * (non-Javadoc)
@@ -631,6 +692,15 @@ public class FetionImpl
      * @see com.honnix.jfetion.FetionAccountControl#isInBlacklistById(long)
      */
     public native boolean isInBlacklistById(long id);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.honnix.jfetion.FetionAccountControl#isLoginByMobile(com.honnix.jfetion
+     * .impl.data.FetionAccount)
+     */
+    public native boolean isLoginByMobile(FetionAccount account);
 
     /*
      * (non-Javadoc)
@@ -803,13 +873,6 @@ public class FetionImpl
      * @see com.honnix.jfetion.Fetion#terminate()
      */
     public native void terminate();
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.honnix.jfetion.FetionAccountControl#updateAccountInfoAll()
-     */
-    public native void updateAccountInfoAll();
 
     /*
      * (non-Javadoc)

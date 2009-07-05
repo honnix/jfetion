@@ -66,6 +66,12 @@ public final class EventConstant
 
     public static final int LOGIN_SERVER_ERROR = EVENT_SPARE + 0x0002;
 
+    public static final int LOGIN_SERVER_REFUSE = EVENT_SPARE + 0x0003;
+
+    public static final int LOGIN_GSML_OK = EVENT_SPARE + 0x0004;
+
+    public static final int LOGIN_GSML_FAIL = EVENT_SPARE + 0x0005;
+
     public static final int NEW_MESSAGE = EVENT_BASE + 0x0010;
 
     public static final int NEW_GANG_MESSAGE = EVENT_BASE + 0x0011;

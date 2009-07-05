@@ -39,6 +39,8 @@ typedef enum _callbackFunctionIndex
     ASYNC_SEND_SMS,
     ASYNC_SEND_SMS_TO_SELF,
     ASYNC_SEND_SMS_BY_MOBILE_NUMBER,
+    ASYNC_SET_SCHEDULED_SMS,
+    ASYNC_DELETE_SCHEDULED_SMS,
     ASYNC_BEGIN_DIALOG,
     ASYNC_DIALOG_SEND,
     ASYNC_SET_USER_STATUS,
@@ -145,6 +147,21 @@ Fetion_Qun* buildFetionGangStruct(JNIEnv* env, Fetion_Qun* gang,
  * Free memory allocated in Fetion_Qun structure.
  */
 void destroyFetionGangStruct(Fetion_Qun* gang);
+
+/*
+ * Build FetionScheduledSMS object.
+ */
+jobject buildFetionScheduledSMS(JNIEnv* env, const Fetion_Schedule_SMS* scheduledSMS);
+
+/*
+ * Build a DList for scheduled SMS related field receiverList.
+ */
+DList* buildReceiverList(JNIEnv* env, jobject jreceiverList);
+
+/*
+ * Destroy a DList.
+ */ 
+void destroyDList();
 
 /*
  * Build FetionGangInfo object.

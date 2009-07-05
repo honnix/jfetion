@@ -20,7 +20,10 @@
  */
 package com.honnix.jfetion;
 
+import java.util.List;
+
 import com.honnix.jfetion.impl.data.FetionMessage;
+import com.honnix.jfetion.impl.data.FetionScheduledSMS;
 
 /**
  * 
@@ -31,6 +34,9 @@ public interface FetionMessageControl
 {
 
     int asyncBeginDialog(long who, EventListener eventListener, Object... args);
+
+    int asyncDeleteScheduledSMS(int id, EventListener eventListener,
+            Object... args);
 
     int asyncDialogSend(long who, String message, EventListener eventListener,
             Object... args);
@@ -46,13 +52,22 @@ public interface FetionMessageControl
     int asyncSendSmsToSelf(String message, EventListener eventListener,
             Object... args);
 
+    int asyncSetScheduledSMS(List<Integer> receiverList, String message,
+            String sendTime, EventListener eventListener, Object... args);
+
     boolean beginDialog(long who);
+
+    String convertScheduledSMSReceiverListToString(List<Integer> receiverList);
 
     boolean dialogSend(long who, String message);
 
     void endDialog(long who);
 
     FetionMessage getMessage(long id);
+
+    FetionScheduledSMS getScheduledSMSById(int id);
+
+    List<FetionScheduledSMS> getScheduledSMSList();
 
     String removeFontTag(String message);
 

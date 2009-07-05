@@ -38,44 +38,49 @@
 #define CALLBACK_ARRAY_SIZE 50
 
 #define OBJECT_CLASS "java/lang/Object"
+#define INTEGER_CLASSS "java/lang/Integer"
 #define ARRAY_LIST_CLASS "java/util/ArrayList"
 #define CLASS_NOT_FOUND_EXCEPTION_CLASS "java/lang/ClassNotFoundException"
 #define NULL_POINTER_EXCEPTION_CLASS "java/lang/NullPointerException"
 
 #define FETION_MESSAGE_CLASS "com/honnix/jfetion/impl/data/FetionMessage"
-#define FETION_MESSAGE_CLASS_NOT_FOUND \
+#define FETION_MESSAGE_CLASS_NOT_FOUND                              \
     "Class com/honnix/jfetion/impl/data/FetionMessage not found."
 
+#define FETION_SCHEDULED_SMS_CLASS "com/honnix/jfetion/impl/data/FetionScheduledSMS"
+#define FETION_SCHEDULED_SMS_CLASS_NOT_FOUND                            \
+    "Class com/honnix/jfetion/impl/data/FetionScheduledSMS not found."
+
 #define FETION_PERSONAL_INFO_CLASS "com/honnix/jfetion/impl/data/FetionPersonalInfo"
-#define FETION_PERSONAL_INFO_CLASS_NOT_FOUND \
+#define FETION_PERSONAL_INFO_CLASS_NOT_FOUND                            \
     "Class com/honnix/jfetion/impl/data/FetionPersonalInfo not found."
 
 #define FETION_GROUP_CLASS "com/honnix/jfetion/impl/data/FetionGroup"
-#define FETION_GROUP_CLASS_NOT_FOUND \
+#define FETION_GROUP_CLASS_NOT_FOUND                            \
     "Class com/honnix/jfetion/impl/data/FetionGroup not found."
 
 #define FETION_ACCOUNT_CLASS "com/honnix/jfetion/impl/data/FetionAccount"
-#define FETION_ACCOUNT_CLASS_NOT_FOUND \
+#define FETION_ACCOUNT_CLASS_NOT_FOUND                              \
     "Class com/honnix/jfetion/impl/data/FetionAccount not found."
 
 #define FETION_BLACKLIST_ITEM_CLASS "com/honnix/jfetion/impl/data/FetionBlacklistItem"
-#define FETION_BLACKLIST_ITEM_CLASS_NOT_FOUND \
+#define FETION_BLACKLIST_ITEM_CLASS_NOT_FOUND                           \
     "Class com/honnix/jfetion/impl/data/FetionBlacklistItem not found."
 
 #define FETION_GANG_CLASS "com/honnix/jfetion/impl/data/FetionGang"
-#define FETION_GANG_CLASS_NOT_FOUND \
+#define FETION_GANG_CLASS_NOT_FOUND                             \
     "Class com/honnix/jfetion/impl/data/FetionGang not found."
 
 #define FETION_GANG_INFO_CLASS "com/honnix/jfetion/impl/data/FetionGangInfo"
-#define FETION_GANG_INFO_CLASS_NOT_FOUND \
+#define FETION_GANG_INFO_CLASS_NOT_FOUND                            \
     "Class com/honnix/jfetion/impl/data/FetionGangInfo not found."
 
 #define FETION_GANG_MEMBER_CLASS "com/honnix/jfetion/impl/data/FetionGangMember"
-#define FETION_GANG_MEMBER_CLASS_NOT_FOUND \
+#define FETION_GANG_MEMBER_CLASS_NOT_FOUND                              \
     "Class com/honnix/jfetion/impl/data/FetionGangMember not found."
 
 #define FETION_PROXY_INFO_CLASS "com/honnix/jfetion/impl/data/FetionProxyInfo"
-#define FETION_PROXY_INFO_CLASS_NOT_FOUND \
+#define FETION_PROXY_INFO_CLASS_NOT_FOUND                           \
     "Class com/honnix/jfetion/impl/data/FetionProxyInfo not found."
 
 #define STRING_CLASS_SIG "Ljava/lang/String;"
@@ -182,7 +187,7 @@ jobject buildObject(JNIEnv* env, jclass* objectClass, const char* objectClassPat
     }
 
     jmethodID constructor = (*env)->GetMethodID(env, (*objectClass),
-                                                   "<init>", "()V");
+                                                "<init>", "()V");
     jobject jobj = (*env)->NewObject(env, (*objectClass), constructor);
 
     return jobj;
@@ -216,6 +221,65 @@ jobject buildFetionMessage(JNIEnv* env, Fetion_MSG* message)
     }
 
     return jmessage;
+}
+
+jobject buildFetionScheduledSMS(JNIEnv* env, const Fetion_Schedule_SMS* scheduledSMS)
+{
+    jclass scheduledSMSClass = NULL;
+    jobject jscheduledSMS = buildObject(env, &scheduledSMSClass, FETION_SCHEDULED_SMS_CLASS,
+                                        FETION_SCHEDULED_SMS_CLASS_NOT_FOUND);
+
+    jfieldID jidField = (*env)->GetFieldID(env, scheduledSMSClass, "id", "I");
+    (*env)->SetIntField(env, jscheduledSMS, jidField, scheduledSMS->id);
+
+    jfieldID jversionField = (*env)->GetFieldID(env, scheduledSMSClass, "id", "I");
+    (*env)->SetIntField(env, jscheduledSMS, jversionField, scheduledSMS->version);
+
+    if (scheduledSMS->send_time != NULL)
+    {
+        jstring jsendTime = (*env)->NewStringUTF(env, scheduledSMS->send_time);
+        jfieldID jsendTimeField = (*env)->GetFieldID(env, scheduledSMSClass, "sendTime", 
+                                                     STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jscheduledSMS, jsendTimeField, jsendTime);
+    }
+
+    if (scheduledSMS->message != NULL)
+    {
+        jstring jmessage = (*env)->NewStringUTF(env, scheduledSMS->message);
+        jfieldID jmessageField = (*env)->GetFieldID(env, scheduledSMSClass, "message", 
+                                                    STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jscheduledSMS, jmessageField, jmessage);
+    }
+
+    if (scheduledSMS->receivers != NULL)
+    {
+        jobject jarrayList = buildArrayList(env);
+        DList* receiverList = scheduledSMS->receivers;
+
+        while (receiverList)
+        {
+            int receiver = (int) receiverList->data;
+
+            jclass integerClass = (*env)->FindClass(env, INTEGER_CLASSS);
+            jmethodID valueOfMethod = (*env)->GetStaticMethodID(env, integerClass,
+                                                                "valueOf", "(I)Ljava/lang/Integer");
+            jobject jreceiver = (*env)->CallStaticObjectMethod(env, integerClass, valueOfMethod,
+                                                            receiver);
+            insertToArrayList(env, jarrayList, jreceiver);
+
+            receiverList = d_list_next(receiverList);
+        }
+
+        jfieldID jreceiverListField = (*env)->GetFieldID(env, scheduledSMSClass,
+                                                         "receiverList",
+                                                         ARRAY_LIST_CLASS_SIG);
+        (*env)->SetObjectField(env, jscheduledSMS, jreceiverListField,
+                               jarrayList);
+    }
+
+    return jscheduledSMS;
 }
 
 jobject buildFetionPersonalInfo(JNIEnv* env, const Fetion_Personal* personalInfo)
@@ -493,6 +557,14 @@ jobject buildFetionAccount(JNIEnv* env, const Fetion_Account* account)
 
     jfieldID juserTypeField = (*env)->GetFieldID(env, accountClass, "userType", "I");
     (*env)->SetIntField(env, jaccount, juserTypeField, account->usr_type);
+    
+    if (account->device_type != NULL)
+    {
+        jstring jdeviceType = (*env)->NewStringUTF(env, account->device_type);
+        jfieldID jdeviceTypeField = (*env)->GetFieldID(env, accountClass, "deviceType", STRING_CLASS_SIG);
+
+        (*env)->SetObjectField(env, jaccount, jdeviceTypeField, jdeviceType);
+    }
 
     return jaccount;
 }
@@ -631,7 +703,7 @@ jobject buildFetionGang(JNIEnv* env, const Fetion_Qun* gang)
     if (gang->quninfo != NULL)
     {
         jfieldID jgangInfoField = (*env)->GetFieldID(env, gangClass, "gangInfo", 
-                                                         FETION_GANG_INFO_CLASS_SIG);
+                                                     FETION_GANG_INFO_CLASS_SIG);
         jobject jgangInfo = buildFetionGangInfo(env, gang->quninfo);
         (*env)->SetObjectField(env, jgang, jgangInfoField, jgangInfo);
     }
@@ -674,6 +746,39 @@ Fetion_Qun* buildFetionGangStruct(JNIEnv* env, Fetion_Qun* gang, jobject jgang)
 void destroyFetionGangStruct(Fetion_Qun* gang)
 {
     free(gang->uri);
+}
+
+DList* buildReceiverList(JNIEnv* env, jobject jreceiverList)
+{
+    DList* receiverList = d_list_alloc();
+
+    jclass arrayListClass = (*env)->GetObjectClass(env, jreceiverList);
+    jmethodID sizeMethod = (*env)->GetMethodID(env, arrayListClass,
+                                               "size", "()I");
+    jmethodID getMethod = (*env)->GetMethodID(env, arrayListClass,
+                                              "get", "(I)Ljava/lang/Integer");
+
+    jclass integerClass = (*env)->FindClass(env, INTEGER_CLASSS);
+    jmethodID intValueMethod = (*env)->GetMethodID(env, integerClass,
+                                                       "intValue", "()I"); 
+
+    jint size = (*env)->CallIntMethod(env, jreceiverList, sizeMethod);
+    jint index;
+   
+    for (index = 0; index < size; ++index)
+    {
+        jobject jreceiver = (*env)->CallObjectMethod(env, jreceiverList, getMethod, index);
+        int receiver = (*env)->CallIntMethod(env, jreceiver, intValueMethod);
+
+        d_list_append(receiverList, (void*) receiver);
+    }
+
+    return receiverList;
+}
+
+void destroyDList(DList* dlist)
+{
+    d_list_free(dlist);
 }
 
 jobject buildFetionProxyInfo(JNIEnv* env, const PROXY_ITEM* proxyInfo)
@@ -845,7 +950,7 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
     (*env)->SetIntField(env, jgangInfo, jportraitCrcField, gangInfo->portrait_crc);
 
     jfieldID jsearchableField = (*env)->GetFieldID(env, gangInfoClass, 
-                                                    "searchable", "I");
+                                                   "searchable", "I");
     (*env)->SetIntField(env, jgangInfo, jsearchableField, gangInfo->searchable);
 
     jfieldID jcurrentMemberCountField = (*env)->GetFieldID(env, gangInfoClass, 
@@ -890,7 +995,7 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
                                                            "gangMemberList",
                                                            ARRAY_LIST_CLASS_SIG);
         (*env)->SetObjectField(env, jgangInfo, jgangMemberListField,
-            jarrayList);
+                               jarrayList);
     }
 
     return jgangInfo;
@@ -919,7 +1024,7 @@ jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
     {
         jstring jnickname = (*env)->NewStringUTF(env, gangMember->nickname);
         jfieldID jnicknameField = (*env)->GetFieldID(env, gangMemberClass, "nickname", 
-                                                STRING_CLASS_SIG);
+                                                     STRING_CLASS_SIG);
 
         (*env)->SetObjectField(env, jgangMember, jnicknameField, jnickname);
     }
@@ -928,7 +1033,7 @@ jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
     {
         jstring jiicNickname = (*env)->NewStringUTF(env, gangMember->iicnickname);
         jfieldID jiicNicknameField = (*env)->GetFieldID(env, gangMemberClass, "iicNickname", 
-                                                STRING_CLASS_SIG);
+                                                        STRING_CLASS_SIG);
 
         (*env)->SetObjectField(env, jgangMember, jiicNicknameField, jiicNickname);
     }
@@ -943,7 +1048,7 @@ jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
     {
         jstring jclientType = (*env)->NewStringUTF(env, gangMember->client_type);
         jfieldID jclientTypeField = (*env)->GetFieldID(env, gangMemberClass, "clientType", 
-                                                STRING_CLASS_SIG);
+                                                       STRING_CLASS_SIG);
 
         (*env)->SetObjectField(env, jgangMember, jclientTypeField, jclientType);
     }
@@ -955,7 +1060,7 @@ jobject buildArrayList(JNIEnv* env)
 {
     jclass arrayListClass = (*env)->FindClass(env, ARRAY_LIST_CLASS);
     jmethodID constructor = (*env)->GetMethodID(env, arrayListClass,
-                                                   "<init>", "()V");
+                                                "<init>", "()V");
     jobject jarrayList = (*env)->NewObject(env, arrayListClass, constructor);
 
     return jarrayList;
@@ -996,6 +1101,8 @@ void JNICALL JNI_OnUnLoad(JavaVM* vm, void* reserved)
             free(callbackArray[index]);            
         }
     }
+
+    free(callbackArray);
 }
 
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_init
@@ -1066,12 +1173,18 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncLogin
     return result;
 }
 
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_cancelLogin
+(JNIEnv* env, jobject jobj)
+{
+    fx_cancel_login();
+}
+
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncReLogin
 (JNIEnv* env, jobject jobj, jobject jeventListener, jobjectArray jargs)
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -1241,6 +1354,110 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
     fx_set_longsms(jenabled);
 }
 
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSList
+(JNIEnv* env, jobject jobj)
+{
+    jobject jarrayList = buildArrayList(env);
+    const DList* scheduledSMSList = fx_data_get_smlist();
+
+    while (scheduledSMSList)
+    {
+        Fetion_Schedule_SMS* scheduledSMS = (Fetion_Schedule_SMS*) scheduledSMSList->data;
+
+        if (scheduledSMS != NULL)
+        {
+            jobject jscheduledSMS = buildFetionScheduledSMS(env, scheduledSMS);
+
+            insertToArrayList(env, jarrayList, jscheduledSMS);
+        }
+
+        scheduledSMSList = d_list_next(scheduledSMSList);
+    }
+
+    return jarrayList;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSById
+(JNIEnv* env, jobject jobj, jint jid)
+{
+    const Fetion_Schedule_SMS* scheduledSMS = fx_get_schedulesms_by_id(jid);
+    jobject jscheduledSMS = NULL;
+
+    if (scheduledSMS != NULL)
+    {
+        jscheduledSMS = buildFetionScheduledSMS(env, scheduledSMS);
+    }
+
+    return jscheduledSMS;
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetScheduledSMS
+(JNIEnv* env, jobject jobj, jobject jreceiverList, jstring jmessage, 
+ jstring jsendTime, jobject jeventListener, jobjectArray jargs)
+{
+    if (checkNullPointer(env, 4, jreceiverList, jmessage, jsendTime, 
+                         jeventListener))
+    {
+        return 0;
+    }
+
+    DList* receiverList = buildReceiverList(env, jreceiverList);
+
+    jboolean isCopy;
+    const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
+    const char* sendTime = (*env)->GetStringUTFChars(env, jsendTime, &isCopy);
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_SET_SCHEDULED_SMS);
+
+    int result = fx_set_schedule_sms(receiverList, message, sendTime, callback, 
+                                     callbackArgs);
+
+    destroyDList(receiverList);
+    (*env)->ReleaseStringUTFChars(env, jmessage, message);
+    (*env)->ReleaseStringUTFChars(env, jsendTime, sendTime);
+
+    return result;
+}
+
+jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteScheduledSMS
+(JNIEnv* env, jobject jobj, jint jid, jobject jeventListener, jobjectArray jargs)
+{
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return 0;
+    }
+
+    Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
+                                               ASYNC_DELETE_SCHEDULED_SMS);
+
+    return fx_delete_schedule_sms(jid, callback, callbackArgs);
+}
+
+jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_convertScheduledSMSReceiverListToString
+(JNIEnv* env, jobject jobj, jobject jreceiverList)
+{
+    if (checkNullPointer(env, 1, jreceiverList))
+    {
+        return NULL;
+    }
+
+    DList* receiverList = buildReceiverList(env, jreceiverList);
+
+    char* receiverListString = fx_covert_schedule_receiver_to_string(receiverList);
+    jstring jreceiverListString = NULL;
+
+    if (receiverListString != NULL)
+    {
+        jreceiverListString = (*env)->NewStringUTF(env, receiverListString);
+        free(receiverListString);
+    }
+
+    destroyDList(receiverList);
+
+    return jreceiverListString;
+}
+
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_beginDialog
 (JNIEnv* env, jobject jobj, jlong jwho)
 {
@@ -1277,7 +1494,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncBeginDialog
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -1393,6 +1610,11 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetUserStatus
 (JNIEnv* env, jobject jobj, jint jstatus, jstring jdescription,
  jobject jeventListener, jobjectArray jargs)
 {
+    if (checkNullPointer(env, 1, jeventListener))
+    {
+        return 0;
+    }
+
     jboolean isCopy;
     const char* description = NULL;
     if (jdescription != NULL)
@@ -1522,27 +1744,42 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
     return jarrayList;
 }
 
-jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountList
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getFirstAccount
 (JNIEnv* env, jobject jobj)
 {
-    jobject jarrayList = buildArrayList(env);
-    const DList* accountList = fx_get_account();
+    jobject jaccount = NULL;
+    const Fetion_Account* account = fx_get_first_account();
 
-    while (accountList)
+    if (account != NULL)
     {
-        Fetion_Account* account = (Fetion_Account*) accountList->data;
-
-        if (account != NULL)
-        {
-            jobject jaccount = buildFetionAccount(env, account);
-
-            insertToArrayList(env, jarrayList, jaccount);
-        }
-
-        accountList = d_list_next(accountList);
+        jaccount = buildFetionAccount(env, account);
     }
 
-    return jarrayList;
+    return jaccount;
+}
+
+jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
+(JNIEnv* env, jobject jobj, jobject jcurrentAccount)
+{
+    if (checkNullPointer(env, 1, jcurrentAccount))
+    {
+        return NULL;
+    }
+
+    Fetion_Account currentAccount;
+    buildFetionAccountStruct(env, &currentAccount, jcurrentAccount);
+
+    jobject jnextAccount = NULL;
+    const Fetion_Account* nextAccount = fx_get_next_account(&currentAccount);
+
+    if (nextAccount != NULL)
+    {
+        jnextAccount = buildFetionAccount(env, nextAccount);
+    }
+
+    destroyFetionAccountStruct(&currentAccount);
+
+    return jnextAccount;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
@@ -1617,6 +1854,24 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangById
     }
 
     return jgang;
+}
+
+jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isLoginByMobile
+(JNIEnv* env, jobject jobj, jobject jaccount)
+{
+    if (checkNullPointer(env, 1, jaccount))
+    {
+        return JNI_FALSE;
+    }
+
+    Fetion_Account account;
+    buildFetionAccountStruct(env, &account, jaccount);
+
+    jboolean result = fx_islogin_by_mobile(&account);
+
+    destroyFetionAccountStruct(&account);
+
+    return result;
 }
 
 jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_isPCUserById
@@ -1703,7 +1958,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBuddyById
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -1718,7 +1973,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBuddyByAccoun
 {
     if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -1769,7 +2024,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getOnlineStatusByAccount
 {
     if (checkNullPointer(env, 1, jaccount))
     {
-        return -1;
+        return -2;
     }
 
     Fetion_Account account;
@@ -1803,13 +2058,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getUserRefuseSmsDayCountByA
 void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_updateAccountInfoById
 (JNIEnv* env, jobject jobj, jlong jid)
 {
-    fx_updata_account_info_by_id(jid);
-}
-
-void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_updateAccountInfoAll
-(JNIEnv* env, jobject jobj)
-{
-    fx_updata_account_info_all();
+    fx_update_account_info_by_id(jid);
 }
 
 jstring JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountShowName
@@ -2043,7 +2292,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyList
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -2098,7 +2347,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyById
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -2113,7 +2362,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncDeleteBuddyByAccount
 {
     if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Fetion_Account account;
@@ -2135,7 +2384,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistById
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -2150,7 +2399,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncAddToBlacklistByAccoun
 {
     if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Fetion_Account account;
@@ -2194,7 +2443,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByI
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
@@ -2209,7 +2458,7 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncRemoveFromBlacklistByA
 {
     if (checkNullPointer(env, 2, jaccount, jeventListener))
     {
-        return JNI_FALSE;
+        return 0;
     }
 
     Fetion_Account account;

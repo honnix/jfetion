@@ -48,9 +48,11 @@ public class FetionAccount
 
     private long portraitCrc;
 
+    private FetionPersonalInfo personalInfo;
+
     private int userType;
 
-    private FetionPersonalInfo personalInfo;
+    private String deviceType;
 
     public FetionAccount()
     {
@@ -63,6 +65,14 @@ public class FetionAccount
     public String getBuddyList()
     {
         return buddyList;
+    }
+
+    /**
+     * @return the deviceType
+     */
+    public String getDeviceType()
+    {
+        return deviceType;
     }
 
     /**
@@ -160,6 +170,15 @@ public class FetionAccount
     public void setBuddyList(String buddyList)
     {
         this.buddyList = buddyList;
+    }
+
+    /**
+     * @param deviceType
+     *            the deviceType to set
+     */
+    public void setDeviceType(String deviceType)
+    {
+        this.deviceType = deviceType;
     }
 
     /**

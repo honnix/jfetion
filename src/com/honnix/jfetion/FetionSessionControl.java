@@ -38,6 +38,8 @@ public interface FetionSessionControl
     int asyncTestNetwork(FetionProxyInfo proxyInfo,
             EventListener eventListener, Object... args);
 
+    void cancelLogin();
+
     boolean closeNetwork();
 
     int getExpireTime();

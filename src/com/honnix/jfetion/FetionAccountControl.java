@@ -103,11 +103,11 @@ public interface FetionAccountControl
 
     int getAccountGroupId(FetionAccount account);
 
-    List<FetionAccount> getAccountList();
-
     String getAccountShowName(FetionAccount account, boolean needImpresa);
 
     List<FetionBlacklistItem> getBlacklist();
+
+    FetionAccount getFirstAccount();
 
     FetionGang getGangById(long id);
 
@@ -116,6 +116,8 @@ public interface FetionAccountControl
     String getGangShowName(FetionGang gang);
 
     List<FetionGroup> getGroupList();
+
+    FetionAccount getNextAccount(FetionAccount currentAccount);
 
     int getOnlineStatusByAccount(FetionAccount account);
 
@@ -156,6 +158,8 @@ public interface FetionAccountControl
 
     boolean isInBlacklistById(long id);
 
+    boolean isLoginByMobile(FetionAccount account);
+
     boolean isOnlineByAccount(FetionAccount account);
 
     boolean isOnlineById(long id);
@@ -167,8 +171,6 @@ public interface FetionAccountControl
     boolean renameBuddyList(int id, String name);
 
     boolean setBuddyInfo(long id, String localName);
-
-    void updateAccountInfoAll();
 
     void updateAccountInfoById(long id);
 
