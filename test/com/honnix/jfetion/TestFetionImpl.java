@@ -164,7 +164,7 @@ public class TestFetionImpl
     //
     // waitUntilCalledBack();
     // }
-    //
+
     // public void testAsyncSendSms()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -180,7 +180,7 @@ public class TestFetionImpl
     //
     // waitUntilCalledBack();
     // }
-    //
+
     // public void testAsyncSendSmsByMobileNumber()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -189,12 +189,12 @@ public class TestFetionImpl
     //
     // checker.setCalled(false);
     // assertEquals("send sms failed?", 1, fetionMessage
-    // .asyncSendSmsByMobileNumber("13816082319", MESSAGE,
+    // .asyncSendSmsByMobileNumber(LP_MOBILE_NUMBER, MESSAGE,
     // smsEventListener, checker));
     //
     // waitUntilCalledBack();
     // }
-    //
+
     // public void testAsyncSendSmsToSelf()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -207,7 +207,7 @@ public class TestFetionImpl
     //
     // waitUntilCalledBack();
     // }
-    //
+
     // public void testAsyncSetUserState()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -223,7 +223,7 @@ public class TestFetionImpl
     // assertEquals("wrong status?", EventConstant.STATUS_AWAY, fetionAccount
     // .getUserStatus());
     // }
-    //
+
     // public void testDialog()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -242,7 +242,7 @@ public class TestFetionImpl
     //
     // fetionMessage.endDialog(Long.parseLong(id));
     // }
-    //
+
     // public void testGangShowName()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -254,7 +254,7 @@ public class TestFetionImpl
     // assertEquals("should have no gang showName", "1", fetionAccount
     // .getGangShowName(gang));
     // }
-    //
+
     // public void testGetInfo()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -272,7 +272,7 @@ public class TestFetionImpl
     // assertEquals("wrong score?", -1, fetionAccount.getUserScore());
     // assertEquals("wrong expire time?", 600, fetionSession.getExpireTime());
     // }
-    //
+
     // public void testGetInfoByAccount()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -281,9 +281,7 @@ public class TestFetionImpl
     //
     // String id = LP_ID;
     //
-    // FetionAccount account = fetionAccount
-    // .getAccountById(Long.parseLong(id));
-    // account = fetionAccount.getAccountById(Long.parseLong(id));
+    // FetionAccount account = fetionAccount.getAccountById(Long.parseLong(id));
     //
     // assertFalse("should not be PC user", fetionAccount
     // .isPCUserByAccount(account));
@@ -306,7 +304,7 @@ public class TestFetionImpl
     // assertEquals("wrong groupId?", 2, fetionAccount
     // .getAccountGroupId(account));
     // }
-    //
+
     // public void testGetInfoById()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -348,9 +346,8 @@ public class TestFetionImpl
     // fetionAccount.getOnlineStatusById(Long.parseLong(LP_ID)));
     //
     // fetionAccount.updateAccountInfoById(Long.parseLong(LP_ID));
-    // fetionAccount.updateAccountInfoAll();
     // }
-    //
+
     // public void testGetList()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -360,22 +357,13 @@ public class TestFetionImpl
     // List<FetionGroup> groupList = fetionAccount.getGroupList();
     // assertEquals("should have no group", 2, groupList.size());
     //
-    // groupList = fetionAccount.getGroupList();
-    // assertEquals("should have no group", 2, groupList.size());
-    //
-    // List<FetionAccount> accountList = fetionAccount.getAccountList();
-    // assertEquals("should have two accounts", 2, accountList.size());
-    //
-    // accountList = fetionAccount.getAccountList();
-    // assertEquals("should have two accounts", 2, accountList.size());
-    //
     // List<FetionBlacklistItem> blacklist = fetionAccount.getBlacklist();
     // assertEquals("should have no blacklist", 0, blacklist.size());
     //
     // List<FetionGang> gangList = fetionAccount.getGangList();
     // assertEquals("should have no gang", 0, gangList.size());
     // }
-    //
+
     // public void testGetMessage()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -388,17 +376,17 @@ public class TestFetionImpl
     // assertNull("should be no message", fetionMessage.getMessage(Long
     // .parseLong(id)));
     // }
-    //
+
     // public void testGetOriginalId()
     // {
     // assertTrue("init failed??", fetionSession.init());
     // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
     // PASSWORD));
-    //        
-    // assertEquals("wrong original id?", LP_MOBILE_NUMBER,
-    // fetionAccount.getOriginalId(Long.parseLong(LP_ID)));
-    // }
     //
+    // assertEquals("wrong original id?", LP_MOBILE_NUMBER, fetionAccount
+    // .getOriginalId(Long.parseLong(LP_ID)));
+    // }
+
     // public void testGetPersonalInfo()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -425,30 +413,29 @@ public class TestFetionImpl
     // assertEquals("wrong birthdayValid?", 0, personalInfo.getBirthdayValid());
     // assertEquals("wrong lunarAnimal?", 0, personalInfo.getLunarAnimal());
     // assertEquals("wrong horoscope?", 0, personalInfo.getHoroscope());
-    // assertEquals("wrong profile?", "", personalInfo.getProfile());
+    // assertNull("wrong profile?", personalInfo.getProfile());
     // assertEquals("wrong bloodType?", 0, personalInfo.getBloodType());
-    // assertEquals("wrong occupation?", "", personalInfo.getOccupation());
-    // assertEquals("wrong hobby?", "", personalInfo.getHobby());
-    // assertEquals("wrong personalEmail?", "", personalInfo
-    // .getPersonalEmail());
-    // assertEquals("wrong workEmail?", "", personalInfo.getWorkEmail());
-    // assertEquals("wrong otherEmail?", "", personalInfo.getOtherEmail());
+    // assertNull("wrong occupation?", personalInfo.getOccupation());
+    // assertNull("wrong hobby?", personalInfo.getHobby());
+    // assertNull("wrong personalEmail?", personalInfo.getPersonalEmail());
+    // assertNull("wrong workEmail?", personalInfo.getWorkEmail());
+    // assertNull("wrong otherEmail?", personalInfo.getOtherEmail());
     // assertEquals("wrong primaryEmail?", 0, personalInfo.getPrimaryEmail());
-    // assertEquals("wrong jobTitle?", "", personalInfo.getJobTitle());
-    // assertEquals("wrong homePhone?", "", personalInfo.getHomePhone());
-    // assertEquals("wrong workPhone?", "", personalInfo.getWorkPhone());
-    // assertEquals("wrong otherPhone?", "", personalInfo.getOtherPhone());
-    // assertEquals("wrong company?", "", personalInfo.getCompany());
+    // assertNull("wrong jobTitle?", personalInfo.getJobTitle());
+    // assertNull("wrong homePhone?", personalInfo.getHomePhone());
+    // assertNull("wrong workPhone?", personalInfo.getWorkPhone());
+    // assertNull("wrong otherPhone?", personalInfo.getOtherPhone());
+    // assertNull("wrong company?", personalInfo.getCompany());
     // assertNull("wrong companyWebsite?", personalInfo.getCompanyWebsite());
     // assertEquals("wrong matchEnabled?", 0, personalInfo.getMatchEnabled());
     // }
 
-    public void testLogin()
-    {
-        assertTrue("init failed??", fetionSession.init());
-        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-                PASSWORD));
-    }
+    // public void testLogin()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    // }
 
     // public void testProxy()
     // {
@@ -468,7 +455,7 @@ public class TestFetionImpl
     // assertEquals("wrong port?", "80", proxyInfo.getPort());
     // assertEquals("wrong type", FetionProxyType.HTTP, proxyInfo.getType());
     // }
-    //
+
     // public void testRemoveFontTag()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -481,7 +468,7 @@ public class TestFetionImpl
     //
     // assertEquals("wrong message?", "this is just a test message.", message);
     // }
-    //
+
     // public void testSendSms()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -494,7 +481,7 @@ public class TestFetionImpl
     // assertTrue("send sms failed?", fetionMessage.sendSms(
     // Long.parseLong(id), MESSAGE));
     // }
-    //
+
     // public void testSendSmsByMobileNumber()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -503,22 +490,21 @@ public class TestFetionImpl
     // assertTrue("send sms failed?", fetionMessage.sendSmsByMobileNumber(
     // "13816082319", MESSAGE));
     // }
-    //
+
     // public void testSendSmsToSelf()
     // {
     // assertTrue("init failed??", fetionSession.init());
     // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
     // PASSWORD));
     // fetionMessage.setLongSmsEnabled(false);
-    // assertTrue("send sms failed??", fetionMessage
-    // .sendSmsToSelf("自动安装盘"));
+    // assertTrue("send sms failed??", fetionMessage.sendSmsToSelf("自动安装盘"));
     // fetionMessage.setLongSmsEnabled(true);
     // assertTrue(
     // "send sms failed??",
     // fetionMessage
     // .sendSmsToSelf("this is a very very very very very very very very very very long long long long long long messsage."));
     // }
-    //
+
     // public void testServer()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -535,7 +521,7 @@ public class TestFetionImpl
     // assertNull("should have no server address", fetionSession
     // .getServerAddress());
     // }
-    //
+
     // public void testSetSystemMessageEventListener()
     // {
     // assertTrue("init failed??", fetionSession.init());
@@ -543,6 +529,16 @@ public class TestFetionImpl
     // checker);
     // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
     // PASSWORD));
+    // }
+
+    // public void testIsLoginByMobile()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    // assertFalse("Should not login by mobile.", fetionAccount
+    // .isLoginByMobile(fetionAccount.getAccountById(Long
+    // .valueOf(LP_ID))));
     // }
 
 }
