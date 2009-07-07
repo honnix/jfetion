@@ -402,10 +402,10 @@ JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getMessage
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    getNextAccount
- * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;)Lcom/honnix/jfetion/impl/data/FetionAccount;
+ * Signature: ()Lcom/honnix/jfetion/impl/data/FetionAccount;
  */
 JNIEXPORT jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
-  (JNIEnv *, jobject, jobject);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl

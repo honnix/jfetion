@@ -69,6 +69,7 @@ typedef enum _callbackFunctionIndex
 extern JavaVM* theVM;
 extern Callback** callbackArray;
 extern CallbackFunctionIndex callbackFunctionIndex;
+extern const Fetion_Account* currentAccount;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved);
 

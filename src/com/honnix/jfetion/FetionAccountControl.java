@@ -117,7 +117,7 @@ public interface FetionAccountControl
 
     List<FetionGroup> getGroupList();
 
-    FetionAccount getNextAccount(FetionAccount currentAccount);
+    FetionAccount getNextAccount();
 
     int getOnlineStatusByAccount(FetionAccount account);
 

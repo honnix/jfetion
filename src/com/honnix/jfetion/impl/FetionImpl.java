@@ -51,7 +51,7 @@ public class FetionImpl
         System.loadLibrary("jfetion");
     }
 
-    public FetionImpl()
+    protected FetionImpl()
     {
         super();
     }
@@ -502,11 +502,9 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * com.honnix.jfetion.FetionAccountControl#getNextAccount(com.honnix.jfetion
-     * .impl.data.FetionAccount)
+     * @see com.honnix.jfetion.FetionAccountControl#getNextAccount()
      */
-    public native FetionAccount getNextAccount(FetionAccount currentAccount);
+    public native FetionAccount getNextAccount();
 
     /*
      * (non-Javadoc)

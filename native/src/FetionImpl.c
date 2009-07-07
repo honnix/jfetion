@@ -90,6 +90,7 @@
 
 JavaVM* theVM = NULL;
 Callback** callbackArray = NULL;
+const Fetion_Account* currentAccount = NULL;
 
 BOOL checkNullPointer(JNIEnv* env, int amount, ...)
 {
@@ -1747,38 +1748,32 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getFirstAccount
 (JNIEnv* env, jobject jobj)
 {
-    jobject jaccount = NULL;
-    const Fetion_Account* account = fx_get_first_account();
+    jobject jcurrentAccount = NULL;
+    currentAccount = fx_get_first_account();
 
-    if (account != NULL)
+    if (currentAccount != NULL)
     {
-        jaccount = buildFetionAccount(env, account);
+        jcurrentAccount = buildFetionAccount(env, currentAccount);
     }
 
-    return jaccount;
+    return jcurrentAccount;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
-(JNIEnv* env, jobject jobj, jobject jcurrentAccount)
+(JNIEnv* env, jobject jobj)
 {
-    if (checkNullPointer(env, 1, jcurrentAccount))
-    {
-        return NULL;
-    }
-
-    Fetion_Account currentAccount;
-    buildFetionAccountStruct(env, &currentAccount, jcurrentAccount);
-
     jobject jnextAccount = NULL;
-    const Fetion_Account* nextAccount = fx_get_next_account(&currentAccount);
-
-    if (nextAccount != NULL)
+    
+    if (currentAccount != NULL)
     {
-        jnextAccount = buildFetionAccount(env, nextAccount);
+        const Fetion_Account* nextAccount = fx_get_next_account(currentAccount);
+
+        if (nextAccount != NULL)
+        {
+            jnextAccount = buildFetionAccount(env, nextAccount);
+        }
     }
-
-    destroyFetionAccountStruct(&currentAccount);
-
+    
     return jnextAccount;
 }
 
