@@ -150,6 +150,24 @@ public class TestFetionImpl
     //
     // waitUntilCalledBack();
     // }
+
+    // public void testCancelLogin()
+    // {
+    // checker.setCalled(false);
+    // assertTrue("init failed??", fetionSession.init());
+    // assertEquals("wrong login status?", 1, fetionSession.asyncLogin(
+    // MOBILE_NUMBER, PASSWORD, loginEventListener, checker));
+    //
+    // try
+    // {
+    // Thread.sleep(800);
+    // }
+    // catch (InterruptedException e)
+    // {
+    // e.printStackTrace();
+    // }
+    // fetionSession.cancelLogin();
+    // }
     //
     // public void testAsyncRelogin()
     // {
@@ -539,6 +557,23 @@ public class TestFetionImpl
     // assertFalse("Should not login by mobile.", fetionAccount
     // .isLoginByMobile(fetionAccount.getAccountById(Long
     // .valueOf(LP_ID))));
+    // }
+
+    // public void testGetAccount()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    //
+    // FetionAccount account = fetionAccount.getFirstAccount();
+    // assertNotNull("Should not be null.", account);
+    // int count = 1;
+    // while (account != null)
+    // {
+    // ++count;
+    // account = fetionAccount.getNextAccount();
+    // }
+    // assertEquals("Should have 4 accounts.", 4, count - 1);
     // }
 
 }

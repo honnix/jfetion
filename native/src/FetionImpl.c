@@ -142,11 +142,6 @@ Callback* buildCallBackArgs(JNIEnv* env, jobject jeventListener, jobjectArray ja
 void callback(int message, unsigned int wparam, unsigned long lparam,
               void* args)
 {
-    DEBUG_INFO_A("message %d\n", message);
-    DEBUG_INFO_A("wparam %d\n", wparam);
-    DEBUG_INFO_A("lparam %ld\n", lparam);
-    DEBUG_INFO_A("args %ld\n", (long) args);
-
     JNIEnv* env = NULL;
     JavaVMAttachArgs vmAttachArgs;
 
@@ -1772,6 +1767,8 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
         {
             jnextAccount = buildFetionAccount(env, nextAccount);
         }
+        
+        currentAccount = nextAccount;
     }
     
     return jnextAccount;
