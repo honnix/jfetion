@@ -522,12 +522,6 @@ public class FetionImpl
      */
     public native int getOnlineStatusById(long id);
 
-    public String getOriginalId()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     /*
      * (non-Javadoc)
      * 

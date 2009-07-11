@@ -191,13 +191,13 @@ PROXY_ITEM* buildFetionProxyInfoStruct(JNIEnv* env, PROXY_ITEM* proxyInfo,
 void destroyFetionProxyInfoStruct(PROXY_ITEM* proxyInfo);
 
 /*
- * Build ArrayList object.
+ * Build List object.
  */
-jobject buildArrayList(JNIEnv* env);
+jobject buildList(JNIEnv* env);
 
 /*
- * Insert element to ArrayList object.
+ * Insert element to List object.
  */
-jboolean insertToArrayList(JNIEnv* env, jobject jarrayList, jobject jelement);
+jboolean insertToList(JNIEnv* env, jobject jlist, jobject jelement);
 
 #endif

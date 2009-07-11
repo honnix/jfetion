@@ -38,7 +38,7 @@
 #define CALLBACK_ARRAY_SIZE 50
 
 #define OBJECT_CLASS "java/lang/Object"
-#define INTEGER_CLASSS "java/lang/Integer"
+#define INTEGER_CLASS "java/lang/Integer"
 #define ARRAY_LIST_CLASS "java/util/ArrayList"
 #define CLASS_NOT_FOUND_EXCEPTION_CLASS "java/lang/ClassNotFoundException"
 #define NULL_POINTER_EXCEPTION_CLASS "java/lang/NullPointerException"
@@ -162,10 +162,10 @@ void callback(int message, unsigned int wparam, unsigned long lparam,
     (*env)->CallVoidMethod(env, callback->jeventListener, callbackMethod, message,
                            (jlong) wparam, (jlong) lparam, callback->jargs);
 
-    /* if ((*env)->ExceptionOccurred(env)) */
-    /* { */
-    /*     (*env)->ExceptionDescribe(env); */
-    /* } */
+    if ((*env)->ExceptionOccurred(env))
+    {
+        (*env)->ExceptionDescribe(env);
+    }
 
     (*theVM)->DetachCurrentThread(theVM);
 }
@@ -251,19 +251,19 @@ jobject buildFetionScheduledSMS(JNIEnv* env, const Fetion_Schedule_SMS* schedule
 
     if (scheduledSMS->receivers != NULL)
     {
-        jobject jarrayList = buildArrayList(env);
+        jobject jlist = buildList(env);
         DList* receiverList = scheduledSMS->receivers;
 
         while (receiverList)
         {
             int receiver = (int) receiverList->data;
 
-            jclass integerClass = (*env)->FindClass(env, INTEGER_CLASSS);
+            jclass integerClass = (*env)->FindClass(env, INTEGER_CLASS);
             jmethodID valueOfMethod = (*env)->GetStaticMethodID(env, integerClass,
                                                                 "valueOf", "(I)Ljava/lang/Integer");
             jobject jreceiver = (*env)->CallStaticObjectMethod(env, integerClass, valueOfMethod,
                                                             receiver);
-            insertToArrayList(env, jarrayList, jreceiver);
+            insertToList(env, jlist, jreceiver);
 
             receiverList = d_list_next(receiverList);
         }
@@ -272,7 +272,7 @@ jobject buildFetionScheduledSMS(JNIEnv* env, const Fetion_Schedule_SMS* schedule
                                                          "receiverList",
                                                          ARRAY_LIST_CLASS_SIG);
         (*env)->SetObjectField(env, jscheduledSMS, jreceiverListField,
-                               jarrayList);
+                               jlist);
     }
 
     return jscheduledSMS;
@@ -746,21 +746,26 @@ void destroyFetionGangStruct(Fetion_Qun* gang)
 
 DList* buildReceiverList(JNIEnv* env, jobject jreceiverList)
 {
-    DList* receiverList = d_list_alloc();
-
-    jclass arrayListClass = (*env)->GetObjectClass(env, jreceiverList);
-    jmethodID sizeMethod = (*env)->GetMethodID(env, arrayListClass,
+    DEBUG_INFO("1.1\n");
+    DEBUG_INFO("1.2\n");
+    jclass listClass = (*env)->GetObjectClass(env, jreceiverList);
+    DEBUG_INFO("1.2.1\n");
+    jmethodID sizeMethod = (*env)->GetMethodID(env, listClass,
                                                "size", "()I");
-    jmethodID getMethod = (*env)->GetMethodID(env, arrayListClass,
-                                              "get", "(I)Ljava/lang/Integer");
-
-    jclass integerClass = (*env)->FindClass(env, INTEGER_CLASSS);
+    DEBUG_INFO("1.2.2\n");
+    jmethodID getMethod = (*env)->GetMethodID(env, listClass,
+                                              "get", "(I)Ljava/lang/Object;");
+    DEBUG_INFO("1.2.3\n");
+    jclass integerClass = (*env)->FindClass(env, INTEGER_CLASS);
+    
+    DEBUG_INFO("1.2.4\n");
     jmethodID intValueMethod = (*env)->GetMethodID(env, integerClass,
                                                        "intValue", "()I"); 
-
+    DEBUG_INFO("1.3\n");
     jint size = (*env)->CallIntMethod(env, jreceiverList, sizeMethod);
+    DList* receiverList = d_list_alloc();
     jint index;
-   
+    DEBUG_INFO("1.4\n");
     for (index = 0; index < size; ++index)
     {
         jobject jreceiver = (*env)->CallObjectMethod(env, jreceiverList, getMethod, index);
@@ -768,7 +773,16 @@ DList* buildReceiverList(JNIEnv* env, jobject jreceiverList)
 
         d_list_append(receiverList, (void*) receiver);
     }
-
+    DEBUG_INFO("1.5\n");
+    
+    if ((*env)->ExceptionOccurred(env))
+    {
+        (*env)->ExceptionDescribe(env);
+    }
+    if (integerClass == NULL)
+    {
+        DEBUG_INFO("no integer class\n");
+    }
     return receiverList;
 }
 
@@ -970,7 +984,7 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
 
     if (gangInfo->QunMember != NULL)
     {
-        jobject jarrayList = buildArrayList(env);
+        jobject jlist = buildList(env);
         DList* gangMemberList = gangInfo->QunMember;
 
         while (gangMemberList)
@@ -981,7 +995,7 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
             {
                 jobject jgangMember = buildFetionGangMember(env, gangMember);
 
-                insertToArrayList(env, jarrayList, jgangMember);
+                insertToList(env, jlist, jgangMember);
             }
 
             gangMemberList = d_list_next(gangMemberList);
@@ -991,7 +1005,7 @@ jobject buildFetionGangInfo(JNIEnv* env, Fetion_QunInfo* gangInfo)
                                                            "gangMemberList",
                                                            ARRAY_LIST_CLASS_SIG);
         (*env)->SetObjectField(env, jgangInfo, jgangMemberListField,
-                               jarrayList);
+                               jlist);
     }
 
     return jgangInfo;
@@ -1052,23 +1066,23 @@ jobject buildFetionGangMember(JNIEnv* env, Fetion_QunMember* gangMember)
     return jgangMember;
 }
 
-jobject buildArrayList(JNIEnv* env)
+jobject buildList(JNIEnv* env)
 {
-    jclass arrayListClass = (*env)->FindClass(env, ARRAY_LIST_CLASS);
-    jmethodID constructor = (*env)->GetMethodID(env, arrayListClass,
+    jclass listClass = (*env)->FindClass(env, ARRAY_LIST_CLASS);
+    jmethodID constructor = (*env)->GetMethodID(env, listClass,
                                                 "<init>", "()V");
-    jobject jarrayList = (*env)->NewObject(env, arrayListClass, constructor);
+    jobject jlist = (*env)->NewObject(env, listClass, constructor);
 
-    return jarrayList;
+    return jlist;
 }
 
-jboolean insertToArrayList(JNIEnv* env, jobject jarrayList, jobject jelement)
+jboolean insertToList(JNIEnv* env, jobject jlist, jobject jelement)
 {
-    jclass arrayListClass = (*env)->GetObjectClass(env, jarrayList);
-    jmethodID addMethod = (*env)->GetMethodID(env, arrayListClass,
+    jclass listClass = (*env)->GetObjectClass(env, jlist);
+    jmethodID addMethod = (*env)->GetMethodID(env, listClass,
                                               "add", "(Ljava/lang/Object;)Z");
 
-    return (*env)->CallBooleanMethod(env, jarrayList, addMethod, jelement);
+    return (*env)->CallBooleanMethod(env, jlist, addMethod, jelement);
 }
 
 jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
@@ -1353,7 +1367,7 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setLongSmsEnabled
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSList
 (JNIEnv* env, jobject jobj)
 {
-    jobject jarrayList = buildArrayList(env);
+    jobject jlist = buildList(env);
     const DList* scheduledSMSList = fx_data_get_smlist();
 
     while (scheduledSMSList)
@@ -1364,13 +1378,13 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSList
         {
             jobject jscheduledSMS = buildFetionScheduledSMS(env, scheduledSMS);
 
-            insertToArrayList(env, jarrayList, jscheduledSMS);
+            insertToList(env, jlist, jscheduledSMS);
         }
 
         scheduledSMSList = d_list_next(scheduledSMSList);
     }
 
-    return jarrayList;
+    return jlist;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getScheduledSMSById
@@ -1397,7 +1411,16 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetScheduledSMS
         return 0;
     }
 
+    DEBUG_INFO("1\n");
     DList* receiverList = buildReceiverList(env, jreceiverList);
+    DList* tmp = receiverList;
+    
+    while (tmp)
+    {
+        DEBUG_INFO_A("receiver is %d\n", (int) tmp->data);
+        tmp = d_list_next(tmp);
+    }
+    DEBUG_INFO("2\n");
 
     jboolean isCopy;
     const char* message = (*env)->GetStringUTFChars(env, jmessage, &isCopy);
@@ -1405,11 +1428,17 @@ jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncSetScheduledSMS
 
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
                                                ASYNC_SET_SCHEDULED_SMS);
-
+    DEBUG_INFO("5\n");
+    DEBUG_INFO_A("%ld\n", receiverList);
+    DEBUG_INFO_A("%s\n", message);
+    DEBUG_INFO_A("%s\n", sendTime);
+    DEBUG_INFO_A("%ld\n", callback);
+    DEBUG_INFO_A("%ld\n", callbackArgs);
     int result = fx_set_schedule_sms(receiverList, message, sendTime, callback, 
                                      callbackArgs);
-
+    DEBUG_INFO("6\n");
     destroyDList(receiverList);
+    DEBUG_INFO("7\n");
     (*env)->ReleaseStringUTFChars(env, jmessage, message);
     (*env)->ReleaseStringUTFChars(env, jsendTime, sendTime);
 
@@ -1720,7 +1749,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getPersonalInfo
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
 (JNIEnv* env, jobject jobj)
 {
-    jobject jarrayList = buildArrayList(env);
+    jobject jlist = buildList(env);
     const DList* groupList = fx_get_group();
 
     while (groupList)
@@ -1731,13 +1760,13 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGroupList
         {
             jobject jgroup = buildFetionGroup(env, group);
 
-            insertToArrayList(env, jarrayList, jgroup);
+            insertToList(env, jlist, jgroup);
         }
 
         groupList = d_list_next(groupList);
     }
 
-    return jarrayList;
+    return jlist;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getFirstAccount
@@ -1777,7 +1806,7 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getNextAccount
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
 (JNIEnv* env, jobject jobj)
 {
-    jobject jarrayList = buildArrayList(env);
+    jobject jlist = buildList(env);
     const DList* blacklist = fx_get_blacklist();
 
     while (blacklist)
@@ -1788,19 +1817,19 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getBlacklist
         {
             jobject jblacklistItem = buildFetionBlacklistItem(env, blacklistItem);
 
-            insertToArrayList(env, jarrayList, jblacklistItem);
+            insertToList(env, jlist, jblacklistItem);
         }
 
         blacklist = d_list_next(blacklist);
     }
 
-    return jarrayList;
+    return jlist;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
 (JNIEnv* env, jobject jobj)
 {
-    jobject jarrayList = buildArrayList(env);
+    jobject jlist = buildList(env);
     const DList* gangList = fx_get_qun();
 
     while (gangList)
@@ -1811,13 +1840,13 @@ jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getGangList
         {
             jobject jgang = buildFetionGang(env, gang);
 
-            insertToArrayList(env, jarrayList, jgang);
+            insertToList(env, jlist, jgang);
         }
 
         gangList = d_list_next(gangList);
     }
 
-    return jarrayList;
+    return jlist;
 }
 
 jobject JNICALL Java_com_honnix_jfetion_impl_FetionImpl_getAccountById

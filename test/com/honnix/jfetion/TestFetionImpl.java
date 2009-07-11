@@ -20,6 +20,9 @@
  */
 package com.honnix.jfetion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import com.honnix.jfetion.impl.FetionFactory;
@@ -576,4 +579,21 @@ public class TestFetionImpl
     // assertEquals("Should have 4 accounts.", 4, count - 1);
     // }
 
+    public void testAsyncSetScheduledSMS()
+    {
+        assertTrue("init failed??", fetionSession.init());
+        assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+                PASSWORD));
+
+        List<Integer> receiverList = new ArrayList<Integer>();
+        receiverList.add(100);
+        receiverList.add(200);
+
+        checker.setCalled(false);
+        assertEquals("send sms failed?", 1, fetionMessage.asyncSetScheduledSMS(
+                receiverList, MESSAGE, "2009-04-22 16:15:00", smsEventListener,
+                checker));
+
+        waitUntilCalledBack();
+    }
 }
