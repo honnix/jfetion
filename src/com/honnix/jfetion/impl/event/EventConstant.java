@@ -188,6 +188,10 @@ public final class EventConstant
 
     public static final int REMOVE_BLACKLIST_TIMEOUT = EVENT_BASE + 0x0076;
 
+    public static final int SCHEDULED_SMS_FAIL = EVENT_BASE + 0x0077;
+
+    public static final int SCHEDULED_SMS_SUCCESS = EVENT_BASE + 0x0078;
+
     public static final int DEL_BUDDY_OK = EVENT_BASE + 0x0081;
 
     public static final int DEL_BUDDY_FAIL = EVENT_BASE + 0x0082;

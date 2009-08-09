@@ -309,7 +309,7 @@ public class FetionImpl
      * .List, java.lang.String, java.lang.String,
      * com.honnix.jfetion.EventListener, java.lang.Object[])
      */
-    public native int asyncSetScheduledSMS(List<Integer> receiverList,
+    public native int asyncSetScheduledSMS(List<FetionAccount> receiverList,
             String message, String sendTime, EventListener eventListener,
             Object... args);
 
@@ -391,7 +391,7 @@ public class FetionImpl
      * convertScheduledSMSReceiverListToString (java.util.List)
      */
     public native String convertScheduledSMSReceiverListToString(
-            List<Integer> receiverList);
+            List<FetionAccount> receiverList);
 
     /*
      * (non-Javadoc)

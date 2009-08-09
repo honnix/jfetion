@@ -59,6 +59,15 @@ public class SmsEventListener
 
         case EventConstant.SMS_UNKNOWN_ERROR:
             System.out.println("sms unknown error");
+            break;
+
+        case EventConstant.SCHEDULED_SMS_FAIL:
+            System.out.println("send schedules sms fail");
+            break;
+
+        case EventConstant.SCHEDULED_SMS_SUCCESS:
+            System.out.println("send schedules sms success");
+            break;
 
         default:
             System.out.println("sms unknown message: " + message);

@@ -22,6 +22,7 @@ package com.honnix.jfetion;
 
 import java.util.List;
 
+import com.honnix.jfetion.impl.data.FetionAccount;
 import com.honnix.jfetion.impl.data.FetionMessage;
 import com.honnix.jfetion.impl.data.FetionScheduledSMS;
 
@@ -52,12 +53,13 @@ public interface FetionMessageControl
     int asyncSendSmsToSelf(String message, EventListener eventListener,
             Object... args);
 
-    int asyncSetScheduledSMS(List<Integer> receiverList, String message,
+    int asyncSetScheduledSMS(List<FetionAccount> receiverList, String message,
             String sendTime, EventListener eventListener, Object... args);
 
     boolean beginDialog(long who);
 
-    String convertScheduledSMSReceiverListToString(List<Integer> receiverList);
+    String convertScheduledSMSReceiverListToString(
+            List<FetionAccount> receiverList);
 
     boolean dialogSend(long who, String message);
 

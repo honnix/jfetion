@@ -37,7 +37,7 @@ public final class FetionScheduledSMS
 
     private String message;
 
-    private List<Integer> receiverList;
+    private List<FetionAccount> receiverList;
 
     public FetionScheduledSMS()
     {
@@ -63,7 +63,7 @@ public final class FetionScheduledSMS
     /**
      * @return the receiverList
      */
-    public List<Integer> getReceiverList()
+    public List<FetionAccount> getReceiverList()
     {
         return receiverList;
     }
@@ -106,7 +106,7 @@ public final class FetionScheduledSMS
      * @param receiverList
      *            the receiverList to set
      */
-    public void setReceiverList(List<Integer> receiverList)
+    public void setReceiverList(List<FetionAccount> receiverList)
     {
         this.receiverList = receiverList;
     }

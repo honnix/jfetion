@@ -20,12 +20,12 @@
  */
 package com.honnix.jfetion;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
 import com.honnix.jfetion.impl.FetionFactory;
+import com.honnix.jfetion.impl.data.FetionScheduledSMS;
 import com.honnix.jfetion.impl.event.BeginDialogEventListener;
 import com.honnix.jfetion.impl.event.DialogSendEventListener;
 import com.honnix.jfetion.impl.event.LoginEventListener;
@@ -579,21 +579,64 @@ public class TestFetionImpl
     // assertEquals("Should have 4 accounts.", 4, count - 1);
     // }
 
-    public void testAsyncSetScheduledSMS()
+    // public void testAsyncSetScheduledSMS()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    //
+    // List<FetionAccount> receiverList = new ArrayList<FetionAccount>();
+    //
+    // FetionAccount account = new FetionAccount();
+    // account.setId(1816082319);
+    // receiverList.add(account);
+    //
+    // account = new FetionAccount();
+    // account.setId(728801465);
+    // receiverList.add(account);
+    //
+    // checker.setCalled(false);
+    // assertEquals("send sms failed?", 1, fetionMessage.asyncSetScheduledSMS(
+    // receiverList, MESSAGE, "2009-07-20 20:40:00", smsEventListener,
+    // checker));
+    //
+    // waitUntilCalledBack();
+    // }
+
+    public void testGetScheduledSMSList()
     {
         assertTrue("init failed??", fetionSession.init());
         assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
                 PASSWORD));
 
-        List<Integer> receiverList = new ArrayList<Integer>();
-        receiverList.add(100);
-        receiverList.add(200);
+        List<FetionScheduledSMS> scheduledSMSList = fetionMessage
+                .getScheduledSMSList();
 
-        checker.setCalled(false);
-        assertEquals("send sms failed?", 1, fetionMessage.asyncSetScheduledSMS(
-                receiverList, MESSAGE, "2009-04-22 16:15:00", smsEventListener,
-                checker));
+        scheduledSMSList = fetionMessage.getScheduledSMSList();
 
-        waitUntilCalledBack();
+        scheduledSMSList = fetionMessage.getScheduledSMSList();
+
+        System.out.println(scheduledSMSList);
     }
+
+    // public void testConvertScheduledSMSReceiverListToString()
+    // {
+    // assertTrue("init failed??", fetionSession.init());
+    // assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+    // PASSWORD));
+    //
+    // List<FetionAccount> receiverList = new ArrayList<FetionAccount>();
+    //
+    // FetionAccount account = new FetionAccount();
+    // account.setId(1816082319);
+    // receiverList.add(account);
+    //
+    // account = new FetionAccount();
+    // account.setId(728801465);
+    // receiverList.add(account);
+    //
+    // assertEquals("Wrong receiverList string.", "老婆:honnix:", fetionMessage
+    // .convertScheduledSMSReceiverListToString(receiverList));
+    // }
+
 }
