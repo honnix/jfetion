@@ -1,10 +1,10 @@
 CC=gcc
 LD=g++
-
+TARGET_DIR=build
 OS=$(shell uname)
 
 ifeq ($(OS), Darwin)
-	CFLAGS=-DDEBUG -arch i386 -arch ppc -ggdb -Wall -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/ -I../include
+	CFLAGS=-DDEBUG -arch i386 -arch ppc -Wall -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/ -I../include
 	LDFLAGS=-dynamiclib -arch i386 -arch ppc -Wall -fpic ../lib/libfetion_mac.a -lpthread -lcurl
 	TARGET=libjfetion.dylib
 else
@@ -13,16 +13,16 @@ else
 	TARGET=libjfetion.so
 endif
 
-all: $(TARGET)
+all: $(TARGET_DIR)/$(TARGET)
 
-$(TARGET): FetionImpl.o
-	$(LD) -o $(TARGET) FetionImpl.o $(LDFLAGS)
+$(TARGET_DIR)/$(TARGET): $(TARGET_DIR)/FetionImpl.o
+	$(LD) -o $(TARGET_DIR)/$(TARGET) $(TARGET_DIR)/FetionImpl.o $(LDFLAGS)
 
-FetionImpl.o: FetionImpl.c FetionImpl.h FetionHelper.h
-	$(CC) $(CFLAGS) -c -o FetionImpl.o FetionImpl.c
+$(TARGET_DIR)/FetionImpl.o: FetionImpl.c FetionImpl.h FetionHelper.h
+	$(CC) $(CFLAGS) -c -o $(TARGET_DIR)/FetionImpl.o FetionImpl.c
 
 clean:
-	rm -rf $(TARGET) *.o TAGS
+	rm -rf $(TARGET_DIR)/*.* TAGS
 
 etags:
 	find ./ -name '*.[hc]' | xargs etags
