@@ -134,15 +134,14 @@ public class TestFetionImpl extends TestCase {
 	// fetionMessage.asyncEndDialog(Long.parseLong(id));
 	// }
 	//
-	// public void testAsyncLogin()
-	// {
-	// checker.setCalled(false);
-	// assertTrue("init failed??", fetionSession.init());
-	// assertEquals("wrong login status?", 1, fetionSession.asyncLogin(
-	// MOBILE_NUMBER, PASSWORD, loginEventListener, checker));
-	//
-	// waitUntilCalledBack();
-	// }
+	public void testAsyncLogin() {
+		checker.setCalled(false);
+		assertTrue("init failed??", fetionSession.init());
+		assertEquals("wrong login status?", 1, fetionSession.asyncLogin(
+				MOBILE_NUMBER, PASSWORD, loginEventListener, checker));
+
+		waitUntilCalledBack();
+	}
 
 	// public void testCancelLogin()
 	// {
@@ -593,26 +592,26 @@ public class TestFetionImpl extends TestCase {
 	// waitUntilCalledBack();
 	// }
 
-	public void testGetScheduledSMSList() {
-		assertTrue("init failed??", fetionSession.init());
-		assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-				PASSWORD));
+	// public void testGetScheduledSMSList() {
+	// assertTrue("init failed??", fetionSession.init());
+	// assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+	// PASSWORD));
+	//
+	// List<FetionScheduledSMS> scheduledSMSList = fetionMessage
+	// .getScheduledSMSList();
+	//
+	// assertEquals("Should be 1 scheduled SMS.", 1, scheduledSMSList.size());
+	// }
 
-		List<FetionScheduledSMS> scheduledSMSList = fetionMessage
-				.getScheduledSMSList();
-
-		assertEquals("Should be 1 scheduled SMS.", 1, scheduledSMSList.size());
-	}
-
-	public void testGetScheduledSMSById() {
-		assertTrue("init failed??", fetionSession.init());
-		assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
-				PASSWORD));
-
-		FetionScheduledSMS scheduledSMS = fetionMessage.getScheduledSMSById(1);
-
-		assertNotNull("There should be schedule SMS.", scheduledSMS);
-	}
+	// public void testGetScheduledSMSById() {
+	// assertTrue("init failed??", fetionSession.init());
+	// assertTrue("login failed??", fetionSession.login(MOBILE_NUMBER,
+	// PASSWORD));
+	//
+	// FetionScheduledSMS scheduledSMS = fetionMessage.getScheduledSMSById(1);
+	//
+	// assertNotNull("There should be schedule SMS.", scheduledSMS);
+	// }
 
 	// public void testConvertScheduledSMSReceiverListToString()
 	// {
