@@ -39,7 +39,7 @@ public class TestFetionImpl extends TestCase {
 
 	private static final String MOBILE_NUMBER = "13761089478";
 
-	private static final String PASSWORD = "honnix548";
+	private static final String PASSWORD = "******";
 
 	private static final String MESSAGE = "sent using JNI";
 
