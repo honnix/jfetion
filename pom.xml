@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.honnix</groupId>
+  <artifactId>jfetion</artifactId>
+  <packaging>jar</packaging>
+  <version>1.3.0-SNAPSHOT</version>
+  <properties>
+    <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+	<dependency>
+	  <groupId>junit</groupId>
+	  <artifactId>junit</artifactId>
+	  <version>3.8.1</version>
+	  <scope>test</scope>
+	</dependency>
+  </dependencies>
+  <build>
+	<plugins>
+	  <plugin>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<configuration>
+		  <source>1.5</source>
+		  <target>1.5</target>
+		</configuration>
+	  </plugin>
+	  <plugin>
+		<artifactId>maven-surefire-plugin</artifactId>
+		<configuration>
+          <!-- force 32bit mode since libfetion does not supply 64bit arch for Mac OS X -->
+          <argLine>-d32 -Djava.library.path=native/src/build</argLine>
+		</configuration>
+	  </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>auto-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+            </configuration>
+          </execution>
+          <execution>
+            <id>auto-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>clean</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+	</plugins>
+  </build>
+</project>
