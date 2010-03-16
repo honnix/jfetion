@@ -5,7 +5,7 @@ OS=$(shell uname)
 
 ifeq ($(OS), Darwin)
 	CFLAGS=-DDEBUG -arch i386 -arch ppc -Wall -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/ -I../include
-	LDFLAGS=-dynamiclib -arch i386 -arch ppc -Wall -fpic ../lib/libfetion_mac.a -lpthread -lcurl
+	LDFLAGS=-dynamiclib -arch i386 -arch ppc -Wall -fpic ../lib/libfetion_mac.a -lpthread -lcurl -lcrypto -compatibility_version 1.0.0 -current_version 1.3.0
 	TARGET=libjfetion.dylib
 else
 	CFLAGS=-DDEBUG -ggdb -Wall -I/opt/jdk/include -I/opt/jdk/include/linux -I../include
