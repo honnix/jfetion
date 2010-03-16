@@ -96,9 +96,9 @@ public interface FetionAccountControl
 
     int asyncSetUserStatus(int status, String description,
             EventListener eventListener, Object... args);
-
+    
     boolean deleteBuddyList(int id);
-
+    
     FetionAccount getAccountById(long id);
 
     int getAccountGroupId(FetionAccount account);
@@ -170,7 +170,11 @@ public interface FetionAccountControl
 
     boolean renameBuddyList(int id, String name);
 
+    void setBuddyImpresaEx(long id, String impresa);
+
     boolean setBuddyInfo(long id, String localName);
+
+    void setBuddyNicknameEx(long id, String nickname);
 
     void updateAccountInfoById(long id);
 

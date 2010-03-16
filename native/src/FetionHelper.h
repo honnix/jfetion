@@ -24,6 +24,7 @@
 
 #include <jni.h>
 #include <libfetion/libfetion.h>
+#include <libfetion/common.h>
 
 typedef struct _callback
 {
@@ -89,7 +90,7 @@ Callback* buildCallBackArgs(JNIEnv* env, jobject jobj, jobjectArray jargs,
 /*
  * Callback function for EventListener.
  */
-void callback(int message, unsigned int wparam, unsigned long lparam, void* args);
+void callback(int message, WPARAM wParam, LPARAM lParam, void* args);
 
 /*
  * Build common jobject.

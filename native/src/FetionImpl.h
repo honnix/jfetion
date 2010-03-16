@@ -65,14 +65,6 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncBeginDialog
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
- * Method:    cancelLogin
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_cancelLogin
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    asyncDeleteBuddyByAccount
  * Signature: (Lcom/honnix/jfetion/impl/data/FetionAccount;Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
  */
@@ -146,10 +138,10 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncMoveGroupBud
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    asyncReLogin
- * Signature: (Lcom/honnix/jfetion/EventListener;[Ljava/lang/Object;)I
+ * Signature: (Lcom/honnix/jfetion/EventListener;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)I
  */
 JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncReLogin
-  (JNIEnv *, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jobject, jstring, jstring, jobjectArray);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -270,6 +262,14 @@ JNIEXPORT jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncTestNetwork
  */
 JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_beginDialog
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    cancelLogin
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_cancelLogin
+  (JNIEnv *, jobject);
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
@@ -713,10 +713,26 @@ JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_sendSmsToSelf
 
 /*
  * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setBuddyImpresaEx
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyImpresaEx
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
  * Method:    setBuddyInfo
  * Signature: (JLjava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyInfo
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:     com_honnix_jfetion_impl_FetionImpl
+ * Method:    setBuddyNicknameEx
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyNicknameEx
   (JNIEnv *, jobject, jlong, jstring);
 
 /*

@@ -139,7 +139,7 @@ Callback* buildCallBackArgs(JNIEnv* env, jobject jeventListener, jobjectArray ja
     return callback;
 }
 
-void callback(int message, unsigned int wparam, unsigned long lparam,
+void callback(int message, WPARAM wparam, LPARAM lparam,
               void* args)
 {
     JNIEnv* env = NULL;
@@ -1186,17 +1186,27 @@ void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_cancelLogin
 }
 
 jint JNICALL Java_com_honnix_jfetion_impl_FetionImpl_asyncReLogin
-(JNIEnv* env, jobject jobj, jobject jeventListener, jobjectArray jargs)
+(JNIEnv* env, jobject jobj, jstring jid, jstring jpassword,
+ jobject jeventListener, jobjectArray jargs)
 {
     if (checkNullPointer(env, 1, jeventListener))
     {
         return 0;
     }
 
+    jboolean isCopy;
+    const char* id = (*env)->GetStringUTFChars(env, jid, &isCopy);
+    const char* password = (*env)->GetStringUTFChars(env, jpassword, &isCopy);
+
     Callback* callbackArgs = buildCallBackArgs(env, jeventListener, jargs,
                                                ASYNC_RELOGIN);
 
-    return fx_relogin(callback, callbackArgs);
+    jint result = fx_relogin(callback, callbackArgs, id, password);
+
+    (*env)->ReleaseStringUTFChars(env, jid, id);
+    (*env)->ReleaseStringUTFChars(env, jpassword, password);
+
+    return result;
 }
 
 void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_logout
@@ -2512,6 +2522,38 @@ jboolean JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setServerAddress
     (*env)->ReleaseStringUTFChars(env, jserverAddress, serverAddress);
 
     return result;
+}
+
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyNicknameEx
+(JNIEnv* env, jobject jobj, jlong jid, jstring jnickname)
+{
+    if (checkNullPointer(env, 1, jnickname))
+    {
+        return;
+    }
+
+    jboolean isCopy;
+    const char* nickname = (*env)->GetStringUTFChars(env, jnickname, &isCopy);
+
+    fx_set_buddy_nickname_ex(jid, nickname);
+
+    (*env)->ReleaseStringUTFChars(env, jnickname, nickname);
+}
+
+void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setBuddyImpresaEx
+(JNIEnv* env, jobject jobj, jlong jid, jstring jimpresa)
+{
+    if (checkNullPointer(env, 1, jimpresa))
+    {
+        return;
+    }
+
+    jboolean isCopy;
+    const char* impresa = (*env)->GetStringUTFChars(env, jimpresa, &isCopy);
+
+    fx_set_buddy_impresa_ex(jid, impresa);
+
+    (*env)->ReleaseStringUTFChars(env, jimpresa, impresa);
 }
 
 void JNICALL Java_com_honnix_jfetion_impl_FetionImpl_setUnknownServerAddress

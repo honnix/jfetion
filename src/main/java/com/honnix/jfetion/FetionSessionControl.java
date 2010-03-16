@@ -33,7 +33,8 @@ public interface FetionSessionControl
     int asyncLogin(String id, String password, EventListener eventListener,
             Object... args);
 
-    int asyncReLogin(EventListener eventListener, Object... args);
+    int asyncReLogin(EventListener eventListener, String id, String password,
+            Object... args);
 
     int asyncTestNetwork(FetionProxyInfo proxyInfo,
             EventListener eventListener, Object... args);

@@ -220,7 +220,8 @@ public class FetionImpl
      * com.honnix.jfetion.FetionSessionControl#asyncReLogin(com.honnix.jfetion
      * .EventListener, java.lang.Object[])
      */
-    public native int asyncReLogin(EventListener eventListener, Object... args);
+    public native int asyncReLogin(EventListener eventListener, String id,
+            String password, Object... args);
 
     /*
      * (non-Javadoc)
@@ -798,10 +799,26 @@ public class FetionImpl
     /*
      * (non-Javadoc)
      * 
+     * @see com.honnix.jfetion.FetionAccountControl#setBuddyImpresaEx(long,
+     * java.lang.String)
+     */
+    public native void setBuddyImpresaEx(long id, String impresa);
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.honnix.jfetion.FetionAccountControl#setBuddyInfo(long,
      * java.lang.String)
      */
     public native boolean setBuddyInfo(long id, String localName);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.honnix.jfetion.FetionAccountControl#setBuddyNicknameEx(long,
+     * java.lang.String)
+     */
+    public native void setBuddyNicknameEx(long id, String nickname);
 
     /*
      * (non-Javadoc)
